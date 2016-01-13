@@ -64,7 +64,7 @@
     </Compile>
     <Compile Include="Model\Port\CComPort.cs" />
     <Compile Include="Model\Port\IPort.cs" />
-    <Compile Include="Model\DeviceConfig.cs" />
+    <Compile Include="Model\Port\CPortConfig.cs" />
     <Compile Include="Model\Device.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\IDevice.cs" />
+    <Compile Include="Model\Port\EPortStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

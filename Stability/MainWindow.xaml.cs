@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -27,25 +28,28 @@ namespace Stability
             InitializeComponent();
             string name;
             var n = CComPort.FindPort("Stabilometric Device", out name);
-            c = new CComPort("COM1");
             if (n)
             {
 
                 var conf = new CPortConfig() {PortName = name, AutoConnect = true, Baud = 9600};
                 c = new CComPort(conf);
-                /*c = new CComPort(name) {AutoConnect = true};
-                n = c.Connect(out name);*/
             }
         }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void OnExit(object sender, RoutedEventArgs e)
         {
-            c.Test(1);
+            Close();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void MenuItem_OnChecked(object sender, RoutedEventArgs e)
         {
-            c.Test(2);
+            Con.Visibility = Visibility.Collapsed;
+            Discon.Visibility = Visibility.Collapsed;
+        }
+
+        private void MenuItem_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            Con.Visibility = Visibility.Visible;
+            Discon.Visibility = Visibility.Visible;
         }
     }
 }
