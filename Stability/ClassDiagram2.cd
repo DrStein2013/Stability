@@ -10,7 +10,7 @@
   <Class Name="Stability.MainWindow" Collapsed="true">
     <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAACAAAAACAAAAAA=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -29,22 +29,22 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Stability.Properties.Settings" Collapsed="true">
-    <Position X="2.25" Y="1.5" Width="1.5" />
+    <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="Stability.Model.CPortConfig">
-    <Position X="0.5" Y="3.25" Width="1.5" />
+  <Class Name="Stability.Model.Port.CPortConfig">
+    <Position X="0.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAgAA=</HashCode>
-      <FileName>Model\DeviceConfig.cs</FileName>
+      <FileName>Model\Port\CPortConfig.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Stability.Model.Port.CComPort">
     <Position X="4.75" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CgQAAAAAAAAAAggAAAAAAIAACAAAAAAgAAAAAAIgAEA=</HashCode>
+      <HashCode>CgQAAAAgAAAAAAgCAAAAAIAACAAAAAAgAAAACAIoAEA=</HashCode>
       <FileName>Model\Port\CComPort.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -57,11 +57,19 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="Stability.Model.Port.IPort">
-    <Position X="2.5" Y="3.5" Width="1.5" />
+    <Position X="2.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAgAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAIAAA=</HashCode>
       <FileName>Model\Port\IPort.cs</FileName>
     </TypeIdentifier>
   </Interface>
+  <Enum Name="Stability.Model.Port.EPortStatus">
+    <Position X="0.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Model\Port\EPortStatus.cs</FileName>
+      <NewMemberFileName>Model\Port\ePortStatus.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
