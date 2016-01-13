@@ -2,6 +2,7 @@
 using System.IO.Ports;
 using System.Threading;
 using System.Collections;
+using Stability.Model.Port;
 
 namespace Stability.Model
 {
