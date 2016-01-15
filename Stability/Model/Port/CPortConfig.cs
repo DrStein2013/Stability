@@ -5,5 +5,6 @@
         public string PortName { get; set; }
         public int Baud { get; set; }
         public bool AutoConnect { get; set; }
+        public bool UseSLIP { get; set; }
     }
 }
