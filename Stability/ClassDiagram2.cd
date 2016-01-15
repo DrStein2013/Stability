@@ -8,14 +8,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Stability.MainWindow" Collapsed="true">
-    <Position X="4" Y="0.5" Width="1.5" />
+    <Position X="7.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAACAAAAACAAAAAA=</HashCode>
+      <HashCode>AAAAgAAIAAAAAIAAAJAAAEgAAAAQAACAAAAAAAAAAAA=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Stability.Model.CDevice" BaseTypeListCollapsed="true">
-    <Position X="8" Y="0.75" Width="1.5" />
+  <Class Name="Stability.Model.CDevice" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CgQAAAAAAAAAAAgAAAEAAIAACAAAAAAAAAAAEAAgGEA=</HashCode>
       <FileName>Model\Device.cs</FileName>
@@ -23,52 +23,51 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Stability.Properties.Resources" Collapsed="true">
-    <Position X="0.5" Y="1.5" Width="1.5" />
+    <Position X="2.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Stability.Properties.Settings" Collapsed="true">
-    <Position X="2.25" Y="0.5" Width="1.5" />
+    <Position X="4.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="Stability.Model.Port.CPortConfig">
-    <Position X="0.5" Y="2.5" Width="1.5" />
+  <Class Name="Stability.Model.Port.CPortConfig" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAgAA=</HashCode>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAACAAACAAAAAAAAAAAgAA=</HashCode>
       <FileName>Model\Port\CPortConfig.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Stability.Model.Port.CComPort">
-    <Position X="4.75" Y="3" Width="1.5" />
+    <Position X="2.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CgQAAAAgAAAAAAgCAAAAAIAACAAAAAAgAAAACAIoAEA=</HashCode>
+      <HashCode>CgQgAQIkAIAAAAgAgAAAAIAACAQACAAgAAgAQAAoAEA=</HashCode>
       <FileName>Model\Port\CComPort.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Interface Name="Stability.Model.IDevice">
-    <Position X="6.25" Y="0.75" Width="1.5" />
+  <Interface Name="Stability.Model.IDevice" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAEAAIAAAAAAAAAAAAAAEAAAEAA=</HashCode>
       <FileName>Model\IDevice.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="Stability.Model.Port.IPort">
-    <Position X="2.75" Y="1.75" Width="1.5" />
+    <Position X="0.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAIAAA=</HashCode>
       <FileName>Model\Port\IPort.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Enum Name="Stability.Model.Port.EPortStatus">
-    <Position X="0.5" Y="4.25" Width="1.5" />
+  <Enum Name="Stability.Model.Port.EPortStatus" Collapsed="true">
+    <Position X="0.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
       <FileName>Model\Port\EPortStatus.cs</FileName>
-      <NewMemberFileName>Model\Port\ePortStatus.cs</NewMemberFileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />
