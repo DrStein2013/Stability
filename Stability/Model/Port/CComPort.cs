@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Collections;
 using System.Linq;
 using System.Management;
 using System.Threading;
@@ -11,7 +10,7 @@ namespace Stability.Model.Port
     public class  Pack
     {
         public List<byte> Data { get; set; }
-        public Pack(List<byte> d)
+        public Pack(IEnumerable<byte> d)
         {
             Data = new List<byte>(d);
         }
@@ -21,12 +20,40 @@ namespace Stability.Model.Port
     {
         private readonly SerialPort _port;
     
-        private readonly List<byte> _rxBuf; 
+        private readonly List<byte> _rxBuf;
 
-        private readonly Thread _rxThread;
+        private readonly ManualResetEvent _rxManualResetEvent = new ManualResetEvent(false);
 
+        private readonly Timer _statusUpdaterTimer;
+        /// <summary>
+        /// Пороговое количество пакетов для вычитки
+        /// </summary>
+        private byte _threshold = 0;
+        private bool _useSLIP;
+
+        /// <summary>
+        /// Очередь, где накапливаются уже вычитанные и обработанные пакеты.
+        /// </summary>
         public Queue<Pack> RxData { get;private set; }
+        /// <summary>
+        /// Указывает, необходимость автоматического восстановления связи
+        /// </summary>
         public bool AutoConnect { get; set; }
+
+        /// <summary>
+        /// Указывает необходимость использования SLIP протокола
+        /// </summary>
+        public bool UseSLIP
+        {
+            get { return _useSLIP; }
+            set
+            {
+                _useSLIP = value;
+                _threshold = (byte) (!_useSLIP ? 1 : 0);    //Если SLIP не используется - порог реакции - 10 входящих байт, иначе реакция без ожидания 
+            }
+        }
+
+        public EPortStatus Status { get;private set; }
 
         /// <summary>
         /// Событие вычитки из порта, взводится, когда есть что читать.
@@ -36,29 +63,33 @@ namespace Stability.Model.Port
         public event EventHandler RxEvent;
 
         /// <summary>
-        /// Событие изменения статуса порта, показывает открыт порт, или нет
+        /// Событие изменения статуса порта, сигналит открыт порт, или нет
         /// </summary>
         public event EventHandler<PortStatusChangedEventArgs> PortStatusChanged; 
 
         private CComPort()
         {
             AutoConnect = false;
+            UseSLIP = false;
             _rxBuf = new List<byte>();
             RxData = new Queue<Pack>();
- 
-            _rxThread = new Thread(RxThreadHandler){IsBackground = true, Priority = ThreadPriority.Normal};
+            Status = EPortStatus.Closed;
+            _statusUpdaterTimer = new Timer(StatusTimerHandler, null,Timeout.Infinite, 2000);      
+            var rxThread = new Thread(RxThreadHandler){IsBackground = true, Priority = ThreadPriority.Normal};
+            rxThread.Start(_rxManualResetEvent);
         }
 
         public CComPort(string portName, int baud = 9600):this()
         {
             _port = new SerialPort(portName,baud);
             _port.DataReceived+=PortOnDataReceived;
-            _port.PinChanged += PortOnPinChanged;
+            _statusUpdaterTimer.Change(0, 2000);
         }
 
         public CComPort(CPortConfig config):this(config.PortName,config.Baud)
         {
             string s;
+            UseSLIP = config.UseSLIP;
             AutoConnect = config.AutoConnect;
             if (AutoConnect)
                 Connect(out s);
@@ -75,34 +106,34 @@ namespace Stability.Model.Port
                 if (!_port.IsOpen)
                 {
                     _port.Open();
-                    if(!_rxThread.IsAlive)
-                        _rxThread.Start();
+                    Status = EPortStatus.Open;
+                    _rxManualResetEvent.Set();
                 }
                 msg = "OK";
                 return true;
             }
             catch (Exception e)
             {
+                Status = EPortStatus.Closed;
                 msg = e.Message;
                 return false;
             }
         }
 
+        /// <summary>
+        /// Метод разрыва соединения и остановки потока вычитки
+        /// </summary>
         public bool Disconnect()
         {
-            if(_port.IsOpen)
+            if (_port.IsOpen)
+            {
                 _port.Close();
-            if(_rxThread.IsAlive) 
-                _rxThread.Abort();
+                Status = EPortStatus.Closed;
+            }
+           _rxManualResetEvent.Reset();
             RxData.Clear();
             _rxBuf.Clear();
             return true;
-        }
-
-        private void PortOnPinChanged(object sender, SerialPinChangedEventArgs serialPinChangedEventArgs)
-        {
-           if(serialPinChangedEventArgs.EventType == SerialPinChange.Break)
-              PortStatusChanged.Invoke(this,new PortStatusChangedEventArgs(){Status = (EPortStatus)Convert.ToInt16(_port.IsOpen)});
         }
 
         private void PortOnDataReceived(object sender, SerialDataReceivedEventArgs serialDataReceivedEventArgs)
@@ -111,66 +142,67 @@ namespace Stability.Model.Port
             _port.Read(buf, 0, buf.Length);
             
             _rxBuf.AddRange(buf);
-            //buf.ToList().ForEach(b =>_rxBuf.Enqueue(b));    
         }
 
-        private void RxThreadHandler()
+        private void RxThreadHandler(object ev)
         {
-            while (true)
-            {
-                    if (_rxBuf.Count > 0)       //Если в буфере есть данные, то прогоняем их через SLIP протокол
-                    {
-                        var p_st = _rxBuf.FindIndex(0, o => o == 0xC0); //Ищем первое вхождение токена 0xC0 - это начало пакета
-                        var p_end = _rxBuf.FindIndex(p_st + 1, o => o == 0xC0); //Ищем следующий 0xC0 - это конец пакета
-                        if ((p_st == -1) || (p_end == -1))      //Если кого-то не нашли, то данные в буфер поступить не успели и надо еще подождать
-                            continue;
+           var stopEvent = (ManualResetEvent)ev;
+           while (stopEvent.WaitOne())
+            {              
+             if (_rxBuf.Count > 0)       //Если в буфере есть данные
+             {
+                 Pack pack;
+                 if (UseSLIP)
+                     pack = SlipParser(); // то прогоняем их через SLIP протокол
+                 else
+                 {
+                     pack = new Pack(_rxBuf.GetRange(0,_threshold));
+                     _rxBuf.RemoveRange(0,_threshold);
+                 }
 
-                        var r = _rxBuf.GetRange(p_st + 1, p_end - p_st - 1);    //Выделяем обнаруженный пакет из списка
-                        _rxBuf.RemoveRange(p_st, p_end - p_st + 1); //Удаляем пакет из списка (получается аналог очереди через List)
-
-                        for (int i = 0; i < r.Count - 1; i++)   //Ищем токен 0xDB, т.к. он указывает на подмену символа 
-                        {
-                            if (r[i] == 0xDB)   
-                                if (r[i + 1] == 0xDC)   //Если имеем 0xDB,0xDC, то это заменитель 0xC0
-                                {
-                                    r.RemoveAt(i + 1);  //Удаляем один
-                                    r[i] = 0xC0;        //Заменяем второй
-                                }
-                                else if (r[i + 1] == 0xDD)  //Если имеем 0xDB,0xDC, то это заменитель 0xDB
-                                    r.RemoveAt(i + 1);  //Просто удаляем лишний
-                        }
-
-                        /*var i = r.FindIndex(0, o => o == 0xDB);
-                        if(i>-1)
-                          if(r[i+1]==0xDC)
-                            {
-                                r[i] = 0xC0;
-                                r.RemoveAt(i+1);
-                            }
-                          else if(r[i+1]==0xDC)
-                             r.RemoveAt(i + 1);
-                          
-                        */
-
-                        RxData.Enqueue(new Pack(r));    //Суем пакет в выходную очередь
-                        if (RxEvent != null)            
-                            RxEvent.Invoke(this, null); //Дергаем Event
-                        r.Clear();
-                    }
+                  if (pack != null)
+                   {
+                    RxData.Enqueue(pack);   //Суем пакет в выходную очередь
+                    if (RxEvent != null)
+                      RxEvent.Invoke(this, null); //Дергаем Event
+                   }
+                }
                 
-               if((!_port.IsOpen)&&(AutoConnect))   //Если порт оказался закрытым и надо его открывать автоматически
-               {
-                    string s;
-                    if(!Connect(out s))             //пробуем открыть
-                        Thread.Sleep(980);          //если не открылось спим около секунды
-               }
                Thread.Sleep(20);
             }
         }
 
+        private Pack SlipParser()
+        {
+            var pSt = _rxBuf.FindIndex(0, o => o == 0xC0); //Ищем первое вхождение токена 0xC0 - это начало пакета
+            var pEnd = _rxBuf.FindIndex(pSt + 1, o => o == 0xC0); //Ищем следующий 0xC0 - это конец пакета
+            if ((pSt == -1) || (pEnd == -1))      //Если кого-то не нашли, то данные в буфер поступить не успели и надо еще подождать
+              return null;
+
+            var r = _rxBuf.GetRange(pSt + 1, pEnd - pSt - 1);    //Выделяем обнаруженный пакет из списка
+            _rxBuf.RemoveRange(pSt, pEnd - pSt + 1); //Удаляем пакет из списка (получается аналог очереди через List)
+
+            for (int i = 0; i < r.Count - 1; i++)   //Ищем токен 0xDB, т.к. он указывает на подмену символа 
+            {
+               if (r[i] == 0xDB)   
+                 if (r[i + 1] == 0xDC)   //Если имеем 0xDB,0xDC, то это заменитель 0xC0
+                 {
+                   r.RemoveAt(i + 1);  //Удаляем один
+                   r[i] = 0xC0;        //Заменяем второй
+                 }
+                 else if (r[i + 1] == 0xDD)  //Если имеем 0xDB,0xDC, то это заменитель 0xDB
+                   r.RemoveAt(i + 1);  //Просто удаляем лишний
+            }
+        
+            return new Pack(r);
+        }
+
+        /// <summary>
+        /// Выполняет поиск порта в реестре устройств компьютера по заданному названию
+        /// </summary>
         public static bool FindPort(string caption, out string portName)   
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", //Формируем WMI запрос для получения списка железа
+            var searcher = new ManagementObjectSearcher("root\\CIMV2", //Формируем WMI запрос для получения списка железа
                         "SELECT * FROM Win32_PnPEntity");
             portName = "";              
             var mng = searcher.Get();       //получаем список
@@ -207,11 +239,67 @@ namespace Stability.Model.Port
             return true;    //Все нашли:)
         }
 
-        public void Test(byte c)
+        /// <summary>
+        /// Выполняет отправку данных по интрефейсу RS232
+        /// </summary>
+        public void SendData(byte[] b)
         {
-            var cmd = new byte[] {0xC0, c, 0xC0};
-            _port.Write(cmd, 0, cmd.Length);
+            var buf = b;
+            if(_useSLIP)
+                buf = ToSlipBytes(b);
+
+            try
+            {
+                _port.Write(buf, 0, buf.Length);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
-       
+
+        /// <summary>
+        /// Выполняет отправку данных по интрефейсу RS232
+        /// </summary>
+        public void SendData(Pack p)
+        {
+            SendData(p.Data.ToArray());
+        }
+
+        private byte[] ToSlipBytes(IEnumerable<byte> b)
+        {
+            var list = b.ToList();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == 0xC0)
+                {
+                    list[i] = 0xDB;
+                    list.Insert(++i,0xDC);
+                } else if(list[i] == 0xDB)
+                    list.Insert(++i,0xDD);
+            }
+            list.Insert(0,0xC0);
+            list.Insert(list.Count,0xC0);
+            return list.ToArray();
+        }
+
+        private void StatusTimerHandler(object state)
+        {
+            if (!_port.IsOpen) //Если порт оказался закрытым 
+            {
+              Status = EPortStatus.Closed; //Меняем статус
+              if(AutoConnect) //и надо его открывать автоматически
+              {
+                  string s;
+                  Connect(out s); //пробуем открыть
+              }
+            }
+
+            if (PortStatusChanged != null)  //Если на событие статуса кто-то подписался, то вызываем обработчик, передав ему туда текущий статус
+                PortStatusChanged.BeginInvoke(this, new PortStatusChangedEventArgs { Status = Status }, null, null);
+        }
+
     }
 }
