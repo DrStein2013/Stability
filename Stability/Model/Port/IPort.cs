@@ -29,7 +29,6 @@ namespace Stability.Model.Port
         /// Метод открытия порта
         /// </summary>
         bool Connect(out string msg);
-
         /// <summary>
         /// Метод закрытия порта
         /// </summary>
