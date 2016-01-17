@@ -30,7 +30,7 @@ namespace Stability
             InitializeComponent();
             string name;
             
-            var n = CComPort.FindPort(/*"Stabilometric Device"*/"USB Serial Port", out name);
+            var n = CComPort.FindPort("Stabilometric Device"/*"USB Serial Port"*/, out name);
             if (n)
             {
 
