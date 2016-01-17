@@ -91,8 +91,8 @@ namespace Stability.Model.Port
             string s;
             UseSLIP = config.UseSLIP;
             AutoConnect = config.AutoConnect;
-            if (AutoConnect)
-                Connect(out s);
+           // if (AutoConnect)
+           //     Connect(out s);
         }
 
         /// <summary>
