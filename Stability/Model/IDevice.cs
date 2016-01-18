@@ -7,8 +7,6 @@ namespace Stability.Model
 {
     interface IDevice
     {
-        bool Connect();
-        bool Disconnect();
         void Calibrate();
         void StartMeasurement();
         void StopMeasurement();

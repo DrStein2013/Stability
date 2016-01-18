@@ -14,10 +14,10 @@
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Stability.Model.CDevice" Collapsed="true" BaseTypeListCollapsed="true">
+  <Class Name="Stability.Model.CDevice" BaseTypeListCollapsed="true">
     <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CgQAAAAAAAAAAAgAAAEAAIAACAAAAAAAAAAAEAAgGEA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\Device.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -49,10 +49,10 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Interface Name="Stability.Model.IDevice" Collapsed="true">
+  <Interface Name="Stability.Model.IDevice">
     <Position X="11" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAEAAIAAAAAAAAAAAAAAEAAAEAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAEAAAEAA=</HashCode>
       <FileName>Model\IDevice.cs</FileName>
     </TypeIdentifier>
   </Interface>
