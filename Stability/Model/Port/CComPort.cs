@@ -252,10 +252,9 @@ namespace Stability.Model.Port
             {
                 _port.Write(buf, 0, buf.Length);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                
-                throw;
+                return;
             }
         }
 
