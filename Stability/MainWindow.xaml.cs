@@ -55,8 +55,7 @@ namespace Stability
             var dat = c.RxData.Dequeue().Data;
             foreach (var b in dat)
             {
-                s += b.ToString("X");
-                //s += Convert.ToChar(b);
+                s += b.ToString("X2")+" ";
             }
           Dispatcher.BeginInvoke(new Action(() => RxTextBlock.Text += s)); 
         }
