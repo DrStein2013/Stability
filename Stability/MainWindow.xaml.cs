@@ -31,21 +31,26 @@ namespace Stability
             InitializeComponent();
             string name;
             
-            var n = CComPort.FindPort(/*"Stabilometric Device"*/"USB Serial Port", out name);
+            var n = CComPort.FindPort("Stabilometric Device"/*"USB Serial Port"*/, out name);
             
           // / if (n)
           //  {
 
                 var conf = new CPortConfig() {PortName = name, AutoConnect = true, Baud = 9600, UseSLIP = true};
-              /*  c = new CComPort(conf);
+               /*c = new CComPort(conf);
                 c.RxEvent += COnRxEvent;
-                c.PortStatusChanged += COnPortStatusChanged;*/
+                c.PortStatusChanged += COnPortStatusChanged;
+            */
             
+          /*     c =  IoC.Resolve<CComPort>(new ConstructorArgument("config", conf));
+               c.RxEvent += COnRxEvent;
+               c.PortStatusChanged += COnPortStatusChanged;*/
+             IoC.GetKernel().Bind<IPort>().To<CComPort>().InSingletonScope().WithConstructorArgument("config", conf);
 
-              c = IoC.Resolve<CComPort>(new ConstructorArgument("config",conf));
-              c.RxEvent += COnRxEvent;
-              c.PortStatusChanged += COnPortStatusChanged;
-
+             //c = IoC.Resolve<CComPort>(new ConstructorArgument("config", conf));
+            c = (CComPort) IoC.Resolve<IPort>();
+            c.RxEvent += COnRxEvent;
+            c.PortStatusChanged += COnPortStatusChanged;
         }
 
         private void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)
@@ -90,13 +95,16 @@ namespace Stability
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            var sym = TxEdit.Text.ToCharArray();
+/*var sym = TxEdit.Text.ToCharArray();
             var buf = new byte[sym.Length];
             for (int i = 0; i < buf.Length; i++)
                 buf[i] = Convert.ToByte(sym[i]);
             
             //c.Test(sym);
             c.SendData(buf);
+            */
+
+            var d = new cDevice();
         }
 
         private void Discon_OnClick(object sender, RoutedEventArgs e)

@@ -10,11 +10,14 @@ namespace Stability.Model
 {
     class cDevice
     {
-        private CComPort _port;
+        private IPort _port;
         private Queue<Pack> RxData;
 
         public cDevice()
         {
+            var c = IoC.Resolve<IPort>() as CComPort;
+            c.SendData(new byte[]{0x31});
+            //c.Disconnect();
             /*_port*/
         }
 

@@ -4,6 +4,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Management;
 using System.Threading;
+using Ninject;
 
 namespace Stability.Model.Port
 {
@@ -79,6 +80,7 @@ namespace Stability.Model.Port
             rxThread.Start(_rxManualResetEvent);
         }
 
+        
         public CComPort(string portName, int baud = 9600):this()
         {
             _port = new SerialPort(portName,baud);
@@ -300,5 +302,21 @@ namespace Stability.Model.Port
                 PortStatusChanged.BeginInvoke(this, new PortStatusChangedEventArgs { Status = Status }, null, null);
         }
 
+    }
+
+
+    public class Test : IPort
+    {
+        public event EventHandler RxEvent;
+        public event EventHandler<PortStatusChangedEventArgs> PortStatusChanged;
+        public bool Connect(out string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Disconnect()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

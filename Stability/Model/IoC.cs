@@ -12,6 +12,10 @@ namespace Stability.Model
         {
             private static readonly IKernel _kernel = new StandardKernel();
 
+            public static IKernel GetKernel()
+            {
+                return _kernel;
+            }
             static IoC()
             {
                 SetBindings();
@@ -39,7 +43,8 @@ namespace Stability.Model
 
             public static void SetBindings()
             {
-                RegisterSingleton<IPort,CComPort>();
+              //  RegisterSingleton<IPort,Test>();
+            
             /*    RegisterSingleton<IDataExchange, DataExchangeCan>();
                 RegisterSingleton<DataListener, DataListener>();
                 RegisterSingleton<ArhivVm, ArhivVm>();
