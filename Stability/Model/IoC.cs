@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Ninject;
 using Ninject.Parameters;
+using Stability.Model.Port;
 
 namespace Stability.Model
 {
@@ -38,6 +39,7 @@ namespace Stability.Model
 
             public static void SetBindings()
             {
+                RegisterSingleton<IPort,CComPort>();
             /*    RegisterSingleton<IDataExchange, DataExchangeCan>();
                 RegisterSingleton<DataListener, DataListener>();
                 RegisterSingleton<ArhivVm, ArhivVm>();

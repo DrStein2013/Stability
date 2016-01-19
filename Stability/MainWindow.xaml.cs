@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Ninject.Parameters;
 using Stability.Model;
 using Stability.Model.Port;
 
@@ -31,14 +32,20 @@ namespace Stability
             string name;
             
             var n = CComPort.FindPort(/*"Stabilometric Device"*/"USB Serial Port", out name);
-            if (n)
-            {
+            
+          // / if (n)
+          //  {
 
                 var conf = new CPortConfig() {PortName = name, AutoConnect = true, Baud = 9600, UseSLIP = true};
-                c = new CComPort(conf);
+              /*  c = new CComPort(conf);
                 c.RxEvent += COnRxEvent;
-                c.PortStatusChanged += COnPortStatusChanged;
-            }
+                c.PortStatusChanged += COnPortStatusChanged;*/
+            
+
+              c = IoC.Resolve<CComPort>(new ConstructorArgument("config",conf));
+              c.RxEvent += COnRxEvent;
+              c.PortStatusChanged += COnPortStatusChanged;
+
         }
 
         private void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)

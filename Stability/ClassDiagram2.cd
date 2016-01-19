@@ -41,10 +41,10 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Stability.Model.CDevice">
+  <Class Name="Stability.Model.cDevice">
     <Position X="6.25" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAgAAAAEAAAEAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAgAAIAEAAAEAA=</HashCode>
       <FileName>Model\Device.cs</FileName>
     </TypeIdentifier>
   </Class>

@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Threading;
 using System.Collections;
+using Ninject.Parameters;
 using Stability.Model.Port;
 
 namespace Stability.Model
 {
-    public abstract class CDevice
+    class cDevice
     {
-        private IPort _port;
+        private CComPort _port;
         private Queue<Pack> RxData;
 
-        CDevice()
+        public cDevice()
         {
-            _port.RxEvent+=PortOnRxEvent;
+            /*_port*/
         }
 
-        private void PortOnRxEvent(object sender, EventArgs eventArgs)
+        private static void PortOnRxEvent(object sender, EventArgs eventArgs)
         {
-            var p = _port as CComPort;
-           RxData.Enqueue(p.RxData.Dequeue());
+           
+           //RxData.Enqueue();
 
         }
 
