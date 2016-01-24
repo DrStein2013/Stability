@@ -101,11 +101,7 @@ namespace Stability
             for (int i = 0; i < buf.Length; i++)
                 buf[i] = Convert.ToByte(sym[i]);
             
-            //c.Test(sym);
-            c.SendData(buf);
-            
-
-        //var d = new cDevice();
+           c.SendData(buf);
         }
 
         private void Discon_OnClick(object sender, RoutedEventArgs e)
