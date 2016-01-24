@@ -33,5 +33,7 @@ namespace Stability.Model.Port
         /// Метод закрытия порта
         /// </summary>
         bool Disconnect();
+
+        void SendData(byte[] b);
     }
 }

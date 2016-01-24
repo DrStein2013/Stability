@@ -15,7 +15,7 @@ namespace Stability.Model
 
         public cDevice()
         {
-            var c = IoC.Resolve<IPort>() as CComPort;
+            var c = IoC.Resolve<IPort>();
             c.SendData(new byte[]{0x31});
             //c.Disconnect();
             /*_port*/

@@ -303,20 +303,4 @@ namespace Stability.Model.Port
         }
 
     }
-
-
-    public class Test : IPort
-    {
-        public event EventHandler RxEvent;
-        public event EventHandler<PortStatusChangedEventArgs> PortStatusChanged;
-        public bool Connect(out string msg)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Disconnect()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }
