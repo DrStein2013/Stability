@@ -1,17 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
+using Stability.Model;
 using Stability.Model.Port;
 
 namespace Stability.View
 {
+    public enum DeviceCmd
+    {
+        START_MEASURE = 0,
+        STOP_MEASURE
+    };
+
+    public class DeviceCmdArgEvent : EventArgs
+    {
+        public DeviceCmd cmd { get; set; }
+    }
+
     interface IView
     {
-        void UpdateView();
+        void UpdateTenzView(string[] tenz);
+        
         void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs);
 
+
         event EventHandler ViewUpdated;
+        event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
     }
 }
