@@ -12,8 +12,6 @@
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="MenuRow" Height="20*" MaxHeight="20" MinHeight="20"/>
-            <RowDefinition x:Name="RxDataRow" Height="241*" MinHeight="50"/>
-            <RowDefinition x:Name="TxDataRow" Height="29*"/>
             <RowDefinition x:Name="ButsRow" Height="29*" MaxHeight="29" MinHeight="29"/>
         </Grid.RowDefinitions>
 
@@ -27,13 +25,6 @@
             </MenuItem>
             <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>
-        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10">
-            <TextBlock Margin="0" x:Name="RxTextBlock" TextWrapping="Wrap" Foreground="Black" Background="White"/>
-        </Border>
-        <Border Margin="10,0" Grid.Row="2" BorderBrush="Black" BorderThickness="1" >
-            <TextBox x:Name="TxEdit" TextWrapping="Wrap"/>
-        </Border>
-        <Button Content="Send" x:Name="SendButton" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="SendButton_Click"/>
 
     </Grid>
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Stability.Model.Port
 {
@@ -35,5 +37,7 @@ namespace Stability.Model.Port
         bool Disconnect();
 
         void SendData(byte[] b);
+
+        Queue<Pack> GetRxBuf();
     }
 }

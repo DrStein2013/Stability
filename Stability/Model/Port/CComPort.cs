@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
@@ -165,8 +166,10 @@ namespace Stability.Model.Port
                   if (pack != null)
                    {
                     RxData.Enqueue(pack);   //Суем пакет в выходную очередь
-                    if (RxEvent != null)
-                      RxEvent.Invoke(this, null); //Дергаем Event
+                       if (RxEvent != null)
+                          RxEvent.Invoke(this, null); //Дергаем Event   
+                           
+                           
                    }
                 }
                 
@@ -258,6 +261,11 @@ namespace Stability.Model.Port
             {
                 return;
             }
+        }
+
+        public Queue<Pack> GetRxBuf()
+        {
+            return RxData;
         }
 
         /// <summary>

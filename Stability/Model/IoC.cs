@@ -43,8 +43,9 @@ namespace Stability.Model
 
             public static void SetBindings()
             {
+
               //  RegisterSingleton<IPort,Test>();
-            
+            //    RegisterSingleton<MainConfig,MainConfig>();
             /*    RegisterSingleton<IDataExchange, DataExchangeCan>();
                 RegisterSingleton<DataListener, DataListener>();
                 RegisterSingleton<ArhivVm, ArhivVm>();
