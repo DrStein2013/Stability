@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using Stability.Model;
 using Stability.Model.Device;
@@ -14,33 +18,20 @@ namespace Stability
     public partial class MainWindow : Window, IView
     {
         private StabilityPresenter _presenter;
-       
         public MainWindow()
         {
             InitializeComponent();
             _presenter = new StabilityPresenter(new StabilityModel(), this);
-            //var n = CComPort.FindPort("Stabilometric Device"/*"USB Serial Port"*/, out name);
+            Thread.Sleep(200);
+            Button_Click_1(this,null);
+        }
 
-            // var conf = MainConfig.PortConfig;
-            // var conf = new CPortConfig() {PortName = "COM9",/*name*/ AutoConnect = true, Baud = 9600, UseSLIP = true};
-            /*c = new CComPort(conf);
-                c.RxEvent += COnRxEvent;
-                c.PortStatusChanged += COnPortStatusChanged;
-            */
-
-            /*     c =  IoC.Resolve<CComPort>(new ConstructorArgument("config", conf));
-               c.RxEvent += COnRxEvent;
-               c.PortStatusChanged += COnPortStatusChanged;*/
-            //   MainConfig.Load();
-            //IoC.GetKernel().Bind<IPort>().To<CComPort>().InSingletonScope().WithConstructorArgument("config", conf);
-
-            //c = IoC.Resolve<CComPort>(new ConstructorArgument("config", conf));
-            //  c = (CComPort) IoC.Resolve<IPort>();
-            //   c.RxEvent += COnRxEvent;
-            //   c.PortStatusChanged += COnPortStatusChanged;
-
-
-            //   st = new StabilityDevice();
+        public void UpdateTenzView(string[] tenz)
+        {
+                Dispatcher.BeginInvoke(new Action(() => Tenz1.Text = tenz[0]));
+                Dispatcher.BeginInvoke(new Action(() => Tenz2.Text = tenz[1]));
+                Dispatcher.BeginInvoke(new Action(() => Tenz3.Text = tenz[2]));
+                Dispatcher.BeginInvoke(new Action(() => Tenz4.Text = tenz[3]));      
         }
 
         public void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)
@@ -51,51 +42,23 @@ namespace Stability
                 Dispatcher.BeginInvoke(new Action(() => StatusMark.Fill = new SolidColorBrush(Colors.Red)));
         }
 
-        private void COnRxEvent(object sender, EventArgs eventArgs)
-        {
-            string s = "";
-          /*  var dat = c.RxData.Dequeue().Data;
-            foreach (var b in dat)
-            {
-             //   s += b.ToString("X2")+" ";
-            }
-          Dispatcher.BeginInvoke(new Action(() => RxTextBlock.Text += s)); */
-        }
-
         private void OnExit(object sender, RoutedEventArgs e)
         {
-            Close();
+           Close();
         }
 
         private void MenuItem_OnChecked(object sender, RoutedEventArgs e)
         {
             Con.Visibility = Visibility.Collapsed;
             Discon.Visibility = Visibility.Collapsed;
-          //  ViewUpdated.Invoke(this,null);
-           // if(c!=null)
-           //     c.AutoConnect = true;
         }
 
         private void MenuItem_OnUnchecked(object sender, RoutedEventArgs e)
         {
             Con.Visibility = Visibility.Visible;
             Discon.Visibility = Visibility.Visible;
-            ViewUpdated.Invoke(this, null);
-          //  if (c != null)
-          //      c.AutoConnect = false;
         }
 
-        private void SendButton_Click(object sender, RoutedEventArgs e)
-        {
-        /*   var sym = TxEdit.Text.ToCharArray();
-            var buf = new byte[sym.Length];
-            for (int i = 0; i < buf.Length; i++)
-                buf[i] = Convert.ToByte(sym[i]);
-    */
-          //  c.SendData(buf);
-            
-          //  st.StartMeasurement();
-        }
 
         private void Discon_OnClick(object sender, RoutedEventArgs e)
         {
@@ -108,12 +71,26 @@ namespace Stability
            // if (!c.Connect(out s))
             //    MessageBox.Show(this, s, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+        
+        public event EventHandler ViewUpdated;
+        public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
 
-        public void UpdateView()
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (DeviceCmdEvent != null)
+                DeviceCmdEvent.Invoke(this,new DeviceCmdArgEvent(){cmd = DeviceCmd.START_MEASURE});
         }
 
-        public event EventHandler ViewUpdated;
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            if (DeviceCmdEvent != null)
+                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.STOP_MEASURE });
+        }
+
+        private void OnClose(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+           Button_Click_2(this,null);
+        }
+        
     }
 }
