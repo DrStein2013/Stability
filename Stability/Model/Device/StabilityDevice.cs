@@ -21,6 +21,7 @@ namespace Stability.Model.Device
             CurrAdcVals = new double[4];
         }
 
+       
         private void PortOnRxEvent(object sender, EventArgs eventArgs)
         {
             var p = Port.GetRxBuf().Dequeue();
