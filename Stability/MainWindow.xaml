@@ -19,20 +19,21 @@
 
         <Menu Grid.Row="0" Height="20" VerticalAlignment="Top">
             <MenuItem  Header="Connection">
-                <MenuItem x:Name="Con" Header="Connect" Visibility="Collapsed"/>
-                <MenuItem x:Name="Discon"  Header="Disconnect" Visibility="Collapsed"/>
+                <MenuItem x:Name="Con" Header="Connect" Visibility="Collapsed" Click="Con_OnClick"/>
+                <MenuItem x:Name="Discon"  Header="Disconnect" Visibility="Collapsed" Click="Discon_OnClick"/>
                 <MenuItem Header="Autoconnect" IsCheckable="True" IsChecked="True" Checked="MenuItem_OnChecked" Unchecked="MenuItem_OnUnchecked"/>
                 <Separator/>
                 <MenuItem Header="Exit" Click="OnExit"/>
             </MenuItem>
+            <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>
         <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10">
-            <TextBlock Margin="0" TextWrapping="Wrap" Text="TextBlock" Foreground="{x:Null}" Background="White"/>
+            <TextBlock Margin="0" x:Name="RxTextBlock" TextWrapping="Wrap" Foreground="Black" Background="White"/>
         </Border>
         <Border Margin="10,0" Grid.Row="2" BorderBrush="Black" BorderThickness="1" >
-            <TextBox TextWrapping="Wrap" Text="TextBox"/>
+            <TextBox x:Name="TxEdit" TextWrapping="Wrap"/>
         </Border>
-        <Button Content="Send" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Send" x:Name="SendButton" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="SendButton_Click"/>
 
     </Grid>
 
