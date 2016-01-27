@@ -29,8 +29,11 @@
         <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Margin="354,19,0,-49" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
         <TextBox x:Name="Tenz2" HorizontalAlignment="Left" Height="60" Margin="38,196,0,-226" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
         <TextBox x:Name="Tenz4" HorizontalAlignment="Left" Height="60" Margin="354,196,0,-226" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
-        <Button Content="Start" HorizontalAlignment="Left" Height="60" Margin="199,19,0,-49" Grid.Row="1" VerticalAlignment="Top" Width="100" FontFamily="SketchFlow Print" FontSize="24" Click="Button_Click_1" />
+        <Button x:Name="button1" Content="Start" HorizontalAlignment="Left" Height="60" Margin="199,19,0,-49" Grid.Row="1" VerticalAlignment="Top" Width="100" FontFamily="SketchFlow Print" FontSize="24" Click="Button_Click_1" />
         <Button Content="Stop" HorizontalAlignment="Left" Height="60" Margin="199,196,0,-226" Grid.Row="1" VerticalAlignment="Top" Width="100" FontFamily="SketchFlow Print" FontSize="24" Click="Button_Click_2" />
+        <Expander x:Name="exp1" Header="Данные пациента" HorizontalAlignment="Left" Height="99" Margin="385,92,0,-161" Grid.Row="1" VerticalAlignment="Top" Width="129" RenderTransformOrigin="0.664,0.511" Expanded="Expander_Expanded" Collapsed="exp1_Collapsed">
+            <Grid x:Name="gr1" Background="#FFE5E5E5" Margin="24,0,25,0"/>
+        </Expander>
 
     </Grid>
 

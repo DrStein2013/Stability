@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
@@ -33,6 +34,7 @@ namespace Stability
                 Dispatcher.BeginInvoke(new Action(() => Tenz3.Text = tenz[2]));
                 Dispatcher.BeginInvoke(new Action(() => Tenz4.Text = tenz[3]));      
         }
+
 
         public void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)
         {
@@ -91,6 +93,23 @@ namespace Stability
         {
            Button_Click_2(this,null);
         }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            var a = new DoubleAnimation
+            {
+                From = gr1.ActualHeight,
+                To = exp1.ActualHeight,
+                Duration = TimeSpan.FromMilliseconds(500)
+            };
+            gr1.BeginAnimation(HeightProperty, a);
+        }
+
+        private void exp1_Collapsed(object sender, RoutedEventArgs e)
+        {
+            gr1.SetCurrentValue(HeightProperty,0.0);
+        }
+
         
     }
 }
