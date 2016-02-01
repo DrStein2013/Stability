@@ -1,0 +1,36 @@
+﻿<Window x:Name="_calibrationWindow" x:Class="Stability.CalibrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Весовая калибровка устройства" Height="347" Width="532" ResizeMode="NoResize" Icon="Resources/config.ico">
+    <Grid Background="#FFE8E8E8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="287*"/>
+            <RowDefinition Height="31*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="1,0,-1,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90*"/>
+                <ColumnDefinition Width="173*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Параметры калибровки" Height="136" Margin="0,2,0,0" VerticalAlignment="Top"/>
+            <Label Content="Вес груза:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="38,22,0,0" />
+            <TextBox x:Name="_editWeight" Height="25" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="106,25,0,0"/>
+            <Label Content="кг" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="149,23,0,0"/>
+            <Label Content="Кол-во записей:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,62,0,0"/>
+            <TextBox x:Name="editEntryCount" Height="25" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Width="45" PreviewTextInput="editEntryCount_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="106,62,0,0" Text="100"/>
+            <Label Content="шт" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="149,63,0,0"/>
+            <Label Content="Период:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="46,102,0,0"/>
+            <ComboBox HorizontalAlignment="Left" Margin="106,104,0,0" VerticalAlignment="Top" SelectedIndex="2">
+                <ComboBoxItem Content="30 мс"/>
+                <ComboBoxItem Content="40 мс"/>
+                <ComboBoxItem Content="50 мс"/>
+                <ComboBoxItem Content="100 мс"/>
+                <ComboBoxItem Content="150 мс"/>
+                <ComboBoxItem Content="200 мс"/>
+            </ComboBox>
+
+        </Grid>
+        <GroupBox Header="Текущие коэффициенты" Height="108" Margin="1,137,345,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

@@ -35,6 +35,7 @@
             <Grid x:Name="gr1" Background="#FFE5E5E5" Margin="24,0,25,0"/>
         </Expander>
         <Button x:Name="button3" Content="Calibrate" HorizontalAlignment="Left" Height="60" Margin="113,107,0,-137" Grid.Row="1" VerticalAlignment="Top" Width="119" FontFamily="SketchFlow Print" FontSize="24" Click="button3_Click" />
+        <Button x:Name="button4" Content="CoefCalib" HorizontalAlignment="Left" Height="60" Margin="250,107,0,-137" Grid.Row="1" VerticalAlignment="Top" Width="119" FontFamily="SketchFlow Print" FontSize="24" Click="button4_Click" />
 
     </Grid>
 

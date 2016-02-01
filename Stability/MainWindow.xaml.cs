@@ -116,6 +116,14 @@ namespace Stability
                 DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.ZERO_CALIBRATE });
         }
 
-        
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(this, "Введите параметры калибровки", "Нужны параметры", MessageBoxButton.OK,
+                MessageBoxImage.Information, MessageBoxResult.OK);
+            var win = new CalibrationWindow();
+            win.ShowDialog();
+        }
     }
+
 }
+
