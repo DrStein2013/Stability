@@ -7,7 +7,8 @@ namespace Stability.View
     public enum DeviceCmd
     {
         START_MEASURE = 0,
-        STOP_MEASURE
+        STOP_MEASURE,
+        ZERO_CALIBRATE
     };
 
     public class DeviceCmdArgEvent : EventArgs

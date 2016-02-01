@@ -54,6 +54,9 @@ namespace Stability.Model
                     case DeviceCmd.STOP_MEASURE:
                         _device.StopMeasurement();
                     break;
+                    case DeviceCmd.ZERO_CALIBRATE:
+                        _device.Calibrate();
+                    break;
                 default:
                     break;
             }

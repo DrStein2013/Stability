@@ -29,10 +29,10 @@ namespace Stability
 
         public void UpdateTenzView(string[] tenz)
         {
-                Dispatcher.BeginInvoke(new Action(() => Tenz1.Text = tenz[0]));
-                Dispatcher.BeginInvoke(new Action(() => Tenz2.Text = tenz[1]));
-                Dispatcher.BeginInvoke(new Action(() => Tenz3.Text = tenz[2]));
-                Dispatcher.BeginInvoke(new Action(() => Tenz4.Text = tenz[3]));      
+                Dispatcher.BeginInvoke(new Action(() => Tenz0.Text = tenz[0]));
+                Dispatcher.BeginInvoke(new Action(() => Tenz1.Text = tenz[1])); 
+                Dispatcher.BeginInvoke(new Action(() => Tenz2.Text = tenz[2]));
+                Dispatcher.BeginInvoke(new Action(() => Tenz3.Text = tenz[3]));
         }
 
 
@@ -108,6 +108,12 @@ namespace Stability
         private void exp1_Collapsed(object sender, RoutedEventArgs e)
         {
             gr1.SetCurrentValue(HeightProperty,0.0);
+        }
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            if (DeviceCmdEvent != null)
+                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.ZERO_CALIBRATE });
         }
 
         
