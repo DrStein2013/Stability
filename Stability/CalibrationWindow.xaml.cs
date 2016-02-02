@@ -18,10 +18,19 @@ namespace Stability
     /// </summary>
     public partial class CalibrationWindow : Window
     {
-        private bool wasDot;    
         public CalibrationWindow()
         {
             InitializeComponent();
+            var arr = new TenzoRadioButton[4] { Tenz0, Tenz1, Tenz2, Tenz3 };
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if(i!=j)
+                        arr[i].GroupTenzoRadioButtons.Add(arr[j]);
+                }
+            }
+
         }
 
         private void _editWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -29,7 +38,7 @@ namespace Stability
             e.Handled = true;
             try
             {
-                if (((e.Text == ".") && (!_editWeight.Text.Contains("."))) || (Char.IsDigit(e.Text, 0)))
+                if (((e.Text == ".") && (!((TextBox)sender).Text.Contains("."))) || (Char.IsDigit(e.Text, 0)))
                     e.Handled = false;
             }
             catch
@@ -50,6 +59,11 @@ namespace Stability
             {
                 e.Handled = true;
             }      
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            bar.Value += 1;
         }
     }
 }
