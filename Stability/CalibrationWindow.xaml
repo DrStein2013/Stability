@@ -47,8 +47,6 @@
 
             </GroupBox>
 
-            <Button Grid.Column="0" Content="Калибровать" HorizontalAlignment="Left" Margin="50,255,0,0" VerticalAlignment="Top" Width="80" Height="30" Click="Button_Click"/>
-
 
 
             <GroupBox Grid.Column="1" Header=" Выбор датчика" Margin="5,2,5,8">
@@ -63,7 +61,26 @@
                     </Grid>
                 </Border>
             </GroupBox>
-
+            <Image x:Name="but_ok" HorizontalAlignment="Center" Height="30" Margin="0,250,45,0" VerticalAlignment="Center" Width="30" Source="Resources/ok_but.png" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave" MouseLeftButtonUp="Button_Click" Stretch="UniformToFill">
+                <Image.Effect>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="20" Color="#FF358340" Opacity="0"/>
+                </Image.Effect>
+            </Image>
+            <Image x:Name="but_next"  HorizontalAlignment="Center" Height="30" Margin="25,250,0,0" VerticalAlignment="Center" Width="30" Source="Resources/next.png" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave">
+                <Image.Effect>
+                    <DropShadowEffect Color="#FFFFAE00" BlurRadius="20" ShadowDepth="0" Opacity="0"/>
+                </Image.Effect>
+            </Image>
+            <Image x:Name="but_prev" HorizontalAlignment="Center" Height="30" Margin="0,250,120,0" VerticalAlignment="Center" Width="30" Source="Resources/prev.png" Stretch="UniformToFill" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave">
+                <Image.Effect>
+                    <DropShadowEffect Color="#FFFFAE00" BlurRadius="20" ShadowDepth="0" Opacity="0"/>
+                </Image.Effect>
+            </Image>
+            <Image HorizontalAlignment="Center" Height="30" Margin="118,250,0,0" VerticalAlignment="Center" Width="30" Source="Resources/help.png" Stretch="UniformToFill" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave">
+                <Image.Effect>
+                    <DropShadowEffect Color="#FF00A2FF" BlurRadius="20" ShadowDepth="0" Opacity="0"/>
+                </Image.Effect>
+            </Image>
         </Grid>
         <ProgressBar x:Name="bar" Margin="10,5" Grid.Row="1"/>
 

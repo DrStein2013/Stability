@@ -118,8 +118,8 @@ namespace Stability
 
         private void button4_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(this, "Введите параметры калибровки", "Нужны параметры", MessageBoxButton.OK,
-                MessageBoxImage.Information, MessageBoxResult.OK);
+           // MessageBox.Show(this, "Введите параметры калибровки", "Нужны параметры", MessageBoxButton.OK,
+             //   MessageBoxImage.Information, MessageBoxResult.OK);
             var win = new CalibrationWindow();
             win.ShowDialog();
         }
