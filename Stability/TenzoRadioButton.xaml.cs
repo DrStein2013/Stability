@@ -50,7 +50,8 @@ namespace Stability
 
         private void UserControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ToggleState();
+            //ToggleState();
+            IsChecked = true;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
