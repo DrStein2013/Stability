@@ -19,8 +19,6 @@ namespace Stability.Model.Device
 
       //  private event EventHandler _parseDone;
 
-        private double[] ZeroAdcVals;
-
         private List<double[]> _adcList;
 
         private int ZeroCalibrationCount = 100;
@@ -30,7 +28,6 @@ namespace Stability.Model.Device
             Port.RxEvent+=PortOnRxEvent;
             _mode = StabilityParseMode.ParseData;
             CurrAdcVals = new double[4];
-            ZeroAdcVals = new double[4];
         }
 
        
@@ -57,19 +54,20 @@ namespace Stability.Model.Device
 
         private void ParseData(Pack pack)
         {
+            var zeroAdcVals = MainConfig.ZeroAdcVals;
             var arr = new int[4];
             var barr = pack.Data.ToArray();
             for (int i = 0, j = 0; i < 4; i++, j += 2)
             {
                 arr[i] = BitConverter.ToInt16(barr, j);
-                CurrAdcVals[i] = (arr[i]*5.0/1024)-ZeroAdcVals[i];
+                CurrAdcVals[i] = (arr[i]*5.0/1024)-zeroAdcVals[i];
             }
         }
 
         public override void Calibrate()
         {
             StopMeasurement();
-            ZeroAdcVals = new double[4];
+            //_zeroAdcVals = new double[4];
             var thr = new Thread(ZeroCalibrationHandler) {Priority = ThreadPriority.AboveNormal, IsBackground = true};
             thr.Start();
             /*      _adcList = new List<double[]>();
@@ -96,6 +94,7 @@ namespace Stability.Model.Device
         private void ZeroCalibrationHandler()
         {
            //_adcList.Add(CurrAdcVals);
+            var zeroAdcVals = new double[4];
             var list = new List<double[]>();
 
             while(list.Count < ZeroCalibrationCount)
@@ -107,13 +106,13 @@ namespace Stability.Model.Device
 
             foreach (var val in list)
             {
-                ZeroAdcVals[0] += val[0];
-                ZeroAdcVals[1] += val[1];
-                ZeroAdcVals[2] += val[2];
-                ZeroAdcVals[3] += val[3];
+                zeroAdcVals[0] += val[0];
+                zeroAdcVals[1] += val[1];
+                zeroAdcVals[2] += val[2];
+                zeroAdcVals[3] += val[3];
             }
-            for (int i = 0; i < ZeroAdcVals.Count(); i++)
-                ZeroAdcVals[i] /= ZeroCalibrationCount;
+            for (int i = 0; i < zeroAdcVals.Count(); i++)
+                zeroAdcVals[i] /= ZeroCalibrationCount;
         }
     }
 }

@@ -20,13 +20,14 @@ namespace Stability
     /// </summary>
     public partial class CalibrationWindow : Window
     {
-        private double but_h;
-        private double but_w;
+        private readonly double _butH;
+        private readonly double _butW;
+        private double[] _weightKoefs;
         public CalibrationWindow()
         {
             InitializeComponent();
-            but_h = but_ok.Height;
-            but_w = but_ok.Width;
+            _butH = but_ok.Height;
+            _butW = but_ok.Width;
             var arr = new TenzoRadioButton[4] { Tenz0, Tenz1, Tenz2, Tenz3 };
             for (int i = 0; i < 4; i++)
             {
@@ -37,6 +38,11 @@ namespace Stability
                 }
             }
 
+            _weightKoefs = MainConfig.WeightKoefs;
+            _tenz0_Koef.Text = _weightKoefs[0].ToString();
+            _tenz1_Koef.Text = _weightKoefs[1].ToString();
+            _tenz2_Koef.Text = _weightKoefs[2].ToString();
+            _tenz3_Koef.Text = _weightKoefs[3].ToString();
         }
 
         private void _editWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -76,12 +82,12 @@ namespace Stability
         {
             var w = new DoubleAnimation();
             var h = new DoubleAnimation();
-            w.From = but_w;
-            w.To = but_w + 5;
+            w.From = _butW;
+            w.To = _butW + 5;
             w.Duration = TimeSpan.FromMilliseconds(20);
 
-            h.From = but_h;
-            h.To = but_h + 5;
+            h.From = _butH;
+            h.To = _butH + 5;
             h.Duration = TimeSpan.FromMilliseconds(20);
 
             ((Image)sender).BeginAnimation(WidthProperty, w);
@@ -98,11 +104,11 @@ namespace Stability
             var a = new DoubleAnimation();
             var h = new DoubleAnimation();
             a.From = but_ok.Width;
-            a.To = but_w;
+            a.To = _butW;
             a.Duration = TimeSpan.FromMilliseconds(20);
 
             h.From = but_ok.Height;
-            h.To = but_h;
+            h.To = _butH;
             h.Duration = TimeSpan.FromMilliseconds(20);
 
             ((Image)sender).BeginAnimation(WidthProperty, a);
