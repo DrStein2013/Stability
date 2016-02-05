@@ -1,34 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Microsoft.SqlServer.Server;
+using Stability.Model;
+using Stability.Model.Port;
+using Stability.View;
 
 namespace Stability
 {
     /// <summary>
     /// Interaction logic for CalibrationWindow.xaml
     /// </summary>
-    public partial class CalibrationWindow : Window
+    public partial class CalibrationWindow : IView
     {
         private readonly double _butH;
         private readonly double _butW;
+       
         private double[] _weightKoefs;
-        public CalibrationWindow()
+        private CalibratePresenter _presenter;
+
+        private CalibrationParams _calibrationParams = new CalibrationParams();
+        private TenzoRadioButton[] arr;
+        public CalibrationWindow(IStabilityModel model)
         {
             InitializeComponent();
             _butH = but_ok.Height;
             _butW = but_ok.Width;
-            var arr = new TenzoRadioButton[4] { Tenz0, Tenz1, Tenz2, Tenz3 };
+            arr = new TenzoRadioButton[4] { Tenz0, Tenz1, Tenz2, Tenz3 };
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -37,12 +39,18 @@ namespace Stability
                         arr[i].GroupTenzoRadioButtons.Add(arr[j]);
                 }
             }
+            Tenz0.IsChecked = true;
 
             _weightKoefs = MainConfig.WeightKoefs;
             _tenz0_Koef.Text = _weightKoefs[0].ToString();
             _tenz1_Koef.Text = _weightKoefs[1].ToString();
             _tenz2_Koef.Text = _weightKoefs[2].ToString();
             _tenz3_Koef.Text = _weightKoefs[3].ToString();
+
+            _calibrationParams.EntryCount = 100;
+            _calibrationParams.Weight = 7.5;
+
+           _presenter = new CalibratePresenter(model,this);
         }
 
         private void _editWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -73,9 +81,38 @@ namespace Stability
             }      
         }
 
+        private void UpdateParams()
+        {
+            _editWeight_LostFocus(this, null);
+            editEntryCount_LostFocus(this,null);
+        }
+        private bool CheckParams()
+        {
+            if (_calibrationParams.Weight < 5.0)
+            {
+                MessageBox.Show(this, "Значение веса слишком мало, груз должен быть более 5кг.", "Малый вес",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            if (_calibrationParams.EntryCount < 10)
+            {
+                MessageBox.Show(this, "Количество записей должно быть больше 10", "Слишком мало записей",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            if (_calibrationParams.EntryCount > 2000)
+            {
+                MessageBox.Show(this, "Количество записей не должно превышать 2000", "Слишком много записей",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            bar.Value += 1;
+            UpdateParams();
+            if(CheckParams())
+                DeviceCmdEvent.Invoke(this,new DeviceCmdArgEvent(){cmd = DeviceCmd.WIEGHT_CALIBRATE, Params = _calibrationParams});
         }
 
         private void but_MouseEnter(object sender, MouseEventArgs e)
@@ -117,7 +154,79 @@ namespace Stability
             ((Image)sender).Effect.SetCurrentValue(DropShadowEffect.OpacityProperty, 0.0);
         }
 
-   
+        public void UpdateTenzView(string[] tenz)
+        {
+            Dispatcher.BeginInvoke(new Action(() => _tenz0_Koef.Text = tenz[0]));
+            Dispatcher.BeginInvoke(new Action(() => _tenz1_Koef.Text = tenz[1]));
+            Dispatcher.BeginInvoke(new Action(() => _tenz2_Koef.Text = tenz[2]));
+            Dispatcher.BeginInvoke(new Action(() => _tenz3_Koef.Text = tenz[3]));
+        }
 
+        public void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)
+        {
+            return;
+        }
+
+        public event EventHandler ViewUpdated;
+        public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
+
+        private void comboPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int[] periods = { 30, 40, 50, 100, 150, 200 };
+
+            var v = ((ComboBox) sender).SelectedIndex;
+            _calibrationParams.Period = periods[v];
+        }
+
+        private void _editWeight_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double var;
+
+            if (!Double.TryParse(_editWeight.Text, NumberStyles.Any, CultureInfo.CreateSpecificCulture("en-GB"), out var))
+            {
+                MessageBox.Show(this, "Значение веса ввдено неверно!", "Ошибка", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            else
+                _calibrationParams.Weight = var;
+        }
+
+        private void editEntryCount_LostFocus(object sender, RoutedEventArgs e)
+        {
+            int v1;
+            if (!int.TryParse(editEntryCount.Text, out v1))
+            {
+                MessageBox.Show(this, "Количество записей ввдено неверно!", "Ошибка", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            else
+             _calibrationParams.EntryCount = v1;
+        }
+
+        private void Tenz_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+           for (byte i = 0; i < 4; i++)
+                if (arr[i].IsChecked)
+                {
+                    _calibrationParams.TenzNumber = i;
+                    break;
+                }
+        }
+
+        private void next_tenz_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var n = _calibrationParams.TenzNumber;
+            if (++n == 4) n = 0;
+            _calibrationParams.TenzNumber = n;
+            arr[n].IsChecked = true;
+        }
+
+        private void prev_tenz_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var n = _calibrationParams.TenzNumber;
+            if (--n == byte.MaxValue) n = 3;
+            _calibrationParams.TenzNumber = n;
+            arr[n].IsChecked = true;
+        }
     }
 }
