@@ -1,5 +1,6 @@
 ﻿using System;
 using Stability.Model.Port;
+using Stability.View;
 
 namespace Stability.Model.Device
 {
@@ -14,7 +15,7 @@ namespace Stability.Model.Device
             Port = IoC.Resolve<IPort>();
         }
 
-        public virtual void Calibrate()
+        public virtual void Calibrate(CalibrationParams p)
         {
             throw new NotImplementedException();
         }
