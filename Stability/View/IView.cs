@@ -8,15 +8,24 @@ namespace Stability.View
     {
         START_MEASURE = 0,
         STOP_MEASURE,
-        ZERO_CALIBRATE
+        ZERO_CALIBRATE,
+        WIEGHT_CALIBRATE
     };
 
+    public class CalibrationParams
+    {
+        public byte TenzNumber { get; set; }
+        public double Weight { get; set; }
+        public int EntryCount { get; set; }
+        public int Period { get; set; }
+    }
     public class DeviceCmdArgEvent : EventArgs
     {
         public DeviceCmd cmd { get; set; }
+        public CalibrationParams Params { get; set; }
     }
 
-    interface IView
+    public interface IView
     {
         void UpdateTenzView(string[] tenz);
         
