@@ -16,10 +16,10 @@ namespace Stability.Model
         public double[] Data { get; set; }
     }
 
-    interface IStabilityModel
+    public interface IStabilityModel
     {
         event EventHandler<TenzEventArgs> UpdateDataView;
-        void DeviceCmdFromView(DeviceCmd c);
+        void DeviceCmdFromView(DeviceCmdArgEvent c);
     }
 
     public class StabilityModel : IStabilityModel
@@ -34,7 +34,10 @@ namespace Stability.Model
             var conf = MainConfig.PortConfig;
             IoC.GetKernel().Bind<IPort>().To<CComPort>().InSingletonScope().WithConstructorArgument("config", conf);
             _device = new StabilityDevice();
-            
+
+            _device.calibrationDone +=
+                (sender, args) => UpdateDataView(this, new TenzEventArgs() {Data = _device._weighKoefs});
+
             _viewUpdaterTimer = new Timer(ViewTimerHandler, null,100, 60);
         }
 
@@ -44,9 +47,9 @@ namespace Stability.Model
                 UpdateDataView(this, new TenzEventArgs() {Data = _device.CurrAdcVals});
         }
 
-        public void DeviceCmdFromView(DeviceCmd c)
+        public void DeviceCmdFromView(DeviceCmdArgEvent deviceCmdArgEvent)
         {
-            switch (c)
+            switch (deviceCmdArgEvent.cmd)
             {
                     case DeviceCmd.START_MEASURE:
                         _device.StartMeasurement();
@@ -55,7 +58,10 @@ namespace Stability.Model
                         _device.StopMeasurement();
                     break;
                     case DeviceCmd.ZERO_CALIBRATE:
-                        _device.Calibrate();
+                        _device.Calibrate(null);
+                    break;
+                    case DeviceCmd.WIEGHT_CALIBRATE:
+                        _device.Calibrate(deviceCmdArgEvent.Params);
                     break;
                 default:
                     break;
