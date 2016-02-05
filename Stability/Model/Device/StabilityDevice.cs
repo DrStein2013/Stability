@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Stability.Model.Port;
+using Stability.View;
 
 namespace Stability.Model.Device
 {
@@ -18,16 +19,19 @@ namespace Stability.Model.Device
         private StabilityParseMode _mode;
 
       //  private event EventHandler _parseDone;
+        public event EventHandler calibrationDone; 
 
         private List<double[]> _adcList;
 
         private int ZeroCalibrationCount = 100;
 
+        public double[] _weighKoefs { get; private set; }
         public StabilityDevice()
         {
             Port.RxEvent+=PortOnRxEvent;
             _mode = StabilityParseMode.ParseData;
             CurrAdcVals = new double[4];
+            _weighKoefs = MainConfig.WeightKoefs;
         }
 
        
@@ -64,12 +68,27 @@ namespace Stability.Model.Device
             }
         }
 
-        public override void Calibrate()
+        public override void Calibrate(CalibrationParams calibrationParams)
         {
             StopMeasurement();
-            //_zeroAdcVals = new double[4];
-            var thr = new Thread(ZeroCalibrationHandler) {Priority = ThreadPriority.AboveNormal, IsBackground = true};
-            thr.Start();
+            if (calibrationParams == null)
+            {
+                var thr = new Thread(ZeroCalibrationHandler)
+                {
+                    Priority = ThreadPriority.AboveNormal,
+                    IsBackground = true
+                };
+                thr.Start();
+            }
+            else
+            {
+                var thr = new Thread(WeightCalibrationHandler)
+                {
+                    Priority = ThreadPriority.AboveNormal,
+                    IsBackground = true
+                };
+                thr.Start(calibrationParams);
+            }
             /*      _adcList = new List<double[]>();
             ZeroAdcVals = new double[4];
             _parseDone += ZeroCalibrationHandler;*/
@@ -113,6 +132,26 @@ namespace Stability.Model.Device
             }
             for (int i = 0; i < zeroAdcVals.Count(); i++)
                 zeroAdcVals[i] /= ZeroCalibrationCount;
+
+            //------------
+        }
+
+        private void WeightCalibrationHandler(object o)
+        {
+            var param = (CalibrationParams) o;
+            double koef,aver=0;
+
+            var list = new List<double[]>();
+            while (list.Count < param.EntryCount)
+            {
+                SendCmd(new byte[] { 0x31 });
+                Thread.Sleep(param.Period);
+                list.Add(CurrAdcVals);
+            }
+            aver = list.Average(val => val[param.TenzNumber]);
+            koef = param.Weight/aver;
+            _weighKoefs[param.TenzNumber] = koef;
+            if (calibrationDone != null) calibrationDone.Invoke(null, null);
         }
     }
 }
