@@ -5,26 +5,39 @@ using Stability.View;
 
 namespace Stability
 {
-    class StabilityPresenter
+    class Presenter
     {
-        private IStabilityModel _model;
-        private IView _view;
+        protected IStabilityModel _model;
+        protected IView _view;
 
-        public StabilityPresenter(IStabilityModel model,IView view)
+        public Presenter(IStabilityModel model, IView view)
         {
             _model = model;
-            _model.UpdateDataView += ModelOnUpdateDataView;
-
-
             _view = view;
             _view.ViewUpdated += ViewOnViewUpdated;
             _view.DeviceCmdEvent += ViewOnDeviceCmdEvent;
-            IoC.Resolve<IPort>().PortStatusChanged += _view.COnPortStatusChanged;
         }
 
-        private void ViewOnDeviceCmdEvent(object sender, DeviceCmdArgEvent deviceCmdArgEvent)
+        private void ViewOnDeviceCmdEvent(object sender, DeviceCmdArgEvent e)
         {
-           _model.DeviceCmdFromView(deviceCmdArgEvent.cmd);
+            _model.DeviceCmdFromView(e);
+        }
+
+        private void ViewOnViewUpdated(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    class StabilityPresenter : Presenter
+    {
+        public IStabilityModel Model { get { return _model; } }
+
+        public StabilityPresenter(IStabilityModel model,IView view):base(model,view)
+        {
+            _model.UpdateDataView += ModelOnUpdateDataView;
+            IoC.Resolve<IPort>().PortStatusChanged += _view.COnPortStatusChanged;
         }
 
         private void ModelOnUpdateDataView(object sender, TenzEventArgs tenzEventArgs)
@@ -46,6 +59,25 @@ namespace Stability
         private void GetViewState()
         {
             
+        }
+    }
+
+    class CalibratePresenter : Presenter
+    {
+        public CalibratePresenter(IStabilityModel model, IView view) : base(model, view)
+        {
+            model.UpdateDataView+=ModelOnUpdateDataView;
+        }
+
+        private void ModelOnUpdateDataView(object sender, TenzEventArgs tenzEventArgs)
+        {
+            _view.UpdateTenzView(new[]
+            {
+                tenzEventArgs.Data[0].ToString("F2"),
+                tenzEventArgs.Data[1].ToString("F2"),
+                tenzEventArgs.Data[2].ToString("F2"),
+                tenzEventArgs.Data[3].ToString("F2")
+            });
         }
     }
 }
