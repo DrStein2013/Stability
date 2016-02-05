@@ -120,7 +120,7 @@ namespace Stability
         {
            // MessageBox.Show(this, "Введите параметры калибровки", "Нужны параметры", MessageBoxButton.OK,
              //   MessageBoxImage.Information, MessageBoxResult.OK);
-            var win = new CalibrationWindow();
+            var win = new CalibrationWindow(_presenter.Model);
             win.ShowDialog();
         }
     }
