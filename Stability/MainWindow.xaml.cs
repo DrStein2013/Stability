@@ -23,8 +23,9 @@ namespace Stability
         {
             InitializeComponent();
             _presenter = new StabilityPresenter(new StabilityModel(), this);
+            
             Thread.Sleep(200);
-            Button_Click_1(this,null);
+           // Button_Click_1(this,null);
         }
 
         public void UpdateTenzView(string[] tenz)
@@ -121,6 +122,12 @@ namespace Stability
            // MessageBox.Show(this, "Введите параметры калибровки", "Нужны параметры", MessageBoxButton.OK,
              //   MessageBoxImage.Information, MessageBoxResult.OK);
             var win = new CalibrationWindow(_presenter.Model);
+            win.ShowDialog();
+        }
+
+        private void DataRxItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            var win = new DataRxWindow();
             win.ShowDialog();
         }
     }

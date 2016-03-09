@@ -23,6 +23,9 @@
                 <Separator/>
                 <MenuItem Header="Exit" Click="OnExit"/>
             </MenuItem>
+            <MenuItem Header="Параметры">
+                <MenuItem x:Name="DataRxItem" Header="Прием данных" Click="DataRxItem_OnClick"/>
+            </MenuItem>
             <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>
         <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Margin="38,19,0,-49" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
