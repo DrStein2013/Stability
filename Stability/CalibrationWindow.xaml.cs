@@ -25,11 +25,14 @@ namespace Stability
 
         private CalibrationParams _calibrationParams = new CalibrationParams();
         private TenzoRadioButton[] arr;
+        private ButtonHandler buttonHandler;
+
         public CalibrationWindow(IStabilityModel model)
         {
             InitializeComponent();
-            _butH = but_ok.Height;
-            _butW = but_ok.Width;
+            buttonHandler = new ButtonHandler(but_ok.Height,but_ok.Width);
+           /* _butH = but_ok.Height;
+            _butW = but_ok.Width;*/
             arr = new TenzoRadioButton[4] { Tenz0, Tenz1, Tenz2, Tenz3 };
             for (int i = 0; i < 4; i++)
             {
@@ -117,6 +120,16 @@ namespace Stability
 
         private void but_MouseEnter(object sender, MouseEventArgs e)
         {
+            buttonHandler.but_MouseEnter(sender,e);
+        }
+
+        private void but_MouseLeave(object sender, MouseEventArgs e)
+        {
+            buttonHandler.but_MouseLeave(sender,e);
+        }
+        /*
+        private void but_MouseEnter(object sender, MouseEventArgs e)
+        {
             var w = new DoubleAnimation();
             var h = new DoubleAnimation();
             w.From = _butW;
@@ -153,7 +166,7 @@ namespace Stability
 
             ((Image)sender).Effect.SetCurrentValue(DropShadowEffect.OpacityProperty, 0.0);
         }
-
+        */
         public void UpdateTenzView(string[] tenz)
         {
             Dispatcher.BeginInvoke(new Action(() => _tenz0_Koef.Text = tenz[0]));
@@ -227,6 +240,62 @@ namespace Stability
             if (--n == byte.MaxValue) n = 3;
             _calibrationParams.TenzNumber = n;
             arr[n].IsChecked = true;
+        }
+
+        private void SaveBut_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MainConfig.Update(null,_presenter.CurrWeightKoefs,null);
+        }
+    }
+
+   public class ButtonHandler
+    {
+        private readonly double _butH;
+        private readonly double _butW;
+
+       public ButtonHandler(double H, double W)
+       {
+           _butH = H;
+           _butW = W;
+       }
+
+        public void but_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var w = new DoubleAnimation();
+            var h = new DoubleAnimation();
+            w.From = _butW;
+            w.To = _butW + 5;
+            w.Duration = TimeSpan.FromMilliseconds(20);
+
+            h.From = _butH;
+            h.To = _butH + 5;
+            h.Duration = TimeSpan.FromMilliseconds(20);
+
+            ((Image)sender).BeginAnimation(Image.WidthProperty, w);
+            ((Image)sender).BeginAnimation(Image.HeightProperty, h);
+
+            //  var op = new DoubleAnimation(0.0, 100.0, TimeSpan.FromMilliseconds(1));
+            //  but_ok.Effect.BeginAnimation(DropShadowEffect.OpacityProperty,op);//SetValue(OpacityProperty,100.0);
+            ((Image)sender).Effect.SetCurrentValue(DropShadowEffect.OpacityProperty, 100.0);
+            //  but_ok.Effect.SetValue();
+        }
+
+        public void but_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var a = new DoubleAnimation();
+            var h = new DoubleAnimation();
+            a.From = _butW + 5;//but_ok.Width;
+            a.To = _butW;
+            a.Duration = TimeSpan.FromMilliseconds(20);
+
+            h.From = _butH + 5;//but_ok.Height;
+            h.To = _butH;
+            h.Duration = TimeSpan.FromMilliseconds(20);
+
+            ((Image)sender).BeginAnimation(Image.WidthProperty, a);
+            ((Image)sender).BeginAnimation(Image.HeightProperty, h);
+
+            ((Image)sender).Effect.SetCurrentValue(DropShadowEffect.OpacityProperty, 0.0);
         }
     }
 }

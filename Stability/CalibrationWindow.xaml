@@ -88,7 +88,7 @@
                     <DropShadowEffect ShadowDepth="0" BlurRadius="20" Color="#FF00B9FF" Opacity="0"/>
                 </Image.Effect>
             </Image>
-            <Image HorizontalAlignment="Center" Height="30" Margin="100,250,0,0" VerticalAlignment="Center" Width="30" Source="Resources/save.png" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave" ToolTip="Сохранить значение">
+            <Image x:Name="SaveBut" HorizontalAlignment="Center" Height="30" Margin="100,250,0,0" VerticalAlignment="Center" Width="30" Source="Resources/save.png" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave" ToolTip="Сохранить значение" MouseLeftButtonUp="SaveBut_MouseLeftButtonUp">
                 <Image.Effect>
                     <DropShadowEffect ShadowDepth="0" BlurRadius="20" Color="#FF00A2FF" Opacity="0"/>
                 </Image.Effect>
