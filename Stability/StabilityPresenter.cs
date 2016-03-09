@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Stability.Model;
 using Stability.Model.Port;
 using Stability.View;
@@ -66,11 +67,13 @@ namespace Stability
     {
         public CalibratePresenter(IStabilityModel model, IView view) : base(model, view)
         {
-            model.UpdateDataView+=ModelOnUpdateDataView;
+            model.UpdateWeightKoef+=ModelOnUpdateWeightView;
+            CurrWeightKoefs = new double[4];
         }
 
-        private void ModelOnUpdateDataView(object sender, TenzEventArgs tenzEventArgs)
+        private void ModelOnUpdateWeightView(object sender, TenzEventArgs tenzEventArgs)
         {
+            CurrWeightKoefs = tenzEventArgs.Data.ToArray();
             _view.UpdateTenzView(new[]
             {
                 tenzEventArgs.Data[0].ToString("F2"),
@@ -79,5 +82,7 @@ namespace Stability
                 tenzEventArgs.Data[3].ToString("F2")
             });
         }
+
+        public double[] CurrWeightKoefs { get; private set; }
     }
 }
