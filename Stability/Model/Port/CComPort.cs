@@ -144,7 +144,7 @@ namespace Stability.Model.Port
             var buf = new byte[_port.BytesToRead];
             _port.Read(buf, 0, buf.Length);
             
-            _rxBuf.AddRange(buf);
+            _rxBuf.AddRange((IEnumerable<byte>) buf.Clone());
         }
 
         private void RxThreadHandler(object ev)
@@ -165,7 +165,7 @@ namespace Stability.Model.Port
 
                   if (pack != null)
                    {
-                    RxData.Enqueue(pack);   //Суем пакет в выходную очередь
+                    RxData.Enqueue(new Pack(pack.Data));   //Суем пакет в выходную очередь
                        if (RxEvent != null)
                           RxEvent.Invoke(this, null); //Дергаем Event   
                            
