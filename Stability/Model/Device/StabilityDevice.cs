@@ -15,26 +15,86 @@ namespace Stability.Model.Device
     class StabilityDevice : CDevice
     {
         public double[] CurrAdcVals { get;private set; }
-        
+        public volatile double[] WeightDoubles;// { get; private set; }
         private StabilityParseMode _mode;
 
-      //  private event EventHandler _parseDone;
+        private event EventHandler _parseDone;
         public event EventHandler calibrationDone; 
 
-        private List<double[]> _adcList;
+        private List<double[]> _adcList = new List<double[]>();
+        private List<double[]> _weList = new List<double[]>();
 
         private int ZeroCalibrationCount = 100;
 
         public double[] _weighKoefs { get; private set; }
+        private double weight;
+        private double[] vl_prev = new double[4];
+        private double[] wDoubles = new double[4]{1.0,0.5,0.5,1.0};
+
         public StabilityDevice()
         {
-            Port.RxEvent+=PortOnRxEvent;
+        //    Port.RxEvent+=PortOnRxEvent;
             _mode = StabilityParseMode.ParseData;
             CurrAdcVals = new double[4];
             _weighKoefs = MainConfig.WeightKoefs;
+            WeightDoubles = new double[4];
+          //  _parseDone+= OnParseDone;
+
+            var t = new Thread(OnParseDone) {Priority = ThreadPriority.Highest, IsBackground = true};
+            t.Start();
+
+            var t2 = new Thread(RxThread) {Priority = ThreadPriority.AboveNormal, IsBackground = true};
+            t2.Start();
         }
 
-       
+        private void OnParseDone(/*object sender, EventArgs eventArgs*/)
+        {
+            StopMeasurement();
+            Thread.Sleep(1000);
+                while (_weList.Count < 50)
+                {
+                    SendCmd(new byte[] {0x31});
+                    Thread.Sleep(500);
+                    // _adcList.Add(WeightDoubles);
+                }
+
+                //StopMeasurement();
+                //if (_adcList.Count > 500)
+                // {
+
+                //   _parseDone -= OnParseDone;
+                double av1 = 0, av2 = 0, av3 = 0, av4 = 0;
+                foreach (var entry in _weList)
+                {
+                    av1 += entry[0];
+                    av2 += entry[1];
+                    av3 += entry[2];
+                    av4 += entry[3];
+                }
+                av1 /= _weList.Count;
+                av2 /= _weList.Count;
+                av3 /= _weList.Count;
+                av4 /= _weList.Count;
+                var w2 = (av1 + av4)/2;
+                w2 += 1;
+                var w3 = (av1 + av4 + av3) / 3;
+                w3 += 1;
+                weight = (av1 + av2 + av3 + av4)/4;
+        }
+
+        private void RxThread()
+        {
+            while (true)
+            {
+                if (Port.GetRxBuf().Count > 0)
+                {
+                    var p = Port.GetRxBuf().Dequeue();
+                    Parse(p);
+                }
+                Thread.Sleep(50);
+            }
+        }
+
         private void PortOnRxEvent(object sender, EventArgs eventArgs)
         {
             var p = Port.GetRxBuf().Dequeue();
@@ -52,20 +112,42 @@ namespace Stability.Model.Device
                 ParseCmd(pack);
               break;
             }
-           /* if(_parseDone != null)
-                _parseDone.Invoke(this,null);//BeginInvoke(this, null, null, null);*/
+            if(_parseDone != null)
+                _parseDone.Invoke(this,null);//BeginInvoke(this, null, null, null);
         }
 
         private void ParseData(Pack pack)
         {
             var zeroAdcVals = MainConfig.ZeroAdcVals;
             var arr = new int[4];
+          
             var barr = pack.Data.ToArray();
             for (int i = 0, j = 0; i < 4; i++, j += 2)
             {
                 arr[i] = BitConverter.ToInt16(barr, j);
-                CurrAdcVals[i] = (arr[i]*5.0/1024)-zeroAdcVals[i];
+              /*  if(arr[i] < 20)
+                    return;
+                */
+                var vl = (arr[i]*5.09/1024);
+
+                vl = wDoubles[i]*vl + (1 - wDoubles[i])*vl_prev[i];
+
+                //if (Math.Abs(vl - (5.09/1024)) < 0.5)
+                //    vl = vl_prev[i];
+               // else
+                    vl_prev[i] = vl;
+                
+
+                if (Math.Abs(vl - zeroAdcVals[i]) < 0.1)
+                    vl = 0.0;
+                else if (vl - zeroAdcVals[i] > 0)
+                    vl-= zeroAdcVals[i];
+
+                CurrAdcVals[i] = vl;//(arr[i]*5.0/1024)-zeroAdcVals[i];
+                WeightDoubles[i] = CurrAdcVals[i]*MainConfig.WeightKoefs[i];
             }
+            _weList.Add((double[]) WeightDoubles.Clone());
+            _adcList.Add((double[])CurrAdcVals.Clone());
         }
 
         public override void Calibrate(CalibrationParams calibrationParams)
@@ -116,14 +198,14 @@ namespace Stability.Model.Device
             var zeroAdcVals = new double[4];
             var list = new List<double[]>();
 
-            while(list.Count < ZeroCalibrationCount)
+            while(_adcList.Count < ZeroCalibrationCount)
             {
                 SendCmd(new byte[] {0x31});
-                Thread.Sleep(100);
-                list.Add(CurrAdcVals);
+                Thread.Sleep(500);
+              //  list.Add((double[])CurrAdcVals.Clone());
             }
 
-            foreach (var val in list)
+            foreach (var val in _adcList)
             {
                 zeroAdcVals[0] += val[0];
                 zeroAdcVals[1] += val[1];
@@ -132,7 +214,8 @@ namespace Stability.Model.Device
             }
             for (int i = 0; i < zeroAdcVals.Count(); i++)
                 zeroAdcVals[i] /= ZeroCalibrationCount;
-
+            MainConfig.Update(null,null,zeroAdcVals);
+            _adcList.Clear();
             //------------
         }
 
@@ -142,16 +225,18 @@ namespace Stability.Model.Device
             double koef,aver=0;
 
             var list = new List<double[]>();
-            while (list.Count < param.EntryCount)
+            while (_adcList.Count < param.EntryCount)
             {
                 SendCmd(new byte[] { 0x31 });
                 Thread.Sleep(param.Period);
-                list.Add(CurrAdcVals);
+                //list.Add((double[]) CurrAdcVals.Clone());
             }
-            aver = list.Average(val => val[param.TenzNumber]);
+            aver = _adcList.Average(val => val[param.TenzNumber]);
             koef = param.Weight/aver;
             _weighKoefs[param.TenzNumber] = koef;
             if (calibrationDone != null) calibrationDone.Invoke(null, null);
+            _adcList.Clear();
+           // StartMeasurement();
         }
     }
 }
