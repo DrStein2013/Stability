@@ -65,12 +65,19 @@
     <Compile Include="CalibrationWindow.xaml.cs">
       <DependentUpon>CalibrationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataRxWindow.xaml.cs">
+      <DependentUpon>DataRxWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StabilityPresenter.cs" />
     <Compile Include="TenzoRadioButton.xaml.cs">
       <DependentUpon>TenzoRadioButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\IView.cs" />
     <Page Include="CalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataRxWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,6 +165,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\save.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\search.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
