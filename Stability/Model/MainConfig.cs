@@ -40,18 +40,19 @@ namespace Stability
                 currentConfig.AppSettings.Settings["UseSLIP"].Value = config.UseSLIP.ToString();
             }
             if (weightKoefs != null)
-                currentConfig.AppSettings.Settings["WeightKoefs"].Value = weightKoefs[0] + "," +
-                                                                          weightKoefs[1] + "," +
-                                                                          weightKoefs[2] + "," +
-                                                                          weightKoefs[3];
+                currentConfig.AppSettings.Settings["WeightKoefs"].Value = weightKoefs[0].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                          weightKoefs[1].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                          weightKoefs[2].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                          weightKoefs[3].ToString(CultureInfo.InvariantCulture);
             if (zeroAdcVals != null)
-                currentConfig.AppSettings.Settings["ZeroAdcVals"].Value = zeroAdcVals[0] + "," +
-                                                                          zeroAdcVals[1] + "," +
-                                                                          zeroAdcVals[2] + "," +
-                                                                          zeroAdcVals[3];
+                currentConfig.AppSettings.Settings["ZeroAdcVals"].Value = zeroAdcVals[0].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                          zeroAdcVals[1].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                          zeroAdcVals[2].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                          zeroAdcVals[3].ToString(CultureInfo.InvariantCulture) ;
 
             currentConfig.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
+            Load();
         }
 
         private static void Load()
