@@ -4,7 +4,8 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
-using System.Text;
+using Stability.Enums;
+using Stability.Model.Device;
 using Stability.Model.Port;
 
 namespace Stability
@@ -18,18 +19,25 @@ namespace Stability
         public static CPortConfig PortConfig { get; private set; }
         public static double[] WeightKoefs { get; private set; }
         public static double[] ZeroAdcVals { get; private set; }
+        public static StabilityExchangeConfig ExchangeConfig { get; private set; }
+        //public static double[] AlphaBetaKoefs { get; private set; }
+       // public static InputFilterType FilterType { get; private set; }
+
         static MainConfig()
         {
             PortConfig = new CPortConfig();
             WeightKoefs = new double[4];
             ZeroAdcVals = new double[4];
+            ExchangeConfig = new StabilityExchangeConfig();
+            //AlphaBetaKoefs = new double[4];
+
            if (ConfigurationManager.AppSettings.Count == 0)
                 Init();
 
             Load();
         }
 
-        public static void Update(CPortConfig config, double[] weightKoefs, double [] zeroAdcVals)
+        public static void Update(CPortConfig config)
         {
             Configuration currentConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             if (config != null)
@@ -39,6 +47,43 @@ namespace Stability
                 currentConfig.AppSettings.Settings["AutoConnect"].Value = config.AutoConnect.ToString();
                 currentConfig.AppSettings.Settings["UseSLIP"].Value = config.UseSLIP.ToString();
             }
+
+            currentConfig.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+            Load();
+        }
+
+        public static void Update(StabilityExchangeConfig config)
+        {
+            Configuration currentConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            if (config != null)
+            {
+                currentConfig.AppSettings.Settings["FilterType"].Value = config.FilterType.ToString();
+                currentConfig.AppSettings.Settings["Period"].Value = config.Period.ToString(CultureInfo.InvariantCulture);
+                currentConfig.AppSettings.Settings["SavePureADCs"].Value = config.SavePureADCs.ToString();
+
+                currentConfig.AppSettings.Settings["AlphaBetaKoefs"].Value = config.AlphaBetaKoefs[0].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                           config.AlphaBetaKoefs[1].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                           config.AlphaBetaKoefs[2].ToString(CultureInfo.InvariantCulture) + "," +
+                                                                           config.AlphaBetaKoefs[3].ToString(CultureInfo.InvariantCulture);
+            }
+
+            currentConfig.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+            Load();            
+        }
+
+        public static void Update(/*CPortConfig config,*/ double[] weightKoefs, double [] zeroAdcVals)
+        {
+            Configuration currentConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            /*if (config != null)
+            {
+                currentConfig.AppSettings.Settings["PortName"].Value = config.PortName;
+                currentConfig.AppSettings.Settings["Baud"].Value = config.Baud.ToString();
+                currentConfig.AppSettings.Settings["AutoConnect"].Value = config.AutoConnect.ToString();
+                currentConfig.AppSettings.Settings["UseSLIP"].Value = config.UseSLIP.ToString();
+            }*/
+
             if (weightKoefs != null)
                 currentConfig.AppSettings.Settings["WeightKoefs"].Value = weightKoefs[0].ToString(CultureInfo.InvariantCulture) + "," +
                                                                           weightKoefs[1].ToString(CultureInfo.InvariantCulture) + "," +
@@ -62,14 +107,20 @@ namespace Stability
             PortConfig.AutoConnect = Convert.ToBoolean(ConfigurationManager.AppSettings["AutoConnect"]);
             PortConfig.UseSLIP = Convert.ToBoolean(ConfigurationManager.AppSettings["UseSLIP"]);
 
+            InputFilterType res;
+            Enum.TryParse(ConfigurationManager.AppSettings["FilterType"],out res);
+            ExchangeConfig.FilterType = res;
+            ExchangeConfig.Period = Convert.ToInt32(ConfigurationManager.AppSettings["Period"]);
+            ExchangeConfig.SavePureADCs = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePureADCs"]);
 
             var s = ConfigurationManager.AppSettings["WeightKoefs"].Split(',');
             var s1 = ConfigurationManager.AppSettings["ZeroAdcVals"].Split(',');
-
+            var s2 = ConfigurationManager.AppSettings["AlphaBetaKoefs"].Split(',');
             for (int i = 0; i < WeightKoefs.Count(); i++)
             {
                 WeightKoefs[i] = Convert.ToDouble(s[i],CultureInfo.InvariantCulture);
                 ZeroAdcVals[i] = Convert.ToDouble(s1[i], CultureInfo.InvariantCulture);
+                ExchangeConfig.AlphaBetaKoefs[i] = Convert.ToDouble(s2[i], CultureInfo.InvariantCulture);
             }
         }
 
@@ -87,7 +138,13 @@ namespace Stability
 
             currentConfig.AppSettings.Settings.Add("ZeroAdcVals","0,0,0,0");
             currentConfig.AppSettings.Settings.Add("WeightKoefs", "1.0,1.0,1.0,1.0");
+           
+            currentConfig.AppSettings.Settings.Add("FilterType", InputFilterType.NoFilter.ToString());
+            currentConfig.AppSettings.Settings.Add("Period", 50.ToString());
+            currentConfig.AppSettings.Settings.Add("SavePureADCs", false.ToString());
+            currentConfig.AppSettings.Settings.Add("AlphaBetaKoefs", "1.0,1.0,1.0,1.0");
             
+           
             currentConfig.Save(ConfigurationSaveMode.Full);
             ConfigurationManager.RefreshSection("appSettings");
         }
