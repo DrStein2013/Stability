@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Stability.Enums;
 using Stability.Model.Port;
 using Stability.View;
 
@@ -10,6 +11,16 @@ namespace Stability.Model.Device
     enum StabilityParseMode
     {
         ParseData=0, ParseCmd
+    }
+
+    public class StabilityExchangeConfig
+    {
+        public int Period { get; set; }
+        public bool SavePureADCs { get; set; }
+        public InputFilterType FilterType { get; set; }
+        public double[] AlphaBetaKoefs { get; set; }
+
+        public StabilityExchangeConfig() {AlphaBetaKoefs = new double[4];}
     }
 
     class StabilityDevice : CDevice
@@ -214,7 +225,7 @@ namespace Stability.Model.Device
             }
             for (int i = 0; i < zeroAdcVals.Count(); i++)
                 zeroAdcVals[i] /= ZeroCalibrationCount;
-            MainConfig.Update(null,null,zeroAdcVals);
+            MainConfig.Update(null,zeroAdcVals);
             _adcList.Clear();
             //------------
         }
