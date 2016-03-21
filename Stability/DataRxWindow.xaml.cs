@@ -24,6 +24,7 @@ namespace Stability
         {
             InitializeComponent();
             buttonHandler = new ButtonHandler(but_ok.Width,but_ok.Height);
+
         }
 
         private void but_MouseEnter(object sender, MouseEventArgs e)

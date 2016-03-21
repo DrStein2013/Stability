@@ -244,7 +244,7 @@ namespace Stability
 
         private void SaveBut_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            MainConfig.Update(null,_presenter.CurrWeightKoefs,null);
+            MainConfig.Update(_presenter.CurrWeightKoefs,null);
         }
     }
 
