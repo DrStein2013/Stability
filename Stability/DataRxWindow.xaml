@@ -11,17 +11,17 @@
       
         <GroupBox Header="Параметры порта">
             <Grid>
-                <CheckBox Content="Автоопределение порта" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" IsChecked="True" Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1"/>
+                <CheckBox x:Name="check_AutoFind" Content="Автоопределение порта" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" IsChecked="True" Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1"/>
                 <Label Content="Порт:" HorizontalAlignment="Left" Margin="0,21,0,0" VerticalAlignment="Top"/>
-                <ComboBox x:Name="combo_portName" HorizontalAlignment="Left" Margin="40,25,0,0" VerticalAlignment="Top" Width="49" IsEnabled="False"/>
-                <Label Content="Нужный порт:" HorizontalAlignment="Left" Margin="94,22,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="portTemplate" HorizontalAlignment="Left" Height="23" Margin="182,24,0,0" TextWrapping="Wrap" Text="Stabilometric Device" VerticalAlignment="Top" Width="130" IsEnabled="False"/>
-                <Image x:Name="but_find" Height="30" Margin="310,-60,0,0" Width="30" Stretch="UniformToFill" Source="Resources/search.png" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave" IsEnabled="False">
+                <ComboBox x:Name="combo_portName" HorizontalAlignment="Left" Margin="40,25,0,0" VerticalAlignment="Top" Width="63" IsEnabled="False" SelectionChanged="combo_SelectionChanged"/>
+                <Label Content="Нужный порт:" HorizontalAlignment="Left" Margin="102,22,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="portTemplate" HorizontalAlignment="Left" Height="23" Margin="187,24,0,0" TextWrapping="Wrap" Text="Stabilometric Device" VerticalAlignment="Top" Width="130" IsEnabled="False"/>
+                <Image x:Name="but_find" Height="30" Margin="310,-60,0,0" Width="30" Stretch="UniformToFill" Source="Resources/search.png" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave" IsEnabled="False" MouseLeftButtonUp="but_find_MouseLeftButtonUp">
                     <Image.Effect>
                         <DropShadowEffect ShadowDepth="0" BlurRadius="20" Color="#FF00D1FF" Opacity="0"/>
                     </Image.Effect>
                 </Image>
-                <CheckBox Content="Подключаться автоматически" HorizontalAlignment="Left" Margin="5,52,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                <CheckBox x:Name="check_AutoConnect" Content="Подключаться автоматически" HorizontalAlignment="Left" Margin="5,52,0,0" VerticalAlignment="Top" IsChecked="True" Click="checks_Click"/>
                 <Label Content="Протокол:" HorizontalAlignment="Left" Margin="0,73,0,0" VerticalAlignment="Top"/>
                 <ComboBox x:Name="combo_Protocol" HorizontalAlignment="Left" Margin="67,77,0,0" VerticalAlignment="Top" Width="53" HorizontalContentAlignment="Center" SelectedIndex="0">
                     <ComboBoxItem Content="SLIP"/>
@@ -31,8 +31,15 @@
         <GroupBox Header="Параметры обмена" Grid.Row="1">
             <Grid>
                 <Label Content="Период опроса:" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
-                <ComboBox x:Name="combo_RxPeriod" HorizontalAlignment="Left" Margin="108,9,0,0" VerticalAlignment="Top" Width="49"/>
-                <CheckBox Content="Сохранять чистые данные АЦП" HorizontalAlignment="Left" Margin="16,35,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="combo_RxPeriod" HorizontalAlignment="Left" Margin="108,9,0,0" VerticalAlignment="Top" Width="65" SelectionChanged="combo_SelectionChanged">
+                    <ComboBoxItem Content="30 мс"/>
+                    <ComboBoxItem Content="40 мс"/>
+                    <ComboBoxItem Content="50 мс"/>
+                    <ComboBoxItem Content="100 мс"/>
+                    <ComboBoxItem Content="150 мс"/>
+                    <ComboBoxItem Content="200 мс"/>
+                </ComboBox>
+                <CheckBox x:Name="check_SavePureADCs" Content="Сохранять чистые данные АЦП" HorizontalAlignment="Left" Margin="16,35,0,0" VerticalAlignment="Top" Click="checks_Click"/>
                 <Label Content="Входной фильтр:" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top"/>
                 <ComboBox x:Name="combo_RxFilterType" HorizontalAlignment="Left" Margin="112,55,0,0" VerticalAlignment="Top" SelectedIndex="0" SelectionChanged="combo_RxFilterType_SelectionChanged">
                     <ComboBoxItem Content="Отсутствует"/>
@@ -40,10 +47,10 @@
                 </ComboBox>
                 <GroupBox x:Name="group_FilterWs" Header="Пар-ры фильтра" HorizontalAlignment="Left" Margin="235,0,0,0" VerticalAlignment="Top" Height="80" Visibility="Hidden">
                 <Grid>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="0,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W4"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="0,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W3"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="55,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W2"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="55,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W1"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="0,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W4" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="0,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W3" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="55,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W2" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="55,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W1" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
                 </Grid>
                </GroupBox>
             </Grid>
