@@ -68,7 +68,7 @@
     <Compile Include="DataRxWindow.xaml.cs">
       <DependentUpon>DataRxWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Enums.cs" />
+    <Compile Include="Enums\Enums.cs" />
     <Compile Include="StabilityPresenter.cs" />
     <Compile Include="TenzoRadioButton.xaml.cs">
       <DependentUpon>TenzoRadioButton.xaml</DependentUpon>
