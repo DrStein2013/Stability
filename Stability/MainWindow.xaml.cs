@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using Stability.Enums;
 using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
@@ -127,7 +128,7 @@ namespace Stability
 
         private void DataRxItem_OnClick(object sender, RoutedEventArgs e)
         {
-            var win = new DataRxWindow();
+            var win = new DataRxWindow(_presenter.Model);
             win.ShowDialog();
         }
     }
