@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -10,21 +12,52 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Stability.Enums;
+using Stability.Model;
+using Stability.Model.Device;
+using Stability.Model.Port;
+using Stability.View;
 
 namespace Stability
 {
     /// <summary>
     /// Interaction logic for DataRxWindow.xaml
     /// </summary>
-    public partial class DataRxWindow : Window
+    public partial class DataRxWindow : IView
     {
         private ButtonHandler buttonHandler;
-
-        public DataRxWindow()
+        private double[] w_koefs;
+        private DataRxWinPresenter _presenter;
+        private readonly int[] _periods = { 30, 40, 50, 100, 150, 200 };
+        public DataRxWindow(IStabilityModel model)
         {
             InitializeComponent();
             buttonHandler = new ButtonHandler(but_ok.Width,but_ok.Height);
+            w_koefs = MainConfig.ExchangeConfig.AlphaBetaKoefs;
 
+            TextBox_W1.Text = w_koefs[0].ToString();
+            TextBox_W2.Text = w_koefs[1].ToString();
+            TextBox_W3.Text = w_koefs[2].ToString();
+            TextBox_W4.Text = w_koefs[3].ToString();
+
+            var pnl = SerialPort.GetPortNames();
+            combo_portName.ItemsSource = pnl;
+            if (pnl.Contains(MainConfig.PortConfig.PortName))
+                combo_portName.SelectedValue = MainConfig.PortConfig.PortName;
+            else MessageBox.Show(this, "Требуемый порт не обнаружен. Выполните поиск порта, или укажите его вручную.", "Ошибка. Порт отсутствует.", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+            combo_RxPeriod.SelectedIndex = GetPeriodIndex();
+            _presenter = new DataRxWinPresenter(model,this);
+        }
+
+        private int GetPeriodIndex()
+        {
+            int i;
+            for (i = 0; i < _periods.Count(); i++)
+                if (_periods[i] == MainConfig.ExchangeConfig.Period)
+                    break;
+            return i;
         }
 
         private void but_MouseEnter(object sender, MouseEventArgs e)
@@ -49,6 +82,8 @@ namespace Stability
             combo_portName.IsEnabled = false;
             portTemplate.IsEnabled = false;
             but_find.IsEnabled = false;
+
+            //ViewUpdated.Invoke(this,null);
         }
 
         private void CheckBox_Unchecked_1(object sender, RoutedEventArgs e)
@@ -72,8 +107,107 @@ namespace Stability
             if(combo_RxFilterType.SelectedIndex == 1)
                 group_FilterWs.Visibility = Visibility.Visible;
             else
-                group_FilterWs.Visibility = Visibility.Hidden;    
+                group_FilterWs.Visibility = Visibility.Hidden;
+
+            if (ViewUpdated != null)
+                ViewUpdated.Invoke(this, null);
         }
 
+        private void _editW_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = true;
+            try
+            {
+                if (((e.Text == ".") && (!((TextBox)sender).Text.Contains("."))) || (Char.IsDigit(e.Text, 0)))
+                    e.Handled = false;
+            }
+            catch
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void _editW_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double var;
+
+            int n;
+            var s = ((TextBox) sender).Name.Replace("TextBox_W", "");
+            int.TryParse(s,out n);
+            n--;
+
+            if (!Double.TryParse(((TextBox) sender).Text, NumberStyles.Any, CultureInfo.CreateSpecificCulture("en-GB"),
+                out var))
+            {
+                MessageBox.Show(this, "Значение веса ввдено неверно!", "Ошибка", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+           else
+            {
+                if (var > 1.0)
+                {
+                    ((TextBox) sender).Text = "1";
+                    var = 1;
+                }
+                w_koefs[n] = var;
+
+                if (ViewUpdated != null)
+                    ViewUpdated.Invoke(this, null);
+            }
+        }
+
+        public void GetWinState(out CPortConfig c, out StabilityExchangeConfig c1)
+        {
+            var name = combo_portName.SelectedValue;
+            
+
+           c = new CPortConfig(){AutoConnect = (bool) check_AutoConnect.IsChecked, Baud = 9600, UseSLIP = true,PortName = (string) name};
+
+           var n = combo_RxPeriod.SelectedIndex;
+           c1 = new StabilityExchangeConfig
+           {
+               FilterType = (InputFilterType) combo_RxFilterType.SelectedIndex,
+               SavePureADCs = (bool) check_SavePureADCs.IsChecked,
+               Period = _periods[n],
+               AlphaBetaKoefs = w_koefs
+           };
+        }
+
+        public void UpdateTenzView(string[] tenz)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event EventHandler ViewUpdated;
+        public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
+
+        private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+          if (ViewUpdated != null)
+            ViewUpdated.Invoke(this, null);
+        }
+
+        private void checks_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewUpdated != null)
+                ViewUpdated.Invoke(this, null);
+        }
+
+        private void but_find_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+          string name;
+          if (!CComPort.FindPort(portTemplate.Text, out name))
+                MessageBox.Show(this, "Требуемый порт не обнаружен. Проверьте правильность строки с именем порта. " +
+                                      "Также удостоверьтесь, что устройство подключено к компьютеру.",
+                    "Ошибка. Порт не найден.", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            else
+                combo_portName.SelectedValue = name;
+        }
     }
 }
