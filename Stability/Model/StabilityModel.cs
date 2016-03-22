@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Stability.Enums;
 using Stability.Model.Device;
 using Stability.Model.Port;
 using System.Threading;
@@ -21,6 +22,7 @@ namespace Stability.Model
         event EventHandler<TenzEventArgs> UpdateDataView;
         event EventHandler<TenzEventArgs> UpdateWeightKoef;
         void DeviceCmdFromView(DeviceCmdArgEvent c);
+        void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig);
     }
 
     public class StabilityModel : IStabilityModel
@@ -71,6 +73,12 @@ namespace Stability.Model
                 default:
                     break;
             }
+        }
+
+        public void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig)
+        {
+
+            //throw new NotImplementedException();
         }
     }
 }
