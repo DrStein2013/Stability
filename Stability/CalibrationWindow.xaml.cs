@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
-using Microsoft.SqlServer.Server;
+using Stability.Enums;
 using Stability.Model;
 using Stability.Model.Port;
 using Stability.View;
