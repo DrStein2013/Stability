@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
@@ -8,7 +6,7 @@ using Stability.Enums;
 using Stability.Model.Device;
 using Stability.Model.Port;
 
-namespace Stability
+namespace Stability.Model
 {
     /// <summary>
     /// Реализует обработку файла конфигурации приложения
@@ -43,7 +41,7 @@ namespace Stability
             if (config != null)
             {
                 currentConfig.AppSettings.Settings["PortName"].Value = config.PortName;
-                currentConfig.AppSettings.Settings["Baud"].Value = config.Baud.ToString();
+                currentConfig.AppSettings.Settings["Baud"].Value = config.Baud.ToString(CultureInfo.InvariantCulture);
                 currentConfig.AppSettings.Settings["AutoConnect"].Value = config.AutoConnect.ToString();
                 currentConfig.AppSettings.Settings["UseSLIP"].Value = config.UseSLIP.ToString();
             }
@@ -132,7 +130,7 @@ namespace Stability
                 name = "COM1";
 
             currentConfig.AppSettings.Settings.Add("PortName", name);
-            currentConfig.AppSettings.Settings.Add("Baud", 9600.ToString());
+            currentConfig.AppSettings.Settings.Add("Baud", 9600.ToString(CultureInfo.InvariantCulture));
             currentConfig.AppSettings.Settings.Add("AutoConnect", true.ToString());
             currentConfig.AppSettings.Settings.Add("UseSLIP", true.ToString());
 
@@ -140,7 +138,7 @@ namespace Stability
             currentConfig.AppSettings.Settings.Add("WeightKoefs", "1.0,1.0,1.0,1.0");
            
             currentConfig.AppSettings.Settings.Add("FilterType", InputFilterType.NoFilter.ToString());
-            currentConfig.AppSettings.Settings.Add("Period", 50.ToString());
+            currentConfig.AppSettings.Settings.Add("Period", 50.ToString(CultureInfo.InvariantCulture));
             currentConfig.AppSettings.Settings.Add("SavePureADCs", false.ToString());
             currentConfig.AppSettings.Settings.Add("AlphaBetaKoefs", "1.0,1.0,1.0,1.0");
             
