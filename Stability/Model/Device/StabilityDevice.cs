@@ -8,11 +8,7 @@ using Stability.View;
 
 namespace Stability.Model.Device
 {
-    enum StabilityParseMode
-    {
-        ParseData=0, ParseCmd
-    }
-
+  
     public class StabilityExchangeConfig
     {
         public int Period { get; set; }
