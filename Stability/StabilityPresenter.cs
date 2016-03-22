@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Stability.Model;
+using Stability.Model.Device;
 using Stability.Model.Port;
 using Stability.View;
 
@@ -26,7 +27,7 @@ namespace Stability
 
         private void ViewOnViewUpdated(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+           
         }
     }
 
@@ -84,5 +85,21 @@ namespace Stability
         }
 
         public double[] CurrWeightKoefs { get; private set; }
+    }
+
+    class DataRxWinPresenter : Presenter
+    {
+        public DataRxWinPresenter(IStabilityModel model, IView view) : base(model, view)
+        {
+           view.ViewUpdated += ViewOnViewUpdated;
+        }
+
+        private void ViewOnViewUpdated(object sender, EventArgs eventArgs)
+        {
+            CPortConfig portConf;
+            StabilityExchangeConfig exchConf;
+          ((DataRxWindow)_view).GetWinState(out portConf, out exchConf);
+            _model.SetNewConfig(portConf,exchConf);
+        }
     }
 }
