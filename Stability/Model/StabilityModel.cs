@@ -81,5 +81,10 @@ namespace Stability.Model
             p.Reconfig(c);
             _device.ExchangeConfig = stabilityExchangeConfig;
         }
+
+        public void SetNewKoefs(double[] w_koefs)
+        {
+            _device._weighKoefs = w_koefs;
+        }
     }
 }
