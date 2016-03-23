@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -44,11 +45,11 @@ namespace Stability
             }
             Tenz0.IsChecked = true;
 
-            _weightKoefs = MainConfig.WeightKoefs;
-            _tenz0_Koef.Text = _weightKoefs[0].ToString();
-            _tenz1_Koef.Text = _weightKoefs[1].ToString();
-            _tenz2_Koef.Text = _weightKoefs[2].ToString();
-            _tenz3_Koef.Text = _weightKoefs[3].ToString();
+            _weightKoefs =  (double[]) MainConfig.WeightKoefs.Clone();
+            _tenz_Koef_0.Text = _weightKoefs[0].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+            _tenz_Koef_1.Text = _weightKoefs[1].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+            _tenz_Koef_2.Text = _weightKoefs[2].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+            _tenz_Koef_3.Text = _weightKoefs[3].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
 
             _calibrationParams.EntryCount = 100;
             _calibrationParams.Weight = 7.5;
@@ -169,11 +170,11 @@ namespace Stability
         */
         public void UpdateTenzView(string[] tenz)
         {
-            Dispatcher.BeginInvoke(new Action(() => _tenz0_Koef.Text = tenz[0]));
-            Dispatcher.BeginInvoke(new Action(() => _tenz1_Koef.Text = tenz[1]));
-            Dispatcher.BeginInvoke(new Action(() => _tenz2_Koef.Text = tenz[2]));
-            Dispatcher.BeginInvoke(new Action(() => _tenz3_Koef.Text = tenz[3]));
-            _weightKoefs = _presenter.CurrWeightKoefs;
+            Dispatcher.BeginInvoke(new Action(() => _tenz_Koef_0.Text = tenz[0]));
+            Dispatcher.BeginInvoke(new Action(() => _tenz_Koef_1.Text = tenz[1]));
+            Dispatcher.BeginInvoke(new Action(() => _tenz_Koef_2.Text = tenz[2]));
+            Dispatcher.BeginInvoke(new Action(() => _tenz_Koef_3.Text = tenz[3]));
+            _weightKoefs = (double[]) _presenter.CurrWeightKoefs.Clone();
         }
 
         public void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)
@@ -246,7 +247,39 @@ namespace Stability
         private void SaveBut_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             MainConfig.Update(_weightKoefs,null);
-          //  MainConfig.Update(_presenter.CurrWeightKoefs,null);
+            MessageBox.Show(this, "Новые параметры успешно сохранены", "Сохранено", MessageBoxButton.OK,
+                 MessageBoxImage.Information);
+        }
+
+        private void _tenz_Koef_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double var;
+
+            int n;
+            var s = ((TextBox)sender).Name.Replace("_tenz_Koef_", "");
+            int.TryParse(s, out n);
+           
+            if (!Double.TryParse(((TextBox)sender).Text, NumberStyles.Any, CultureInfo.CreateSpecificCulture("en-GB"),
+                out var))
+            {
+                MessageBox.Show(this, "Значение веса ввдено неверно!", "Ошибка", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            else
+            {
+                _weightKoefs[n] = var;
+                if (ViewUpdated != null)
+                    ViewUpdated.Invoke(this, null);
+            }
+        }
+        public double[] GetWeightDoubles(){return _weightKoefs;}
+
+        private void _calibrationWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _tenz_Koef_0.LostFocus -= _tenz_Koef_LostFocus;
+            _tenz_Koef_1.LostFocus -= _tenz_Koef_LostFocus;
+            _tenz_Koef_2.LostFocus -= _tenz_Koef_LostFocus;
+            _tenz_Koef_3.LostFocus -= _tenz_Koef_LostFocus;
         }
     }
 
