@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Stability" x:Name="_calibrationWindow" x:Class="Stability.CalibrationWindow"
-        Title="Весовая калибровка устройства" Height="355" Width="546" ResizeMode="NoResize" Icon="Resources/config.ico">
+        Title="Весовая калибровка устройства" Height="355" Width="546" ResizeMode="NoResize" Icon="Resources/config.ico" Closing="_calibrationWindow_Closing">
     <Grid Background="#FFE8E8E8">
         <Grid.RowDefinitions>
             <RowDefinition Height="287*"/>
@@ -39,10 +39,10 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="_tenz0_Koef" TextWrapping="Wrap" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="10" Grid.Column="1"/>
-                    <TextBox x:Name="_tenz1_Koef" TextWrapping="Wrap" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="10" Grid.Column="1" Grid.Row="1"/>
-                    <TextBox x:Name="_tenz2_Koef" TextWrapping="Wrap" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="10" Grid.Column="0" Grid.Row="1"/>
-                    <TextBox x:Name="_tenz3_Koef" TextWrapping="Wrap" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="10" Grid.Column="0" Grid.Row="0"/>
+                    <TextBox x:Name="_tenz_Koef_0" TextWrapping="Wrap" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="10" Grid.Column="1" LostFocus="_tenz_Koef_LostFocus"/>
+                    <TextBox x:Name="_tenz_Koef_1" TextWrapping="Wrap" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="10" Grid.Column="1" Grid.Row="1" LostFocus="_tenz_Koef_LostFocus"/>
+                    <TextBox x:Name="_tenz_Koef_2" TextWrapping="Wrap" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="10" Grid.Column="0" Grid.Row="1" LostFocus="_tenz_Koef_LostFocus"/>
+                    <TextBox x:Name="_tenz_Koef_3" TextWrapping="Wrap" PreviewTextInput="_editWeight_PreviewTextInput" VerticalContentAlignment="Center" MaxLines="1" MaxLength="6" Margin="10" Grid.Column="0" Grid.Row="0" LostFocus="_tenz_Koef_LostFocus"/>
                 </Grid>
 
             </GroupBox>
