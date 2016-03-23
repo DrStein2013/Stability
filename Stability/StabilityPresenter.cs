@@ -92,6 +92,8 @@ namespace Stability
         public DataRxWinPresenter(IStabilityModel model, IView view) : base(model, view)
         {
            view.ViewUpdated += ViewOnViewUpdated;
+            ((DataRxWindow) _view).Closing +=
+                (sender, args) => _model.SetNewConfig(MainConfig.PortConfig, MainConfig.ExchangeConfig);
         }
 
         private void ViewOnViewUpdated(object sender, EventArgs eventArgs)
@@ -101,5 +103,7 @@ namespace Stability
           ((DataRxWindow)_view).GetWinState(out portConf, out exchConf);
             _model.SetNewConfig(portConf,exchConf);
         }
+
+
     }
 }
