@@ -130,6 +130,7 @@ namespace Stability
         {
             var win = new DataRxWindow(_presenter.Model);
             win.ShowDialog();
+            
         }
     }
 
