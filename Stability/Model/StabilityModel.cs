@@ -77,8 +77,9 @@ namespace Stability.Model
 
         public void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig)
         {
-
-            //throw new NotImplementedException();
+            var p = (CComPort) IoC.Resolve<IPort>();
+            p.Reconfig(c);
+            _device.ExchangeConfig = stabilityExchangeConfig;
         }
     }
 }
