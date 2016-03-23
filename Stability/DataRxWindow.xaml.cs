@@ -35,10 +35,10 @@ namespace Stability
             buttonHandler = new ButtonHandler(but_ok.Width,but_ok.Height);
             w_koefs = MainConfig.ExchangeConfig.AlphaBetaKoefs;
 
-            TextBox_W1.Text = w_koefs[0].ToString();
-            TextBox_W2.Text = w_koefs[1].ToString();
-            TextBox_W3.Text = w_koefs[2].ToString();
-            TextBox_W4.Text = w_koefs[3].ToString();
+            TextBox_W1.Text = w_koefs[0].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+            TextBox_W2.Text = w_koefs[1].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+            TextBox_W3.Text = w_koefs[2].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+            TextBox_W4.Text = w_koefs[3].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
 
             var pnl = SerialPort.GetPortNames();
             combo_portName.ItemsSource = pnl;
@@ -48,6 +48,9 @@ namespace Stability
                     MessageBoxImage.Error);
 
             combo_RxPeriod.SelectedIndex = GetPeriodIndex();
+            check_AutoConnect.IsChecked = MainConfig.PortConfig.AutoConnect;
+            check_SavePureADCs.IsChecked = MainConfig.ExchangeConfig.SavePureADCs;
+            combo_RxFilterType.SelectedIndex = (int) MainConfig.ExchangeConfig.FilterType;
             _presenter = new DataRxWinPresenter(model,this);
         }
 
@@ -97,7 +100,15 @@ namespace Stability
 
         private void but_ok_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
+            but_ok.Focus();
+            CPortConfig portConf;
+            StabilityExchangeConfig exchConf;
+            GetWinState(out portConf, out exchConf);
+            MainConfig.Update(exchConf);
+            MainConfig.Update(portConf);
+          
+            MessageBox.Show(this, "Новые параметры успешно сохранены", "Сохранено", MessageBoxButton.OK,
+                   MessageBoxImage.Information);
         }
 
         private void combo_RxFilterType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -184,6 +195,7 @@ namespace Stability
         }
 
         public event EventHandler ViewUpdated;
+        
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
 
         private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
