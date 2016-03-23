@@ -35,7 +35,7 @@ namespace Stability.Model.Device
 
         private int ZeroCalibrationCount = 100;
 
-        public double[] _weighKoefs { get; private set; }
+        public double[] _weighKoefs { get; set; }
         private double weight;
         private double[] vl_prev = new double[4];
         private double[] wDoubles = new double[4]{1.0,0.5,0.5,1.0};
