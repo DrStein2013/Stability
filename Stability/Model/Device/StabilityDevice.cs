@@ -25,6 +25,8 @@ namespace Stability.Model.Device
         public volatile double[] WeightDoubles;// { get; private set; }
         private StabilityParseMode _mode;
 
+        public StabilityExchangeConfig ExchangeConfig { get; set; }
+        
         private event EventHandler _parseDone;
         public event EventHandler calibrationDone; 
 
@@ -44,11 +46,13 @@ namespace Stability.Model.Device
             _mode = StabilityParseMode.ParseData;
             CurrAdcVals = new double[4];
             _weighKoefs = MainConfig.WeightKoefs;
+            ExchangeConfig = MainConfig.ExchangeConfig;
+
             WeightDoubles = new double[4];
           //  _parseDone+= OnParseDone;
 
             var t = new Thread(OnParseDone) {Priority = ThreadPriority.Highest, IsBackground = true};
-            t.Start();
+       //     t.Start();
 
             var t2 = new Thread(RxThread) {Priority = ThreadPriority.AboveNormal, IsBackground = true};
             t2.Start();
