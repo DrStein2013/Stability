@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
@@ -69,7 +71,16 @@ namespace Stability
         public CalibratePresenter(IStabilityModel model, IView view) : base(model, view)
         {
             model.UpdateWeightKoef+=ModelOnUpdateWeightView;
+            _view.ViewUpdated += ViewOnViewUpdated;
             CurrWeightKoefs = new double[4];
+
+            ((Window)_view).Closing += (sender, args) => ((StabilityModel)_model).SetNewKoefs(MainConfig.WeightKoefs);
+        }
+
+        private void ViewOnViewUpdated(object sender, EventArgs eventArgs)
+        {
+            CurrWeightKoefs = ((CalibrationWindow) _view).GetWeightDoubles();
+            ((StabilityModel)_model).SetNewKoefs(CurrWeightKoefs);
         }
 
         private void ModelOnUpdateWeightView(object sender, TenzEventArgs tenzEventArgs)
