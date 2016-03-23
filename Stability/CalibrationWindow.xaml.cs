@@ -173,6 +173,7 @@ namespace Stability
             Dispatcher.BeginInvoke(new Action(() => _tenz1_Koef.Text = tenz[1]));
             Dispatcher.BeginInvoke(new Action(() => _tenz2_Koef.Text = tenz[2]));
             Dispatcher.BeginInvoke(new Action(() => _tenz3_Koef.Text = tenz[3]));
+            _weightKoefs = _presenter.CurrWeightKoefs;
         }
 
         public void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)
@@ -244,7 +245,8 @@ namespace Stability
 
         private void SaveBut_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            MainConfig.Update(_presenter.CurrWeightKoefs,null);
+            MainConfig.Update(_weightKoefs,null);
+          //  MainConfig.Update(_presenter.CurrWeightKoefs,null);
         }
     }
 
