@@ -40,12 +40,18 @@ namespace Stability
             TextBox_W3.Text = w_koefs[2].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
             TextBox_W4.Text = w_koefs[3].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
 
-            var pnl = SerialPort.GetPortNames();
+            var pnl = SerialPort.GetPortNames().ToList();
             combo_portName.ItemsSource = pnl;
             if (pnl.Contains(MainConfig.PortConfig.PortName))
                 combo_portName.SelectedValue = MainConfig.PortConfig.PortName;
-            else MessageBox.Show(this, "Требуемый порт не обнаружен. Выполните поиск порта, или укажите его вручную.", "Ошибка. Порт отсутствует.", MessageBoxButton.OK,
+            else
+            {
+                pnl.Add("NoCOM");
+                combo_portName.SelectedValue = "NoCOM";
+                MessageBox.Show(this, "Требуемый порт не обнаружен. Выполните поиск порта, или укажите его вручную.",
+                    "Ошибка. Порт отсутствует.", MessageBoxButton.OK,
                     MessageBoxImage.Error);
+            }
 
             combo_RxPeriod.SelectedIndex = GetPeriodIndex();
             check_AutoConnect.IsChecked = MainConfig.PortConfig.AutoConnect;
