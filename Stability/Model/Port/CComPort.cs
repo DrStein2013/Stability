@@ -310,5 +310,13 @@ namespace Stability.Model.Port
                 PortStatusChanged.BeginInvoke(this, new PortStatusChangedEventArgs { Status = Status }, null, null);
         }
 
+        public void Reconfig(CPortConfig c)
+        {
+            AutoConnect = c.AutoConnect;
+            Disconnect();
+            _port.PortName = c.PortName;
+            _port.BaudRate = c.Baud;
+            UseSLIP = c.UseSLIP;
+        }
     }
 }
