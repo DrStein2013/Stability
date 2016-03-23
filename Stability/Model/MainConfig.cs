@@ -60,10 +60,10 @@ namespace Stability.Model
                 currentConfig.AppSettings.Settings["Period"].Value = config.Period.ToString(CultureInfo.InvariantCulture);
                 currentConfig.AppSettings.Settings["SavePureADCs"].Value = config.SavePureADCs.ToString();
 
-                currentConfig.AppSettings.Settings["AlphaBetaKoefs"].Value = config.AlphaBetaKoefs[0].ToString(CultureInfo.InvariantCulture) + "," +
-                                                                           config.AlphaBetaKoefs[1].ToString(CultureInfo.InvariantCulture) + "," +
-                                                                           config.AlphaBetaKoefs[2].ToString(CultureInfo.InvariantCulture) + "," +
-                                                                           config.AlphaBetaKoefs[3].ToString(CultureInfo.InvariantCulture);
+                currentConfig.AppSettings.Settings["AlphaBetaKoefs"].Value = config.AlphaBetaKoefs[0].ToString(CultureInfo.CreateSpecificCulture("en-GB")) + "," +
+                                                                           config.AlphaBetaKoefs[1].ToString(CultureInfo.CreateSpecificCulture("en-GB")) + "," +
+                                                                           config.AlphaBetaKoefs[2].ToString(CultureInfo.CreateSpecificCulture("en-GB")) + "," +
+                                                                           config.AlphaBetaKoefs[3].ToString(CultureInfo.CreateSpecificCulture("en-GB"));
             }
 
             currentConfig.Save(ConfigurationSaveMode.Modified);
