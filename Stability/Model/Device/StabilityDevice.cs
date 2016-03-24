@@ -38,7 +38,7 @@ namespace Stability.Model.Device
         public double[] _weighKoefs { get; set; }
         private double weight;
         private double[] vl_prev = new double[4];
-        private double[] wDoubles = new double[4]{1.0,0.5,0.5,1.0};
+        //private double[] wDoubles = new double[4]{1.0,0.5,0.5,1.0};
 
         public StabilityDevice()
         {
@@ -141,7 +141,7 @@ namespace Stability.Model.Device
                 */
                 var vl = (arr[i]*5.09/1024);
 
-                vl = wDoubles[i]*vl + (1 - wDoubles[i])*vl_prev[i];
+                vl = ExchangeConfig.AlphaBetaKoefs[i] * vl + (1 - ExchangeConfig.AlphaBetaKoefs[i]) * vl_prev[i];
 
                 //if (Math.Abs(vl - (5.09/1024)) < 0.5)
                 //    vl = vl_prev[i];
