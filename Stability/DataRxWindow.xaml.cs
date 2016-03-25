@@ -56,6 +56,7 @@ namespace Stability
             combo_RxPeriod.SelectedIndex = GetPeriodIndex();
             check_AutoConnect.IsChecked = MainConfig.PortConfig.AutoConnect;
             check_SavePureADCs.IsChecked = MainConfig.ExchangeConfig.SavePureADCs;
+            check_CorrectMistakes.IsChecked = MainConfig.ExchangeConfig.CorrectRxMistakes;
             combo_RxFilterType.SelectedIndex = (int) MainConfig.ExchangeConfig.FilterType;
             _presenter = new DataRxWinPresenter(model,this);
         }
@@ -177,7 +178,6 @@ namespace Stability
         {
             var name = combo_portName.SelectedValue;
             
-
            c = new CPortConfig(){AutoConnect = (bool) check_AutoConnect.IsChecked, Baud = 9600, UseSLIP = true,PortName = (string) name};
 
            var n = combo_RxPeriod.SelectedIndex;
@@ -185,6 +185,7 @@ namespace Stability
            {
                FilterType = (InputFilterType) combo_RxFilterType.SelectedIndex,
                SavePureADCs = (bool) check_SavePureADCs.IsChecked,
+               CorrectRxMistakes = (bool) check_CorrectMistakes.IsChecked,
                Period = _periods[n],
                AlphaBetaKoefs = w_koefs
            };

@@ -59,6 +59,7 @@ namespace Stability.Model
                 currentConfig.AppSettings.Settings["FilterType"].Value = config.FilterType.ToString();
                 currentConfig.AppSettings.Settings["Period"].Value = config.Period.ToString(CultureInfo.InvariantCulture);
                 currentConfig.AppSettings.Settings["SavePureADCs"].Value = config.SavePureADCs.ToString();
+                currentConfig.AppSettings.Settings["CorrectRxMistakes"].Value = config.CorrectRxMistakes.ToString();
 
                 currentConfig.AppSettings.Settings["AlphaBetaKoefs"].Value = config.AlphaBetaKoefs[0].ToString(CultureInfo.CreateSpecificCulture("en-GB")) + "," +
                                                                            config.AlphaBetaKoefs[1].ToString(CultureInfo.CreateSpecificCulture("en-GB")) + "," +
@@ -110,6 +111,7 @@ namespace Stability.Model
             ExchangeConfig.FilterType = res;
             ExchangeConfig.Period = Convert.ToInt32(ConfigurationManager.AppSettings["Period"]);
             ExchangeConfig.SavePureADCs = Convert.ToBoolean(ConfigurationManager.AppSettings["SavePureADCs"]);
+            ExchangeConfig.CorrectRxMistakes = Convert.ToBoolean(ConfigurationManager.AppSettings["CorrectRxMistakes"]);
 
             var s = ConfigurationManager.AppSettings["WeightKoefs"].Split(',');
             var s1 = ConfigurationManager.AppSettings["ZeroAdcVals"].Split(',');
@@ -140,9 +142,9 @@ namespace Stability.Model
             currentConfig.AppSettings.Settings.Add("FilterType", InputFilterType.NoFilter.ToString());
             currentConfig.AppSettings.Settings.Add("Period", 50.ToString(CultureInfo.InvariantCulture));
             currentConfig.AppSettings.Settings.Add("SavePureADCs", false.ToString());
+            currentConfig.AppSettings.Settings.Add("CorrectRxMistakes", false.ToString());
             currentConfig.AppSettings.Settings.Add("AlphaBetaKoefs", "1.0,1.0,1.0,1.0");
             
-           
             currentConfig.Save(ConfigurationSaveMode.Full);
             ConfigurationManager.RefreshSection("appSettings");
         }

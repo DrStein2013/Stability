@@ -13,9 +13,9 @@ namespace Stability.Model.Device
     {
         public int Period { get; set; }
         public bool SavePureADCs { get; set; }
+        public bool CorrectRxMistakes { get; set; }
         public InputFilterType FilterType { get; set; }
         public double[] AlphaBetaKoefs { get; set; }
-
         public StabilityExchangeConfig() {AlphaBetaKoefs = new double[4];}
     }
 
@@ -139,19 +139,22 @@ namespace Stability.Model.Device
               /*  if(arr[i] < 20)
                     return;
                 */
-                var vl = (arr[i]*5.09/1024);
+            var vl = (arr[i]*5.09/1024);
 
-                vl = ExchangeConfig.AlphaBetaKoefs[i] * vl + (1 - ExchangeConfig.AlphaBetaKoefs[i]) * vl_prev[i];
+            if(ExchangeConfig.FilterType==InputFilterType.AlphaBeta)
+              vl = ExchangeConfig.AlphaBetaKoefs[i] * vl + (1 - ExchangeConfig.AlphaBetaKoefs[i]) * vl_prev[i];
 
-                //if (Math.Abs(vl - (5.09/1024)) < 0.5)
-                //    vl = vl_prev[i];
-               // else
-                    vl_prev[i] = vl;
-                
+                if(ExchangeConfig.CorrectRxMistakes)
+                {
+                    if (Math.Abs(vl - (5.09/1024)) < 0.5)
+                        vl = vl_prev[i];
+                    else
+                        vl_prev[i] = vl;
+                }
 
                 if (Math.Abs(vl - zeroAdcVals[i]) < 0.1)
                     vl = 0.0;
-                else if (vl - zeroAdcVals[i] > 0)
+                else if (vl - zeroAdcVals[i] > 0.1)
                     vl-= zeroAdcVals[i];
 
                 CurrAdcVals[i] = vl;//(arr[i]*5.0/1024)-zeroAdcVals[i];

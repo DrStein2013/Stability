@@ -1,14 +1,14 @@
 ﻿<Window x:Class="Stability.DataRxWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DataRxWindow" Height="322.447" Width="382.408" Background="#FFE8E8E8" WindowStyle="ToolWindow" ResizeMode="NoResize">
+        Title="Настройка параметров приема" Height="345.447" Width="382.408" Background="#FFE8E8E8" WindowStyle="ToolWindow" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="63*" MaxHeight="126" MinHeight="126"/>
             <RowDefinition Height="55*" MaxHeight="179" MinHeight="110" />
             <RowDefinition x:Name="ButRow" Height="60"/>
         </Grid.RowDefinitions>
-      
+
         <GroupBox Header="Параметры порта">
             <Grid>
                 <CheckBox x:Name="check_AutoFind" Content="Автоопределение порта" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" IsChecked="True" Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1"/>
@@ -46,15 +46,16 @@
                     <ComboBoxItem Content="Альфа-Бета"/>
                 </ComboBox>
                 <GroupBox x:Name="group_FilterWs" Header="Пар-ры фильтра" HorizontalAlignment="Left" Margin="235,0,0,0" VerticalAlignment="Top" Height="80" Visibility="Hidden">
-                <Grid>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="0,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W4" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="0,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W3" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="55,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W2" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
-                    <TextBox HorizontalAlignment="Left" Height="23" Margin="55,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W1" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
-                </Grid>
-               </GroupBox>
+                    <Grid>
+                        <TextBox HorizontalAlignment="Left" Height="23" Margin="0,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W4" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
+                        <TextBox HorizontalAlignment="Left" Height="23" Margin="0,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W3" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
+                        <TextBox HorizontalAlignment="Left" Height="23" Margin="55,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W2" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
+                        <TextBox HorizontalAlignment="Left" Height="23" Margin="55,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W1" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
+                    </Grid>
+                </GroupBox>
+                <CheckBox x:Name="check_CorrectMistakes" Content="Коррекция входной ошибки" HorizontalAlignment="Left" Margin="16,82,0,0" VerticalAlignment="Top" Click="checks_Click" ToolTip="Если входное значение равно 0, то это ошибка. Вместо 0 будет взято предидущее значение, отличное от 0"/>
             </Grid>
-         </GroupBox>
+        </GroupBox>
         <Image x:Name="but_ok" Margin="307,2,0,10" Grid.Row="2" Stretch="UniformToFill" Source="Resources/ok_but.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30" Height="30" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave" MouseLeftButtonUp="but_ok_MouseLeftButtonUp" >
             <Image.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="20" Color="#FF358340" Opacity="0"/>
