@@ -132,6 +132,12 @@ namespace Stability
             win.ShowDialog();
             
         }
+
+        private void WeightCalibItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            var win = new CalibrationWindow(_presenter.Model);
+            win.ShowDialog();
+        }
     }
 
 }

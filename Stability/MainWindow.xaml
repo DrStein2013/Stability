@@ -25,6 +25,7 @@
             </MenuItem>
             <MenuItem Header="Параметры">
                 <MenuItem x:Name="DataRxItem" Header="Прием данных" Click="DataRxItem_OnClick"/>
+                <MenuItem x:Name="WeightCalibItem" Header="Весовая калибровка" Click="WeightCalibItem_OnClick"/>
             </MenuItem>
             <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>
