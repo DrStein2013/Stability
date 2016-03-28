@@ -184,6 +184,7 @@ namespace Stability.Model.Device
         public override void Calibrate(CalibrationParams calibrationParams)
         {
             StopMeasurement();
+            _adcList.Clear();
             if (calibrationParams == null)
             {
                 var thr = new Thread(ZeroCalibrationHandler)
