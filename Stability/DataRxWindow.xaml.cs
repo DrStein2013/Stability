@@ -228,5 +228,14 @@ namespace Stability
             else
                 combo_portName.SelectedValue = name;
         }
+
+        private void zeroCalib_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show(this, "Освободите платформу от нагрузки перед началом калибровки", "Внимание!",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+
+           if (DeviceCmdEvent != null)
+             DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.ZERO_CALIBRATE });
+        }
     }
 }
