@@ -38,7 +38,7 @@ namespace Stability.Model.Device
         public double[] _weighKoefs { get; set; }
         private double weight;
         private double[] vl_prev = new double[4];
-        private int[] arr_prev = new int[4] {30,30,30,30};
+        private double[] arr_prev = new double[4] {0.4, 0.4, 0.4, 0.4};
         //private double[] wDoubles = new double[4]{1.0,0.5,0.5,1.0};
 
         public StabilityDevice()
@@ -146,26 +146,26 @@ namespace Stability.Model.Device
             {
                 arr[i] = BitConverter.ToInt16(barr, j);
 
+                var vl = (arr[i] * 5.09 / 1024);
+
                 if (ExchangeConfig.CorrectRxMistakes)
                 {
-                    if (arr[i] < 30)   
-                        arr[i] = arr_prev[i];
-                    else
-                        arr_prev[i] = arr[i]; 
+                    if (vl < 0.4)
+                        vl = arr_prev[i];
+                    else if (Math.Abs(vl - arr_prev[i]) < 0.5)
+                        arr_prev[i] = vl;
                 }
 
-                var vl = (arr[i]*5.09/1024);
 
-               /* if ((vl - zeroAdcVals[i]) > 0.01)
-                    vl -= zeroAdcVals[i];*/
                 if (vl < zeroAdcVals[i])
                     vl = 0.0;
-                else// if ((vl - zeroAdcVals[i]) > 0.1)
+                else
                     vl -= zeroAdcVals[i];
                 
             if(ExchangeConfig.FilterType==InputFilterType.AlphaBeta)
               vl = ExchangeConfig.AlphaBetaKoefs[i] * vl + (1 - ExchangeConfig.AlphaBetaKoefs[i]) * vl_prev[i];
 
+                vl_prev[i] = vl;
               /*  if(ExchangeConfig.CorrectRxMistakes)
                 {
                     if (Math.Abs(vl - (5.09/1024)) < 0.1)
