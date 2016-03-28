@@ -177,8 +177,8 @@ namespace Stability.Model.Device
                 CurrAdcVals[i] = vl;//(arr[i]*5.0/1024)-zeroAdcVals[i];
                 WeightDoubles[i] = CurrAdcVals[i]*MainConfig.WeightKoefs[i];
             }
-            _weList.Add((double[]) WeightDoubles.Clone());
-            _adcList.Add((double[])CurrAdcVals.Clone());
+           // _weList.Add((double[]) WeightDoubles.Clone());
+          //  _adcList.Add((double[])CurrAdcVals.Clone());
         }
 
         public override void Calibrate(CalibrationParams calibrationParams)
