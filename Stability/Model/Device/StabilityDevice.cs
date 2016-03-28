@@ -50,7 +50,7 @@ namespace Stability.Model.Device
             ExchangeConfig = MainConfig.ExchangeConfig;
 
             WeightDoubles = new double[4];
-            _parseDone+= OnParseDone;
+           _parseDone+= OnParseDone;
 
        //     var t = new Thread(OnParseDone) {Priority = ThreadPriority.Highest, IsBackground = true};
        //     t.Start();
@@ -61,8 +61,8 @@ namespace Stability.Model.Device
 
         private void OnParseDone(object sender, EventArgs eventArgs)
         {
-            StopMeasurement();
-            Thread.Sleep(1000);
+            //StopMeasurement();
+            //Thread.Sleep(1000);
             double aver_w = 0;
          //   for (int i = 0; i < 10; i++)
          //   {
@@ -76,8 +76,11 @@ namespace Stability.Model.Device
                 }
 
                 double av1 = 0, av2 = 0, av3 = 0, av4 = 0;
-                double av1_test;
-                av1_test = _weList.Average(doubles => doubles[0]);  //Тест на вычисление среднего арифметического через лямбда выр-е
+                av1 = _weList.Average(doubles => doubles[0]);
+                av2 = _weList.Average(doubles => doubles[1]);
+                av3 = _weList.Average(doubles => doubles[2]);
+                av4 = _weList.Average(doubles => doubles[3]);
+            /* av1_test = _weList.Average(doubles => doubles[0]);  //Тест на вычисление среднего арифметического через лямбда выр-е
                 av1_test += 0;
                 
                 foreach (var entry in _weList)
@@ -91,7 +94,8 @@ namespace Stability.Model.Device
                 av1 /= _weList.Count;
                 av2 /= _weList.Count;
                 av3 /= _weList.Count;
-                av4 /= _weList.Count;
+                av4 /= _weList.Count;*/
+
                 var w2 = (av1 + av4);///2;
                 w2 += 1;
                 var w3 = (av1 + av4 + av3)/3;
@@ -99,10 +103,11 @@ namespace Stability.Model.Device
                 weight = (av1 + av2 + av3 + av4)/4;
                 aver_w += weight;
                 _weList.Clear();
+            _parseDone -= OnParseDone;
 
-        //   }
-      //      aver_w /= 10;
-       //     aver_w += 0;
+            //   }
+            //      aver_w /= 10;
+            //     aver_w += 0;
         }
 
 
@@ -211,7 +216,7 @@ namespace Stability.Model.Device
 
         public void StartMeasurement()
         {
-            SendCmd(new byte[] { 0x32 });
+            SendCmd(new byte[] { 0x31 });
         }
 
         public void StopMeasurement()
@@ -227,9 +232,9 @@ namespace Stability.Model.Device
 
             while(_adcList.Count < ZeroCalibrationCount)
             {
-                SendCmd(new byte[] {0x31});
+                _adcList.Add((double[])CurrAdcVals.Clone());
                 Thread.Sleep(ExchangeConfig.Period);
-                list.Add((double[])CurrAdcVals.Clone());
+                SendCmd(new byte[] { 0x31 });
             }
 
             foreach (var val in _adcList)
@@ -256,9 +261,9 @@ namespace Stability.Model.Device
             var list = new List<double[]>();
             while (_adcList.Count < param.EntryCount)
             {
+                _adcList.Add((double[])CurrAdcVals.Clone());
+                Thread.Sleep(ExchangeConfig.Period);
                 SendCmd(new byte[] { 0x31 });
-                Thread.Sleep(param.Period);
-                list.Add((double[]) CurrAdcVals.Clone());
             }
             aver = _adcList.Average(val => val[param.TenzNumber]);
             double koef = param.Weight/aver;
