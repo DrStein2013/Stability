@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
@@ -74,7 +75,11 @@ namespace Stability
             _view.ViewUpdated += ViewOnViewUpdated;
             CurrWeightKoefs = new double[4];
 
-            ((Window)_view).Closing += (sender, args) => ((StabilityModel)_model).SetNewKoefs(MainConfig.WeightKoefs);
+            ((Window)_view).Closing += (sender, args) =>
+            {
+                ((StabilityModel) _model).SetNewKoefs(MainConfig.WeightKoefs);
+                _model.UpdateWeightKoef -= ModelOnUpdateWeightView;
+            };
         }
 
         private void ViewOnViewUpdated(object sender, EventArgs eventArgs)
@@ -103,8 +108,22 @@ namespace Stability
         public DataRxWinPresenter(IStabilityModel model, IView view) : base(model, view)
         {
            view.ViewUpdated += ViewOnViewUpdated;
+           
             ((DataRxWindow) _view).Closing +=
-                (sender, args) => _model.SetNewConfig(MainConfig.PortConfig, MainConfig.ExchangeConfig);
+                (sender, args) =>
+                {
+                    _model.SetNewConfig(MainConfig.PortConfig, MainConfig.ExchangeConfig);
+                    _model.UpdateWeightKoef -= ModelOnUpdateWeightKoef;
+                };
+
+            _model.UpdateWeightKoef += ModelOnUpdateWeightKoef;
+        }
+
+        private void ModelOnUpdateWeightKoef(object sender, TenzEventArgs tenzEventArgs)
+        {
+            ((Window)_view).Dispatcher.BeginInvoke(new Action(() =>
+                MessageBox.Show((DataRxWindow) _view,
+                    "Калибровка нуля проведена успешно. Новые параметры сохранены.", "Готово",MessageBoxButton.OK,MessageBoxImage.Information)));
         }
 
         private void ViewOnViewUpdated(object sender, EventArgs eventArgs)
