@@ -27,7 +27,7 @@ namespace Stability.Model
 
     public class StabilityModel : IStabilityModel
     {
-        private StabilityDevice _device;
+        private readonly StabilityDevice _device;
         public event EventHandler<TenzEventArgs> UpdateDataView;
         public event EventHandler<TenzEventArgs> UpdateWeightKoef;
         public bool ShowAdcs { get; set; }
@@ -40,14 +40,18 @@ namespace Stability.Model
             _device = new StabilityDevice();
             
             _device.calibrationDone +=
-                (sender, args) => UpdateWeightKoef(this, new TenzEventArgs() {Data = _device._weighKoefs});
+                (sender, args) =>
+                {
+                    if (UpdateWeightKoef != null)
+                        UpdateWeightKoef(this, new TenzEventArgs() {Data = _device._weighKoefs});
+                };
 
             _viewUpdaterTimer = new Timer(ViewTimerHandler, null,100, 60);
         }
 
         private void ViewTimerHandler(object state)
         {
-            var d = new double[4];
+            double[] d;
             d = ShowAdcs ? _device.CurrAdcVals : _device.WeightDoubles;
 
             if (UpdateDataView != null) 
