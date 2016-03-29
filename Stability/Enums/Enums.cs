@@ -15,6 +15,7 @@
         START_MEASURE = 0,
         STOP_MEASURE,
         ZERO_CALIBRATE,
-        WIEGHT_CALIBRATE
+        WEIGHT_CALIBRATE,
+        WEIGHT_MEASURE
     };
 }

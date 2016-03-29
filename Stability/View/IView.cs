@@ -21,7 +21,6 @@ namespace Stability.View
     public interface IView
     {
         void UpdateTenzView(string[] tenz);
-        
         void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs);
 
         event EventHandler ViewUpdated;
