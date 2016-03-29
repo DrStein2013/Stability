@@ -116,7 +116,7 @@ namespace Stability
         {
             UpdateParams();
             if(CheckParams())
-                DeviceCmdEvent.Invoke(this,new DeviceCmdArgEvent(){cmd = DeviceCmd.WIEGHT_CALIBRATE, Params = _calibrationParams});
+                DeviceCmdEvent.Invoke(this,new DeviceCmdArgEvent(){cmd = DeviceCmd.WEIGHT_CALIBRATE, Params = _calibrationParams});
         }
 
         private void but_MouseEnter(object sender, MouseEventArgs e)
