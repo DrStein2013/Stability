@@ -42,6 +42,13 @@ namespace Stability
         public StabilityPresenter(IStabilityModel model,IView view):base(model,view)
         {
             _model.UpdateDataView += ModelOnUpdateDataView;
+
+            var win = ((MainWindow) _view);
+            _model.UpdateWeight +=
+                (sender, args) =>
+                    win.TextBoxWeight.Dispatcher.BeginInvoke(
+                        new Action(() => win.TextBoxWeight.Text = args.Weight.ToString("F2")));
+               
             IoC.Resolve<IPort>().PortStatusChanged += _view.COnPortStatusChanged;
         }
 

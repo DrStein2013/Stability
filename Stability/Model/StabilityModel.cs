@@ -21,6 +21,7 @@ namespace Stability.Model
     {
         event EventHandler<TenzEventArgs> UpdateDataView;
         event EventHandler<TenzEventArgs> UpdateWeightKoef;
+        event EventHandler<WeightEventArgs> UpdateWeight; 
         void DeviceCmdFromView(DeviceCmdArgEvent c);
         void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig);
     }
@@ -30,6 +31,7 @@ namespace Stability.Model
         private readonly StabilityDevice _device;
         public event EventHandler<TenzEventArgs> UpdateDataView;
         public event EventHandler<TenzEventArgs> UpdateWeightKoef;
+        public event EventHandler<WeightEventArgs> UpdateWeight; 
         public bool ShowAdcs { get; set; }
         private readonly Timer _viewUpdaterTimer;
 
@@ -39,14 +41,21 @@ namespace Stability.Model
             IoC.GetKernel().Bind<IPort>().To<CComPort>().InSingletonScope().WithConstructorArgument("config", conf);
             _device = new StabilityDevice();
             
-            _device.calibrationDone +=
+            _device.CalibrationDone +=
                 (sender, args) =>
                 {
                     if (UpdateWeightKoef != null)
-                        UpdateWeightKoef(this, new TenzEventArgs() {Data = _device._weighKoefs});
+                        UpdateWeightKoef(this, new TenzEventArgs() {Data = _device.WeightKoefs});
                 };
 
+            _device.WeightMeasured+=DeviceOnWeightMeasured;
+
             _viewUpdaterTimer = new Timer(ViewTimerHandler, null,100, 60);
+        }
+
+        private void DeviceOnWeightMeasured(object sender, WeightEventArgs weightEventArgs)
+        {
+            UpdateWeight(this, weightEventArgs);
         }
 
         private void ViewTimerHandler(object state)
@@ -71,8 +80,11 @@ namespace Stability.Model
                     case DeviceCmd.ZERO_CALIBRATE:
                         _device.Calibrate(null);
                     break;
-                    case DeviceCmd.WIEGHT_CALIBRATE:
+                    case DeviceCmd.WEIGHT_CALIBRATE:
                         _device.Calibrate(deviceCmdArgEvent.Params);
+                    break;
+                    case DeviceCmd.WEIGHT_MEASURE:
+                        _device.GetWeight();
                     break;
                 default:
                     break;
@@ -88,7 +100,7 @@ namespace Stability.Model
 
         public void SetNewKoefs(double[] w_koefs)
         {
-            _device._weighKoefs = w_koefs;
+            _device.WeightKoefs = w_koefs;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Stability.Model.Device
             Port = IoC.Resolve<IPort>();
         }
 
-        public virtual void Calibrate(CalibrationParams p)
+        public virtual void Calibrate(CalibrationParams calibParams)
         {
             throw new NotImplementedException();
         }
