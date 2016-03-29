@@ -37,7 +37,6 @@ namespace Stability
                 Dispatcher.BeginInvoke(new Action(() => Tenz3.Text = tenz[3]));
         }
 
-
         public void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs)
         {
             if(portStatusChangedEventArgs.Status == EPortStatus.Open)
@@ -66,14 +65,15 @@ namespace Stability
 
         private void Discon_OnClick(object sender, RoutedEventArgs e)
         {
-           // c.Disconnect();
+            IoC.Resolve<IPort>().Disconnect();
         }
         
         private void Con_OnClick(object sender, RoutedEventArgs e)
         {
             string s;
-           // if (!c.Connect(out s))
-            //    MessageBox.Show(this, s, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            var c = IoC.Resolve<IPort>();
+             if (!c.Connect(out s))
+                MessageBox.Show(this, s, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         
         public event EventHandler ViewUpdated;
@@ -120,10 +120,10 @@ namespace Stability
 
         private void button4_Click(object sender, RoutedEventArgs e)
         {
-           // MessageBox.Show(this, "Введите параметры калибровки", "Нужны параметры", MessageBoxButton.OK,
-             //   MessageBoxImage.Information, MessageBoxResult.OK);
-            var win = new CalibrationWindow(_presenter.Model);
-            win.ShowDialog();
+            if(DeviceCmdEvent!=null)
+            { DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.WEIGHT_MEASURE }); }
+//            var win = new CalibrationWindow(_presenter.Model);
+//            win.ShowDialog();
         }
 
         private void DataRxItem_OnClick(object sender, RoutedEventArgs e)
