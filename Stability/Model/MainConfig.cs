@@ -132,7 +132,7 @@ namespace Stability.Model
                 name = "COM1";
 
             currentConfig.AppSettings.Settings.Add("PortName", name);
-            currentConfig.AppSettings.Settings.Add("Baud", 9600.ToString(CultureInfo.InvariantCulture));
+            currentConfig.AppSettings.Settings.Add("Baud", 19200.ToString(CultureInfo.InvariantCulture));
             currentConfig.AppSettings.Settings.Add("AutoConnect", true.ToString());
             currentConfig.AppSettings.Settings.Add("UseSLIP", true.ToString());
 
