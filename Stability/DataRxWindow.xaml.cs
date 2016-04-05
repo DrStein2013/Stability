@@ -178,7 +178,7 @@ namespace Stability
         {
             var name = combo_portName.SelectedValue;
             
-           c = new CPortConfig(){AutoConnect = (bool) check_AutoConnect.IsChecked, Baud = 9600, UseSLIP = true,PortName = (string) name};
+           c = new CPortConfig(){AutoConnect = (bool) check_AutoConnect.IsChecked, Baud = MainConfig.PortConfig.Baud, UseSLIP = true,PortName = (string) name};
 
            var n = combo_RxPeriod.SelectedIndex;
            c1 = new StabilityExchangeConfig
