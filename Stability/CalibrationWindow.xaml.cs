@@ -92,7 +92,7 @@ namespace Stability
         }
         private bool CheckParams()
         {
-            if (_calibrationParams.Weight < 5.0)
+            if (_calibrationParams.Weight < 0.1)
             {
                 MessageBox.Show(this, "Значение веса слишком мало, груз должен быть более 5кг.", "Малый вес",
                     MessageBoxButton.OK, MessageBoxImage.Error);

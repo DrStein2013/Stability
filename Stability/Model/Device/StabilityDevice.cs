@@ -30,7 +30,7 @@ namespace Stability.Model.Device
 
         public StabilityExchangeConfig ExchangeConfig { get; set; }
         
-        private event EventHandler<EventArgs> ParseDone;
+        private event EventHandler ParseDone;
         public event EventHandler  CalibrationDone;
         public event EventHandler<WeightEventArgs> WeightMeasured;
 
@@ -42,9 +42,13 @@ namespace Stability.Model.Device
         private CalibrationParams _calibrationParams;
         public double[] WeightKoefs { get; set; }
         private double weight;
+        private byte w_count = 0;
         private double[] vl_prev = new double[4];
-        private double[] arr_prev = new double[4] {0.4, 0.4, 0.4, 0.4};
-        
+        private double[] w_prev = new double[4];
+        private byte[] arr_prev = new byte[4] {35,35,35,35};
+
+        private bool _isStarted;
+
         public StabilityDevice()
         {
             Port.RxEvent+=PortOnRxEvent;
@@ -52,7 +56,7 @@ namespace Stability.Model.Device
             CurrAdcVals = new double[4];
             WeightKoefs = MainConfig.WeightKoefs;
             ExchangeConfig = MainConfig.ExchangeConfig;
-            
+
             WeightDoubles = new double[4];
            
        //     var t = new Thread(OnParseDone) {Priority = ThreadPriority.Highest, IsBackground = true};
@@ -70,16 +74,20 @@ namespace Stability.Model.Device
 
         private void WeightCalc(object sender, EventArgs eventArgs)
         {
-            if (_weList.Count < 50)
+            if (_weList.Count < 100)
             {
                 _weList.Add((double[]) WeightDoubles.Clone());
+               // OnParseDone(sender,eventArgs);
                 //      Thread.Sleep(ExchangeConfig.Period);
                 //      SendCmd(new byte[] { 0x31 });
                 //      return;
             }
             else
             {
-                ParseDone -= WeightCalc;
+                w_count++;
+                if (w_count == 10)
+                    ParseDone -= WeightCalc;
+                
                 double av1 = 0, av2 = 0, av3 = 0, av4 = 0;
                 av1 = _weList.Average(doubles => doubles[0]);
                 av2 = _weList.Average(doubles => doubles[1]);
@@ -87,12 +95,12 @@ namespace Stability.Model.Device
                 av4 = _weList.Average(doubles => doubles[3]);
 
                 var w2 = (av1 + av4)/2;
-                w2 += 1;
+                
                 var w3 = (av1 + av4 + av3)/3;
-                w3 += 1;
-                weight = (av1 + av2 + av3 + av4)/4;
+                var w4 = (av1 + av2 + av3 + av4) / 4;
+                weight += w4;
                 _weList.Clear();
-                WeightMeasured(this, new WeightEventArgs(){Weight = weight});
+                WeightMeasured(this, new WeightEventArgs(){Weight = weight/w_count});
             }
         }
 
@@ -113,7 +121,8 @@ namespace Stability.Model.Device
         private void PortOnRxEvent(object sender, EventArgs eventArgs)
         {
             var p = Port.GetRxBuf().Dequeue();
-            Parse(p);
+            //if(p.Data.Count == 8)
+                Parse(p);
         }
 
         protected override void Parse(Pack pack)
@@ -134,36 +143,41 @@ namespace Stability.Model.Device
         private void ParseData(Pack pack)
         {
             var zeroAdcVals = MainConfig.ZeroAdcVals;
-            var arr = new int[4];
+            var arr = new byte[4];
           
-            var barr = pack.Data.ToArray();
+            //var barr = pack.Data.ToArray();
+            arr = pack.Data.ToArray();
             for (int i = 0, j = 0; i < 4; i++, j += 2)
             {
-                arr[i] = BitConverter.ToInt16(barr, j);
+               // arr[i] = BitConverter.ToInt16(barr, j);
+               // arr[i] >>= 2;
 
-                var vl = (arr[i] * 5.09 / 1024);
+              if (ExchangeConfig.CorrectRxMistakes)
+               {
+                   if (arr[i] < 0x0F)
+                       arr[i] = arr_prev[i];
+                   else 
+                       arr_prev[i] = arr[i];
+                   /*if ((vl < 0.1)&&(i==1))
+                       vl = vl_prev[i];*/
+               }
 
-                if (ExchangeConfig.CorrectRxMistakes)
-                {
-                    if (vl < 0.4)
-                        vl = arr_prev[i];
-                    else if (Math.Abs(vl - arr_prev[i]) < 0.5)
-                        arr_prev[i] = vl;
-                }
-
-
-            if (vl < zeroAdcVals[i])
-              vl = 0.0;
-            else
-              vl -= zeroAdcVals[i];
-                
-            if(ExchangeConfig.FilterType==InputFilterType.AlphaBeta)
+              var vl = (arr[i] * 5.09 / 256);
+               
+              if(ExchangeConfig.FilterType==InputFilterType.AlphaBeta)
               vl = ExchangeConfig.AlphaBetaKoefs[i] * vl + (1 - ExchangeConfig.AlphaBetaKoefs[i]) * vl_prev[i];
 
                 vl_prev[i] = vl;
 
+                if (Math.Abs(vl - zeroAdcVals[i]) < 0.1)
+                    vl = 0.0;
+                else if (vl > zeroAdcVals[i])
+                    vl -= zeroAdcVals[i];
+
                 CurrAdcVals[i] = vl;
-                WeightDoubles[i] = CurrAdcVals[i]*MainConfig.WeightKoefs[i];
+             //   var a = 0.2;
+                WeightDoubles[i] = CurrAdcVals[i]*MainConfig.WeightKoefs[i];//*a+w_prev[i]*(1-a);
+              //  w_prev[i] = WeightDoubles[i];
             }
          }
 
@@ -192,21 +206,32 @@ namespace Stability.Model.Device
         {
             StopMeasurement();
             _weList.Clear();
+            weight = 0;
+            w_count = 0;
             ParseDone += WeightCalc;
             StartMeasurement();
         }
 
         public void StartMeasurement()
         {
-            ParseDone += OnParseDone;
-            _adcList.Clear();
-            SendCmd(new byte[] { 0x31 });
+           if (!_isStarted)
+            {
+                ParseDone += OnParseDone;
+                _adcList.Clear();
+                Thread.Sleep(250);
+                SendCmd(new byte[] {0x31});
+                _isStarted = true;
+            }
         }
 
         public void StopMeasurement()
         {
-            ParseDone -= OnParseDone;
-            SendCmd(new byte[] { 0x30 });
+            if (_isStarted)
+            {
+                ParseDone -= OnParseDone;
+               // SendCmd(new byte[] {0x30});
+                _isStarted = false;
+            }
         }
 
         private void ZeroCalibrationHandler(object sender, EventArgs eventArgs)
