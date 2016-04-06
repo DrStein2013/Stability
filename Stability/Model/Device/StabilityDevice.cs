@@ -48,7 +48,7 @@ namespace Stability.Model.Device
         private byte[] arr_prev = new byte[4] {35,35,35,35};
 
         private bool _isStarted;
-
+        private int _periodBuf;
         public StabilityDevice()
         {
             Port.RxEvent+=PortOnRxEvent;
@@ -74,7 +74,7 @@ namespace Stability.Model.Device
 
         private void WeightCalc(object sender, EventArgs eventArgs)
         {
-            if (_weList.Count < 100)
+            if (_weList.Count < 20)
             {
                 _weList.Add((double[]) WeightDoubles.Clone());
                // OnParseDone(sender,eventArgs);
@@ -85,7 +85,7 @@ namespace Stability.Model.Device
             else
             {
                 w_count++;
-                if (w_count == 10)
+                if (w_count == 3)
                     ParseDone -= WeightCalc;
                 
                 double av1 = 0, av2 = 0, av3 = 0, av4 = 0;
@@ -121,7 +121,7 @@ namespace Stability.Model.Device
         private void PortOnRxEvent(object sender, EventArgs eventArgs)
         {
             var p = Port.GetRxBuf().Dequeue();
-            //if(p.Data.Count == 8)
+            if(p.Data.Count > 0)
                 Parse(p);
         }
 
@@ -173,11 +173,11 @@ namespace Stability.Model.Device
                     vl = 0.0;
                 else if (vl > zeroAdcVals[i])
                     vl -= zeroAdcVals[i];
-
+                
                 CurrAdcVals[i] = vl;
              //   var a = 0.2;
                 WeightDoubles[i] = CurrAdcVals[i]*MainConfig.WeightKoefs[i];//*a+w_prev[i]*(1-a);
-              //  w_prev[i] = WeightDoubles[i];
+                //  w_prev[i] = WeightDoubles[i];
             }
          }
 
@@ -192,6 +192,8 @@ namespace Stability.Model.Device
             {
                 ParseDone += WeightCalibrationHandler;
                 _calibrationParams = calibParams;
+                _periodBuf = ExchangeConfig.Period;
+                ExchangeConfig.Period = _calibrationParams.Period;
             }
             StartMeasurement();
         }
@@ -236,55 +238,60 @@ namespace Stability.Model.Device
 
         private void ZeroCalibrationHandler(object sender, EventArgs eventArgs)
         {
-           //_adcList.Add(CurrAdcVals);
-            var zeroAdcVals = new double[4];
-            var list = new List<double[]>();
-
-            while(_adcList.Count < ZeroCalibrationCount)
+          
+            if (_adcList.Count < ZeroCalibrationCount)
             {
-                _adcList.Add((double[])CurrAdcVals.Clone());
-                return;
-             //   Thread.Sleep(ExchangeConfig.Period);
-             //   SendCmd(new byte[] { 0x31 });
+                _adcList.Add((double[]) CurrAdcVals.Clone());
+                //   Thread.Sleep(ExchangeConfig.Period);
+                //   SendCmd(new byte[] { 0x31 });
             }
-
-            ParseDone -= ZeroCalibrationHandler;
-            foreach (var val in _adcList)
+            else
             {
-                zeroAdcVals[0] += val[0];
-                zeroAdcVals[1] += val[1];
-                zeroAdcVals[2] += val[2];
-                zeroAdcVals[3] += val[3];
+                ParseDone -= ZeroCalibrationHandler;
+                var zeroAdcVals = new double[4];
+                for (int i = 0; i < zeroAdcVals.Count(); i++)
+                    zeroAdcVals[i] = _adcList.Average(doubles => doubles[i]);
+                
+                /*foreach (var val in _adcList)
+                {
+                 //   zeroAdcVals[0] += val[0];
+                    zeroAdcVals[1] += val[1];
+                    zeroAdcVals[2] += val[2];
+                    zeroAdcVals[3] += val[3];
+                }
+                for (int i = 1; i < zeroAdcVals.Count(); i++)
+                    zeroAdcVals[i] /= ZeroCalibrationCount;*/
+
+                MainConfig.Update(null, zeroAdcVals);
+                if (CalibrationDone != null)
+                    CalibrationDone.Invoke(null, null);
+                _adcList.Clear();
             }
-            for (int i = 0; i < zeroAdcVals.Count(); i++)
-                zeroAdcVals[i] /= ZeroCalibrationCount;
-            MainConfig.Update(null,zeroAdcVals);
-            if(CalibrationDone != null)
-                CalibrationDone.Invoke(null,null);
-            _adcList.Clear();
             //------------
         }
 
         private void WeightCalibrationHandler(object o, EventArgs eventArgs)
         {
           //  var param = (CalibrationParams) o;
-            double aver=0;
 
-          //  var list = new List<double[]>();
-            while (_adcList.Count < _calibrationParams.EntryCount)
+            //  var list = new List<double[]>();
+            if (_adcList.Count < _calibrationParams.EntryCount)
             {
-                _adcList.Add((double[])CurrAdcVals.Clone());
-                return;
-              //  Thread.Sleep(ExchangeConfig.Period);
-              //  SendCmd(new byte[] { 0x31 });
+                _adcList.Add((double[]) CurrAdcVals.Clone());
+                //  Thread.Sleep(ExchangeConfig.Period);
+                //  SendCmd(new byte[] { 0x31 });
             }
-            ParseDone -= WeightCalibrationHandler;
-            aver = _adcList.Average(val => val[_calibrationParams.TenzNumber]);
-            double koef = _calibrationParams.Weight / aver;
-            WeightKoefs[_calibrationParams.TenzNumber] = koef;
-            if (CalibrationDone != null) CalibrationDone.Invoke(null, null);
-            _adcList.Clear();
-            _calibrationParams = null;
+            else
+            {
+                ParseDone -= WeightCalibrationHandler;
+                var aver=_adcList.Average(val => val[_calibrationParams.TenzNumber]);
+                double koef = _calibrationParams.Weight/aver;
+                WeightKoefs[_calibrationParams.TenzNumber] = koef;
+                if (CalibrationDone != null) CalibrationDone.Invoke(null, null);
+                _adcList.Clear();
+                _calibrationParams = null;
+                ExchangeConfig.Period = _periodBuf; // MainConfig.ExchangeConfig.Period;
+            }
             // StartMeasurement();
         }
     }
