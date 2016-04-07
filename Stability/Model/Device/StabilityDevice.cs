@@ -49,6 +49,7 @@ namespace Stability.Model.Device
 
         private bool _isStarted;
         private int _periodBuf;
+        private bool ZeroCorrection = true;
         public StabilityDevice()
         {
             Port.RxEvent+=PortOnRxEvent;
@@ -139,7 +140,7 @@ namespace Stability.Model.Device
             if(ParseDone != null)
                 ParseDone.Invoke(this,null);//BeginInvoke(this, null, null, null);
         }
-
+        
         private void ParseData(Pack pack)
         {
             var zeroAdcVals = MainConfig.ZeroAdcVals;
@@ -169,10 +170,13 @@ namespace Stability.Model.Device
 
                 vl_prev[i] = vl;
 
-                if (Math.Abs(vl - zeroAdcVals[i]) < 0.1)
-                    vl = 0.0;
-                else if (vl > zeroAdcVals[i])
-                    vl -= zeroAdcVals[i];
+                if (ZeroCorrection)
+                {
+                    if (Math.Abs(vl - zeroAdcVals[i]) < 0.06)
+                        vl = 0.0;
+                    else if (vl > zeroAdcVals[i])
+                        vl -= zeroAdcVals[i];
+                }
                 
                 CurrAdcVals[i] = vl;
              //   var a = 0.2;
@@ -186,6 +190,7 @@ namespace Stability.Model.Device
             StopMeasurement();
             if (calibParams == null)
             {
+                ZeroCorrection = false; 
                 ParseDone += ZeroCalibrationHandler;
             }
             else
@@ -238,7 +243,7 @@ namespace Stability.Model.Device
 
         private void ZeroCalibrationHandler(object sender, EventArgs eventArgs)
         {
-          
+            bool startupCalib = false;
             if (_adcList.Count < ZeroCalibrationCount)
             {
                 _adcList.Add((double[]) CurrAdcVals.Clone());
@@ -249,22 +254,34 @@ namespace Stability.Model.Device
             {
                 ParseDone -= ZeroCalibrationHandler;
                 var zeroAdcVals = new double[4];
+                startupCalib = true;
                 for (int i = 0; i < zeroAdcVals.Count(); i++)
-                    zeroAdcVals[i] = _adcList.Average(doubles => doubles[i]);
-                
-                /*foreach (var val in _adcList)
                 {
-                 //   zeroAdcVals[0] += val[0];
-                    zeroAdcVals[1] += val[1];
-                    zeroAdcVals[2] += val[2];
-                    zeroAdcVals[3] += val[3];
-                }
-                for (int i = 1; i < zeroAdcVals.Count(); i++)
-                    zeroAdcVals[i] /= ZeroCalibrationCount;*/
+                    zeroAdcVals[i] = _adcList.Average(doubles => doubles[i]);
+                    if (startupCalib)
+                    {
+                       // var offset_percent = (100*zeroAdcVals[i])/MainConfig.ZeroAdcVals[i];    //Процент, который составляет новое значение в старом
+                       // MainConfig.WeightKoefs[i] = (MainConfig.WeightKoefs[i] * offset_percent) / 100;
 
-                MainConfig.Update(null, zeroAdcVals);
+                      //  offset_percent = 100 - offset_percent;  //разница, которая и является ошибкой измерения
+                      //  var partFromKoef = (MainConfig.WeightKoefs[i]*offset_percent)/100;      //корректировочная часть, есть процент от коэффициента
+                        //MainConfig.WeightKoefs[i] -= partFromKoef;  //корректировка на эту часть
+                        var w = 0.1;
+                        var koef_new = w/zeroAdcVals[i];
+                        var koef_old = w/MainConfig.ZeroAdcVals[i];
+                        var offset_percent = (100*koef_new)/koef_old;
+                        offset_percent = (100 - offset_percent)*10;
+
+                        if (offset_percent < 0) 
+                            offset_percent = offset_percent*(-1);
+                        MainConfig.WeightKoefs[i] -= (MainConfig.WeightKoefs[i] * offset_percent) / 100;
+                    }
+                }
+                MainConfig.Update(MainConfig.WeightKoefs, zeroAdcVals);
+
                 if (CalibrationDone != null)
                     CalibrationDone.Invoke(null, null);
+                ZeroCorrection = true;
                 _adcList.Clear();
             }
             //------------
@@ -294,5 +311,7 @@ namespace Stability.Model.Device
             }
             // StartMeasurement();
         }
+
+
     }
 }
