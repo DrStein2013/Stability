@@ -1,0 +1,10 @@
+﻿<Window x:Class="Stability.SimpleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SimpleWindow" Height="144" Width="300" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize">
+    <Grid Background="#FFEEEEEE">
+        <Label x:Name="Label" Content="Label" Margin="0,10,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14" ScrollViewer.VerticalScrollBarVisibility="Disabled" VerticalAlignment="Top"/>
+        <Button Content="OK" IsDefault="True" VerticalAlignment="Bottom" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="72" Margin="0,0,0,10" MinWidth="72" MaxWidth="72" MinHeight="22" MaxHeight="22" Click="Button_Click_1"/>
+        <TextBox x:Name="textBox_input" HorizontalAlignment="Center" Height="23" Margin="0,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" PreviewTextInput="TextBox_input_OnPreviewTextInput"/>
+    </Grid>
+</Window>
