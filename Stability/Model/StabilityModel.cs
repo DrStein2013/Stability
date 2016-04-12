@@ -78,10 +78,16 @@ namespace Stability.Model
                         _device.StopMeasurement();
                     break;
                     case DeviceCmd.ZERO_CALIBRATE:
-                        _device.Calibrate(null);
+                        _device.Calibrate(null,false,100);
+                    break;
+                    case DeviceCmd.STARTUP_CALIBRATE:
+                        _device.Calibrate(null,true,100);
                     break;
                     case DeviceCmd.WEIGHT_CALIBRATE:
-                        _device.Calibrate(deviceCmdArgEvent.Params);
+                        _device.Calibrate(deviceCmdArgEvent.Params,false);
+                    break;
+                    case DeviceCmd.WEIGHT_CALIBRATE_FAST:
+                        _device.Calibrate(deviceCmdArgEvent.Params,true);
                     break;
                     case DeviceCmd.WEIGHT_MEASURE:
                         _device.GetWeight();

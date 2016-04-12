@@ -37,34 +37,29 @@ namespace Stability.Model.Device
         private readonly List<double[]> _adcList = new List<double[]>();
         private readonly List<double[]> _weList = new List<double[]>();
 
-        private int ZeroCalibrationCount = 100;
+        private int _zeroCalibrationCount = 100;
 
         private CalibrationParams _calibrationParams;
         public double[] WeightKoefs { get; set; }
+        private double[] zeroAdcVals;
         private double weight;
         private byte w_count = 0;
         private double[] vl_prev = new double[4];
-        private double[] w_prev = new double[4];
-        private byte[] arr_prev = new byte[4] {35,35,35,35};
-
+      
         private bool _isStarted;
         private int _periodBuf;
-        private bool ZeroCorrection = true;
+        private bool _zeroCorrection = true;
+        private bool _startupCalib;
         public StabilityDevice()
         {
             Port.RxEvent+=PortOnRxEvent;
             _mode = StabilityParseMode.ParseData;
             CurrAdcVals = new double[4];
             WeightKoefs = MainConfig.WeightKoefs;
+            zeroAdcVals = MainConfig.ZeroAdcVals;
             ExchangeConfig = MainConfig.ExchangeConfig;
 
             WeightDoubles = new double[4];
-           
-       //     var t = new Thread(OnParseDone) {Priority = ThreadPriority.Highest, IsBackground = true};
-       //     t.Start();
-
-   //         var t2 = new Thread(RxThread) {Priority = ThreadPriority.AboveNormal, IsBackground = true};
-   //         t2.Start();
         }
 
         private void OnParseDone(object sender, EventArgs e)
@@ -78,10 +73,6 @@ namespace Stability.Model.Device
             if (_weList.Count < 20)
             {
                 _weList.Add((double[]) WeightDoubles.Clone());
-               // OnParseDone(sender,eventArgs);
-                //      Thread.Sleep(ExchangeConfig.Period);
-                //      SendCmd(new byte[] { 0x31 });
-                //      return;
             }
             else
             {
@@ -90,14 +81,11 @@ namespace Stability.Model.Device
                     ParseDone -= WeightCalc;
                 
                 double av1 = 0, av2 = 0, av3 = 0, av4 = 0;
-                av1 = _weList.Average(doubles => doubles[0]);
-                av2 = _weList.Average(doubles => doubles[1]);
-                av3 = _weList.Average(doubles => doubles[2]);
-                av4 = _weList.Average(doubles => doubles[3]);
+                av1 = _weList.Average(doubles =>  Math.Round(doubles[0],1));
+                av2 = _weList.Average(doubles =>  Math.Round(doubles[1],1));
+                av3 = _weList.Average(doubles =>  Math.Round(doubles[2],1));
+                av4 = _weList.Average(doubles =>  Math.Round(doubles[3],1));
 
-                var w2 = (av1 + av4)/2;
-                
-                var w3 = (av1 + av4 + av3)/3;
                 var w4 = (av1 + av2 + av3 + av4) / 4;
                 weight += w4;
                 _weList.Clear();
@@ -106,7 +94,7 @@ namespace Stability.Model.Device
         }
 
 
-        private void RxThread()
+     /*   private void RxThread()
         {
             while (true)
             {
@@ -117,7 +105,7 @@ namespace Stability.Model.Device
                 }
                 Thread.Sleep(50);
             }
-        }
+        }*/
 
         private void PortOnRxEvent(object sender, EventArgs eventArgs)
         {
@@ -143,62 +131,74 @@ namespace Stability.Model.Device
         
         private void ParseData(Pack pack)
         {
-            var zeroAdcVals = MainConfig.ZeroAdcVals;
-            var arr = new byte[4];
+            var arr = new int[4];
           
-            //var barr = pack.Data.ToArray();
-            arr = pack.Data.ToArray();
+            var barr = pack.Data.ToArray();
+          //  arr = pack.Data.ToArray();
             for (int i = 0, j = 0; i < 4; i++, j += 2)
             {
-               // arr[i] = BitConverter.ToInt16(barr, j);
-               // arr[i] >>= 2;
+                arr[i] = BitConverter.ToInt16(barr, j);
+                arr[i] >>= 1;
 
-              if (ExchangeConfig.CorrectRxMistakes)
+            /*  if (ExchangeConfig.CorrectRxMistakes)
                {
                    if (arr[i] < 0x0F)
                        arr[i] = arr_prev[i];
                    else 
                        arr_prev[i] = arr[i];
-                   /*if ((vl < 0.1)&&(i==1))
-                       vl = vl_prev[i];*/
-               }
+                  
+               }*/
 
-              var vl = (arr[i] * 5.09 / 256);
+              var vl = (arr[i] * 5.09 / 1024);
                
               if(ExchangeConfig.FilterType==InputFilterType.AlphaBeta)
-              vl = ExchangeConfig.AlphaBetaKoefs[i] * vl + (1 - ExchangeConfig.AlphaBetaKoefs[i]) * vl_prev[i];
+                 vl = ExchangeConfig.AlphaBetaKoefs[i] * vl + (1 - ExchangeConfig.AlphaBetaKoefs[i]) * vl_prev[i];
 
+              
                 vl_prev[i] = vl;
 
-                if (ZeroCorrection)
+                if (_zeroCorrection)
                 {
                     if (Math.Abs(vl - zeroAdcVals[i]) < 0.06)
                         vl = 0.0;
                     else if (vl > zeroAdcVals[i])
                         vl -= zeroAdcVals[i];
                 }
-                
+
+                if(ExchangeConfig.CorrectRxMistakes)
+                    vl = Math.Round(vl, 2);
+
                 CurrAdcVals[i] = vl;
-             //   var a = 0.2;
-                WeightDoubles[i] = CurrAdcVals[i]*MainConfig.WeightKoefs[i];//*a+w_prev[i]*(1-a);
-                //  w_prev[i] = WeightDoubles[i];
+      
+                WeightDoubles[i] = CurrAdcVals[i]*WeightKoefs[i]; 
+
             }
          }
 
-        public override void Calibrate(CalibrationParams calibParams)
+        public override void Calibrate(CalibrationParams calibParams, params object[] pObjects)
         {
             StopMeasurement();
             if (calibParams == null)
             {
-                ZeroCorrection = false; 
+                _zeroCorrection = false;
+                _startupCalib = (bool)pObjects[0];
+                _zeroCalibrationCount = (int) pObjects[1];
                 ParseDone += ZeroCalibrationHandler;
             }
             else
             {
-                ParseDone += WeightCalibrationHandler;
-                _calibrationParams = calibParams;
-                _periodBuf = ExchangeConfig.Period;
-                ExchangeConfig.Period = _calibrationParams.Period;
+                if (!(bool) pObjects[0])
+                {
+                    ParseDone += WeightCalibrationHandler;
+                    _calibrationParams = calibParams;
+                    _periodBuf = ExchangeConfig.Period;
+                    ExchangeConfig.Period = _calibrationParams.Period;
+                }
+                else
+                {
+                    ParseDone += FastWeightCalibrationHandler;
+                    _calibrationParams = calibParams;
+                }
             }
             StartMeasurement();
         }
@@ -236,52 +236,46 @@ namespace Stability.Model.Device
             if (_isStarted)
             {
                 ParseDone -= OnParseDone;
-               // SendCmd(new byte[] {0x30});
                 _isStarted = false;
             }
         }
 
         private void ZeroCalibrationHandler(object sender, EventArgs eventArgs)
         {
-            bool startupCalib = false;
-            if (_adcList.Count < ZeroCalibrationCount)
+            if (_adcList.Count < _zeroCalibrationCount)
             {
                 _adcList.Add((double[]) CurrAdcVals.Clone());
-                //   Thread.Sleep(ExchangeConfig.Period);
-                //   SendCmd(new byte[] { 0x31 });
             }
             else
             {
                 ParseDone -= ZeroCalibrationHandler;
-                var zeroAdcVals = new double[4];
-                startupCalib = true;
-                for (int i = 0; i < zeroAdcVals.Count(); i++)
+                var zeroVals = new double[4];
+            
+                for (int i = 0; i < zeroVals.Count(); i++)
                 {
-                    zeroAdcVals[i] = _adcList.Average(doubles => doubles[i]);
-                    if (startupCalib)
+                    zeroVals[i] = _adcList.Average(doubles => doubles[i]);
+                    if (_startupCalib)
                     {
-                       // var offset_percent = (100*zeroAdcVals[i])/MainConfig.ZeroAdcVals[i];    //Процент, который составляет новое значение в старом
-                       // MainConfig.WeightKoefs[i] = (MainConfig.WeightKoefs[i] * offset_percent) / 100;
-
-                      //  offset_percent = 100 - offset_percent;  //разница, которая и является ошибкой измерения
-                      //  var partFromKoef = (MainConfig.WeightKoefs[i]*offset_percent)/100;      //корректировочная часть, есть процент от коэффициента
-                        //MainConfig.WeightKoefs[i] -= partFromKoef;  //корректировка на эту часть
                         var w = 0.1;
-                        var koef_new = w/zeroAdcVals[i];
+                        var koef_new = w/zeroVals[i];
                         var koef_old = w/MainConfig.ZeroAdcVals[i];
                         var offset_percent = (100*koef_new)/koef_old;
+                       
                         offset_percent = (100 - offset_percent)*10;
+                        
 
-                        if (offset_percent < 0) 
-                            offset_percent = offset_percent*(-1);
-                        MainConfig.WeightKoefs[i] -= (MainConfig.WeightKoefs[i] * offset_percent) / 100;
+                        WeightKoefs[i] += (WeightKoefs[i] * offset_percent) / 100;
                     }
                 }
-                MainConfig.Update(MainConfig.WeightKoefs, zeroAdcVals);
+
+                if (!_startupCalib)
+                    MainConfig.Update(null, zeroVals);
+                zeroAdcVals = zeroVals;
 
                 if (CalibrationDone != null)
                     CalibrationDone.Invoke(null, null);
-                ZeroCorrection = true;
+                _zeroCorrection = true;
+                _startupCalib = false;
                 _adcList.Clear();
             }
             //------------
@@ -289,14 +283,9 @@ namespace Stability.Model.Device
 
         private void WeightCalibrationHandler(object o, EventArgs eventArgs)
         {
-          //  var param = (CalibrationParams) o;
-
-            //  var list = new List<double[]>();
             if (_adcList.Count < _calibrationParams.EntryCount)
             {
                 _adcList.Add((double[]) CurrAdcVals.Clone());
-                //  Thread.Sleep(ExchangeConfig.Period);
-                //  SendCmd(new byte[] { 0x31 });
             }
             else
             {
@@ -307,11 +296,31 @@ namespace Stability.Model.Device
                 if (CalibrationDone != null) CalibrationDone.Invoke(null, null);
                 _adcList.Clear();
                 _calibrationParams = null;
-                ExchangeConfig.Period = _periodBuf; // MainConfig.ExchangeConfig.Period;
+                ExchangeConfig.Period = _periodBuf;
             }
-            // StartMeasurement();
         }
 
+        private void FastWeightCalibrationHandler(object o, EventArgs eventArgs)
+        {
+            if (_adcList.Count < _calibrationParams.EntryCount)
+            {
+                _adcList.Add((double[])CurrAdcVals.Clone());
+            }
+            else
+            {
+                ParseDone -= FastWeightCalibrationHandler;
+                for (int i = 0; i < 4; i++)
+                {
+                    var aver = _adcList.Average(val => val[i]);
+                    double koef = _calibrationParams.Weight / aver;
+                    WeightKoefs[i] = koef;   
+                }
+
+                if (CalibrationDone != null) CalibrationDone.Invoke(null, null);
+                _adcList.Clear();
+                _calibrationParams = null;
+            }  
+        }
 
     }
 }
