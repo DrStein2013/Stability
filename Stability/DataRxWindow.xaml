@@ -53,7 +53,7 @@
                         <TextBox HorizontalAlignment="Left" Height="23" Margin="55,5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="50" x:Name="TextBox_W1" PreviewTextInput="_editW_PreviewTextInput" LostFocus="_editW_LostFocus"/>
                     </Grid>
                 </GroupBox>
-                <CheckBox x:Name="check_CorrectMistakes" Content="Коррекция входной ошибки" HorizontalAlignment="Left" Margin="16,82,0,0" VerticalAlignment="Top" Click="checks_Click" ToolTip="Если входное значение равно 0, то это ошибка. Вместо 0 будет взято предидущее значение, отличное от 0"/>
+                <CheckBox x:Name="check_CorrectMistakes" Content="Округлять входные данные" HorizontalAlignment="Left" Margin="16,82,0,0" VerticalAlignment="Top" Click="checks_Click" ToolTip="Округлять входные данные до сотых долей"/>
             </Grid>
         </GroupBox>
         <Image x:Name="but_ok" Margin="307,2,0,10" Grid.Row="2" Stretch="UniformToFill" Source="Resources/ok_but.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="30" Height="30" MouseEnter="but_MouseEnter" MouseLeave="but_MouseLeave" MouseLeftButtonUp="but_ok_MouseLeftButtonUp" ToolTip="Сохранить текущие параметры" >
