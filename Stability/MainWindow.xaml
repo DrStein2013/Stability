@@ -25,7 +25,10 @@
             </MenuItem>
             <MenuItem Header="Параметры">
                 <MenuItem x:Name="DataRxItem" Header="Прием данных" Click="DataRxItem_OnClick"/>
+                <MenuItem x:Name="WeightParamItem" Header="Определение веса" Click="WeightParamItem_OnClick"/>
                 <MenuItem x:Name="WeightCalibItem" Header="Весовая калибровка" Click="WeightCalibItem_OnClick"/>
+                <MenuItem x:Name="StartUpCalibItem" Header="Начальная калибровка" Click="StartUpCalibItem_Click" />
+                <MenuItem x:Name="FastWeightCalibItem" Header="Быстрая весовая калибровка" Click="FastWeightCalibItem_Click" />
             </MenuItem>
             <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>

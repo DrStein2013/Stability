@@ -84,6 +84,9 @@
       <DependentUpon>DataRxWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Enums\Enums.cs" />
+    <Compile Include="SimpleWindow.xaml.cs">
+      <DependentUpon>SimpleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StabilityPresenter.cs" />
     <Compile Include="TenzoRadioButton.xaml.cs">
       <DependentUpon>TenzoRadioButton.xaml</DependentUpon>
@@ -116,6 +119,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SimpleWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="TenzoRadioButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

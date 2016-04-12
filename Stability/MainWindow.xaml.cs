@@ -138,6 +138,26 @@ namespace Stability
             var win = new CalibrationWindow(_presenter.Model);
             win.ShowDialog();
         }
+
+        private void StartUpCalibItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (DeviceCmdEvent != null)
+                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.STARTUP_CALIBRATE });
+        }
+
+        private void FastWeightCalibItem_Click(object sender, RoutedEventArgs e)
+        {
+           var win = new SimpleWindow("Вес для калибровки","Введите значения веса для калибровки:");
+    
+           if((bool)win.ShowDialog())
+             if (DeviceCmdEvent != null)
+                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.WEIGHT_CALIBRATE_FAST,Params = new CalibrationParams(){Weight = win.Value,EntryCount = 100}});
+        }
+
+        private void WeightParamItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 
 }
