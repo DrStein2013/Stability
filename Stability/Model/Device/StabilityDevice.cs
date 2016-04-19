@@ -8,10 +8,23 @@ using Stability.View;
 
 namespace Stability.Model.Device
 {
+    [Serializable]
+    public class DeviceDataEntry
+    {
+        public DeviceDataEntry(List<double[]> List)
+        {
+            AdcList = new List<double[]>();
+            AdcList.AddRange(List);
+        }
+
+        public List<double[]> AdcList { get; private set; }
+    }
+
     public class WeightEventArgs : EventArgs
     {
         public double Weight { get; set; }
     }
+
     public class StabilityExchangeConfig
     {
         public int Period { get; set; }
@@ -50,6 +63,7 @@ namespace Stability.Model.Device
         private int _periodBuf;
         private bool _zeroCorrection = true;
         private bool _startupCalib;
+
         public StabilityDevice()
         {
             Port.RxEvent+=PortOnRxEvent;
@@ -93,7 +107,10 @@ namespace Stability.Model.Device
             }
         }
 
-
+        public DeviceDataEntry GetDataEntry()
+        {
+            return new DeviceDataEntry(_adcList);
+        }
      /*   private void RxThread()
         {
             while (true)

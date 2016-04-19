@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Stability.Enums;
@@ -11,6 +15,7 @@ using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
 using Stability.View;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Stability
 {
@@ -147,16 +152,132 @@ namespace Stability
 
         private void FastWeightCalibItem_Click(object sender, RoutedEventArgs e)
         {
-           var win = new SimpleWindow("Вес для калибровки","Введите значения веса для калибровки:");
+       /*    var win = new SimpleWindow("Вес для калибровки","Введите значения веса для калибровки:");
     
            if((bool)win.ShowDialog())
              if (DeviceCmdEvent != null)
-                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.WEIGHT_CALIBRATE_FAST,Params = new CalibrationParams(){Weight = win.Value,EntryCount = 100}});
+                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.WEIGHT_CALIBRATE_FAST,Params = new CalibrationParams(){Weight = win.Value,EntryCount = 100}});*/
+      
+            /* var adp = new PatientBaseDataSetTableAdapters.PatientTableAdapter();
+            TestBaseDataSet.PatientDataTable t = adp.GetData();
+            var d = t.Select("Name = 'Lesha'");
+            foreach (var pt in d)
+            {
+                var c = pt as TestBaseDataSet.PatientRow;
+                c.Age++;
+                var str = c.Name + " " + c.Age.ToString();
+                MessageBox.Show(str);
+                adp.Update(c);
+            }*/
+            /*var adp = new PatientBaseDataSetTableAdapters.NamesTableAdapter();
+
+            var t = adp.GetDataBy("Леша");
+
+            foreach (var id in t)
+            {
+                MessageBox.Show(id.ID + " " + id.Name);
+            }
+            
+            var ad = new PatientBaseDataSetTableAdapters.PatientTableAdapter();//PatientTableAdapter();
+         //   ad.Insert(t[0].ID, 0, 0, new DateTime(), false, 0, 0);*/
+
+            var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
+
+            try
+            {
+                var data = adp.GetData();//GetDataByID(1);
+                grid.ItemsSource = data;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+
+
+
+            /* grid.ItemsSource = data;
+
+            string s = "ID = " + data[0].ID + " " + data[0].Имя + " " + data[0]["Фамилия"];
+            MessageBox.Show(s);*/
         }
 
         private void WeightParamItem_OnClick(object sender, RoutedEventArgs e)
         {
+
+            var pat = new cPatient()
+            {
+                Name = "Артур",
+                Surname = "Бережной",
+                Patronymic = "Борисович",
+                Sex = true,
+                Birthdate = new DateTime(1992, 7, 7),
+                Address = new cAddress() { Street = "Островского", House = 20, Flat = 97 },
+                PhoneNumber = "0632737032"
+            };
+            var Base = new cDataBase();
+            Base.AddPatient(pat);
+
+            MessageBox.Show("Good");
+            /*var r = adp_name.GetByName(name);
+
+            if (r.Count == 0)
+            {
+                adp_name.Insert(name);
+                r = adp_name.GetByName(name);
+                tab_patient[0].Name_ID = r[0].ID;
+            }
+            */
+
+
+
+            // MessageBox.Show();
+            /* adp.Insert("Миша");
+            adp.Insert("Рома");
+            adp.Insert("Леша");
+            var r = adp.GetID();
+           */
+
+            /*  var t = adp.GetIDByName();
             
+            var ad = new PatientBaseDataSetTableAdapters.PatientTableAdapter();//PatientTableAdapter();
+            ad.Insert(t[0].ID, 0, 0, new DateTime(), false, 0, 0);*/
+            //       adp.InsertQuery("Lesha", 20);
+
+
+        }
+
+        private void Test1_OnClick(object sender, RoutedEventArgs e)
+        {
+            var l = new List<double[]>();
+            for (int i = 0; i < 1200; i++)
+            {
+                l.Add(new double[] { 5, 7, 8, 9 });
+            }
+
+            var t = new DeviceDataEntry(l);
+            var bin_format = new BinaryFormatter();
+            var mem_stream = new MemoryStream();
+            bin_format.Serialize(mem_stream, t);
+
+            var adp_anam = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
+
+            adp_anam.Insert(1, DateTime.Now, 59, "", mem_stream.ToArray());
+        }
+
+        private void Test2_OnClick(object sender, RoutedEventArgs e)
+        {
+            var adp = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
+            var t = adp.GetDataBy(1);
+
+            var b_arr = t[0].Entries;
+
+            var bin_format = new BinaryFormatter();
+            var mem_stream = new MemoryStream();
+            mem_stream.Write(b_arr,0,b_arr.Count());
+            mem_stream.Position = 0;
+            DeviceDataEntry d = (DeviceDataEntry) bin_format.Deserialize(mem_stream);
+            d.AdcList.Add(new double[]{5,4,3,7});
+
         }
     }
 

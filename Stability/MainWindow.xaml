@@ -1,9 +1,17 @@
-﻿<Window x:Class="Stability.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525" Closing="OnClose">
+        xmlns:PatientBaseDataSetTableAdapters="clr-namespace:Stability.PatientBaseDataSetTableAdapters" xmlns:local="clr-namespace:Stability" x:Class="Stability.MainWindow"
+    
+        
+        Title="MainWindow" Height="440" Width="650" Closing="OnClose">
+    <Window.Resources>
+        <local:DateTimeConverter x:Key="DateTimeConverter"></local:DateTimeConverter>
+        <local:SexesConverter x:Key="SexesConverter"></local:SexesConverter>
+    </Window.Resources>
 
-    <Grid>
+    <Grid Margin="0,0,0,0
+          ">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                 <GradientStop Color="White" Offset="1"/>
@@ -29,6 +37,8 @@
                 <MenuItem x:Name="WeightCalibItem" Header="Весовая калибровка" Click="WeightCalibItem_OnClick"/>
                 <MenuItem x:Name="StartUpCalibItem" Header="Начальная калибровка" Click="StartUpCalibItem_Click" />
                 <MenuItem x:Name="FastWeightCalibItem" Header="Быстрая весовая калибровка" Click="FastWeightCalibItem_Click" />
+                <MenuItem x:Name="Test1" Header="Test1" Click="Test1_OnClick" />
+                <MenuItem x:Name="Test2" Header="Test2" Click="Test2_OnClick" />
             </MenuItem>
             <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>
@@ -43,7 +53,24 @@
         </Expander>
         <Button x:Name="button4" Content="Weight" HorizontalAlignment="Left" Height="60" Margin="250,107,0,-137" Grid.Row="1" VerticalAlignment="Top" Width="119" FontFamily="SketchFlow Print" FontSize="24" Click="button4_Click" />
         <TextBox x:Name="TextBoxWeight" HorizontalAlignment="Left" Height="60" Margin="118,107,0,-137" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
+        <DataGrid x:Name="grid" HorizontalAlignment="Left" Height="100" Margin="50,271,0,-341" Grid.Row="1" VerticalAlignment="Top" Width="503" CanUserReorderColumns="False" HeadersVisibility="Column" AutoGenerateColumns="False" ItemsSource="{Binding Path=DataTable1, Mode=OneWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=ID, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="ID"/>
+                <DataGridTextColumn Binding="{Binding Surname, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Фамилия"/>
+                <DataGridTextColumn Binding="{Binding Name, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Имя"/>
+                <DataGridTextColumn Binding="{Binding Patronymic, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Отчество"/>
+                <DataGridTextColumn Binding="{Binding Sex, Converter={StaticResource SexesConverter}, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Пол"/>
+                <DataGridTextColumn Binding="{Binding Birthdate, Converter={StaticResource DateTimeConverter}, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Дата рождения"/>
+                <DataGridTextColumn Binding="{Binding Street, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Улица"/>
+                <DataGridTextColumn Binding="{Binding House, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Дом"/>
+                <DataGridTextColumn Binding="{Binding Flat, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Кв-ра"/>
+            </DataGrid.Columns>
+            <DataGrid.DataContext>
+                <local:PatientBaseDataSet Locale="ru-RU" EnforceConstraints="False"/>
+            </DataGrid.DataContext>
+        </DataGrid>
 
     </Grid>
+
 
 </Window>

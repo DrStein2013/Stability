@@ -20,4 +20,9 @@
         WEIGHT_CALIBRATE_FAST,
         WEIGHT_MEASURE
     };
+
+    public enum Sexes
+    {
+        Female = 0, Male
+    }
 }
