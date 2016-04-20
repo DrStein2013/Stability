@@ -181,8 +181,9 @@ namespace Stability
             var ad = new PatientBaseDataSetTableAdapters.PatientTableAdapter();//PatientTableAdapter();
          //   ad.Insert(t[0].ID, 0, 0, new DateTime(), false, 0, 0);*/
 
+        /*-----------------------------------------------------------
             var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
-
+         
             try
             {
                 var data = adp.GetData();//GetDataByID(1);
@@ -192,12 +193,13 @@ namespace Stability
             {
                 MessageBox.Show(err.Message);
             }
+            */
 
+            var Base = new cDataBase();
 
+            grid.ItemsSource = Base.GetPatientBy(1);
 
-            /* grid.ItemsSource = data;
-
-            string s = "ID = " + data[0].ID + " " + data[0].Имя + " " + data[0]["Фамилия"];
+           /* string s = "ID = " + data[0].ID + " " + data[0].Имя + " " + data[0]["Фамилия"];
             MessageBox.Show(s);*/
         }
 

@@ -36,6 +36,20 @@ namespace Stability.Model
         public cAddress Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Profession { get; set; }
+        public long ID { get; private set; }
+
+        public cPatient()
+        {
+        }
+
+        public cPatient(PatientBaseDataSet.Pat_TabRow t)
+        {
+            Name = t.Name;
+            Surname = t.Surname;
+            Patronymic = t.Patronymic;
+            Address = new cAddress() {Street = t.Street, House = t.House, Flat = t.Flat};
+            ID = t.ID;
+        }
     }
 
     class cDataBase
@@ -64,6 +78,47 @@ namespace Stability.Model
             }
 
             return false;
+        }
+
+        public cPatient FindPatientBy(long ID)
+        {
+            var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
+
+            var data = adp.GetDataByID(ID);
+            if (data.Count != 0)
+            {
+              return new cPatient(data[0]);
+            }
+            return null;
+        }
+
+      
+        public cPatient FindPatientBy(cHuman FIO)
+        {
+            var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
+
+            var data = adp.GetDataBy(FIO.Name, FIO.Surname, FIO.Patronymic);
+            if (data.Count != 0)
+            {
+                return new cPatient(data[0]);
+            }
+            return null;
+        }
+
+        public PatientBaseDataSet.Pat_TabDataTable GetPatientBy(long ID)
+        {
+            var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
+
+            var data = adp.GetDataByID(ID);
+            return data;  
+        }
+
+        public PatientBaseDataSet.Pat_TabDataTable GetPatientBy(cHuman FIO)
+        {
+            var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
+
+            var data = adp.GetDataBy(FIO.Name, FIO.Surname, FIO.Patronymic);
+            return data;
         }
     }
 }

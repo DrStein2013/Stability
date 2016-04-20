@@ -1,6 +1,6 @@
-﻿namespace Stability
-{
-}
+﻿using Stability.Model;
+
+
 namespace Stability.PatientBaseDataSetTableAdapters
 {
 
@@ -91,8 +91,12 @@ namespace Stability.PatientBaseDataSetTableAdapters
         }
     }
 }
-
-
+namespace Stability {
+    
+    
+    public partial class PatientBaseDataSet {
+    }
+}
 namespace Stability {
     
     

@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:PatientBaseDataSetTableAdapters="clr-namespace:Stability.PatientBaseDataSetTableAdapters" xmlns:local="clr-namespace:Stability" x:Class="Stability.MainWindow"
     
-        
-        Title="MainWindow" Height="440" Width="650" Closing="OnClose">
+    Title="MainWindow" Height="440" Width="650" Closing="OnClose">
     <Window.Resources>
         <local:DateTimeConverter x:Key="DateTimeConverter"></local:DateTimeConverter>
         <local:SexesConverter x:Key="SexesConverter"></local:SexesConverter>
