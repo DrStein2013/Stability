@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Stability.Model.Device;
 
 namespace Stability.Model
 {
@@ -12,6 +10,7 @@ namespace Stability.Model
         public string Patronymic { get; set; }
         public bool Sex { get; set; }
         public DateTime Birthdate { get; set; }
+        public short Height { get; set; }
 
         public int Age
         {
@@ -47,9 +46,20 @@ namespace Stability.Model
             Name = t.Name;
             Surname = t.Surname;
             Patronymic = t.Patronymic;
+            Sex = t.Sex;
+            Height = t.Height;
+            Birthdate = t.Birthdate;
             Address = new cAddress() {Street = t.Street, House = t.House, Flat = t.Flat};
             ID = t.ID;
         }
+    }
+
+    class cAnamnesisEntry   
+    {
+        public DateTime MeasureDate { get; set; }
+        public double Weight { get; set; }
+        public string Info { get; set; }
+        public DeviceDataEntry Entry { get; set; }
     }
 
     class cDataBase
@@ -69,11 +79,12 @@ namespace Stability.Model
             t.Patronymic_ID = adp_patrname.InsertGetID(pat.Patronymic);
             t.Sex = pat.Sex;
             t.Birthdate = pat.Birthdate;
+            t.Height = pat.Height;
             t.Addr_ID = adp_addr.InsertGetID(pat.Address.Street, pat.Address.House, pat.Address.Flat);
 
             if (!adp_pat.Exists(t.Name_ID, t.Surname_ID, t.Patronymic_ID, t.Birthdate, t.Sex, t.Addr_ID))
             {
-                adp_pat.Insert(t.Name_ID, t.Surname_ID, t.Patronymic_ID, t.Birthdate, t.Sex, t.Addr_ID);
+                adp_pat.Insert(t.Name_ID, t.Surname_ID, t.Patronymic_ID, t.Birthdate, t.Sex, t.Addr_ID,t.Height);
                 return true;
             }
 
@@ -92,7 +103,19 @@ namespace Stability.Model
             return null;
         }
 
-      
+        public cPatient FindPatientBy(long ID,ref PatientBaseDataSet.Pat_TabDataTable patTab)
+        {
+            var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
+
+            var data = adp.GetDataByID(ID);
+            if (data.Count != 0)
+            {
+                patTab = data;
+                return new cPatient(data[0]);
+            }
+            return null;
+        }
+
         public cPatient FindPatientBy(cHuman FIO)
         {
             var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
@@ -118,6 +141,44 @@ namespace Stability.Model
             var adp = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
 
             var data = adp.GetDataBy(FIO.Name, FIO.Surname, FIO.Patronymic);
+            return data;
+        }
+
+        public void AddAnamnesis(cAnamnesisEntry entry, long Pat_ID = 0)
+        {
+            var adp_anam = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
+            int i = adp_anam.Insert(Pat_ID, DateTime.Now, entry.Weight, entry.Info, DeviceDataEntry.Serialize(entry.Entry));
+            i += 1;
+        }
+
+        public cAnamnesisEntry GetAnamnesisBy(long Pat_ID)
+        {
+            var adp_anam = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
+            var data = adp_anam.GetDataBy(1);
+            if (data.Count != 0)
+            {
+                return new cAnamnesisEntry()
+                {
+                    Entry = DeviceDataEntry.Deserialize(data[0].Entries),
+                    Weight = data[0].Weight,
+                    Info = data[0].Info,
+                    MeasureDate = data[0].Datetime
+                };
+            }
+            return null;
+        }
+
+        public PatientBaseDataSet.AnamnesisDataTable GetAnamesisRange(DateTime From, DateTime To)
+        {
+            var adp_anam = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
+            var data = adp_anam.GetDataRange(From, To);
+            return data;
+        }
+
+        public PatientBaseDataSet.Pat_TabDataTable GetPatients(DateTime From, DateTime To)
+        {
+            var adp_pat = new PatientBaseDataSetTableAdapters.Pat_TabTableAdapter();
+            var data = adp_pat.GetDataRange(From, To);
             return data;
         }
     }

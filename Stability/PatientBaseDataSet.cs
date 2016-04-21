@@ -69,12 +69,12 @@ namespace Stability.PatientBaseDataSetTableAdapters
     {
         public long InsertGetID(global::System.Nullable<long> Name_ID, global::System.Nullable<long> Surname_ID,
             global::System.Nullable<long> Patronymic_ID, global::System.Nullable<global::System.DateTime> Birthdate,
-            global::System.Nullable<bool> Sex, global::System.Nullable<long> Addr_ID)
+            global::System.Nullable<bool> Sex, global::System.Nullable<long> Addr_ID, short Height)
         {
             var r = GetDataBy(Name_ID, Surname_ID, Patronymic_ID, Birthdate, Sex, Addr_ID);
             if (r.Count == 0)
             {
-                Insert(Name_ID, Surname_ID, Patronymic_ID, Birthdate, Sex, Addr_ID);
+                Insert(Name_ID, Surname_ID, Patronymic_ID, Birthdate, Sex, Addr_ID, Height);
                 r = GetDataBy(Name_ID, Surname_ID, Patronymic_ID, Birthdate, Sex, Addr_ID);
             }
             return r[0].ID;
@@ -89,12 +89,6 @@ namespace Stability.PatientBaseDataSetTableAdapters
                  return false;
              return true;
         }
-    }
-}
-namespace Stability {
-    
-    
-    public partial class PatientBaseDataSet {
     }
 }
 namespace Stability {

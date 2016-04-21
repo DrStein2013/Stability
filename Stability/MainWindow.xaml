@@ -68,8 +68,10 @@
                 <local:PatientBaseDataSet Locale="ru-RU" EnforceConstraints="False"/>
             </DataGrid.DataContext>
         </DataGrid>
+        
+       <local:PatientControl HorizontalAlignment="Left" Margin="558,54,-92,-324" Grid.Row="1" Width="200"/>
 
     </Grid>
 
-
+    
 </Window>

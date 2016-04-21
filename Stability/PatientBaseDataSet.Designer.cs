@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Data;
-
 #pragma warning disable 1591
 
 namespace Stability {
@@ -40,13 +38,17 @@ namespace Stability {
         
         private AnamnesisDataTable tableAnamnesis;
         
-        private global::System.Data.DataRelation relationAdr_rel;
+        private global::System.Data.DataRelation relationPat_rel;
         
         private global::System.Data.DataRelation relationSur_rel;
         
-        private global::System.Data.DataRelation relationPat_rel;
+        private global::System.Data.DataRelation relationAdr_rel;
+        
+        private global::System.Data.DataRelation relationName_rel;
         
         private global::System.Data.DataRelation relationPatient_Anamnesis;
+        
+        private global::System.Data.DataRelation relationAdr_rel1;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
@@ -348,10 +350,12 @@ namespace Stability {
                     this.tableAnamnesis.InitVars();
                 }
             }
-            this.relationAdr_rel = this.Relations["Adr_rel"];
-            this.relationSur_rel = this.Relations["Sur_rel"];
             this.relationPat_rel = this.Relations["Pat_rel"];
+            this.relationSur_rel = this.Relations["Sur_rel"];
+            this.relationAdr_rel = this.Relations["Adr_rel"];
+            this.relationName_rel = this.Relations["Name_rel"];
             this.relationPatient_Anamnesis = this.Relations["Patient_Anamnesis"];
+            this.relationAdr_rel1 = this.Relations["Adr_rel1"];
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -377,16 +381,9 @@ namespace Stability {
             this.tableAnamnesis = new AnamnesisDataTable();
             base.Tables.Add(this.tableAnamnesis);
             global::System.Data.ForeignKeyConstraint fkc;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Names_Patient", new global::System.Data.DataColumn[] {
-                        this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Name_IDColumn});
-            this.tablePatient.Constraints.Add(fkc);
-            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
-            fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("Adr_rel", new global::System.Data.DataColumn[] {
-                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Addr_IDColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("Pat_rel", new global::System.Data.DataColumn[] {
+                        this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Patronymic_IDColumn});
             this.tablePatient.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
@@ -398,29 +395,44 @@ namespace Stability {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("Pat_rel", new global::System.Data.DataColumn[] {
-                        this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Patronymic_IDColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("Adr_rel", new global::System.Data.DataColumn[] {
+                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Addr_IDColumn});
             this.tablePatient.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            this.relationAdr_rel = new global::System.Data.DataRelation("Adr_rel", new global::System.Data.DataColumn[] {
-                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Addr_IDColumn}, false);
-            this.Relations.Add(this.relationAdr_rel);
-            this.relationSur_rel = new global::System.Data.DataRelation("Sur_rel", new global::System.Data.DataColumn[] {
-                        this.tableSurnames.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Surname_IDColumn}, false);
-            this.Relations.Add(this.relationSur_rel);
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Names_Patient", new global::System.Data.DataColumn[] {
+                        this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Name_IDColumn});
+            this.tablePatient.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
             this.relationPat_rel = new global::System.Data.DataRelation("Pat_rel", new global::System.Data.DataColumn[] {
                         this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
                         this.tablePatient.Patronymic_IDColumn}, false);
             this.Relations.Add(this.relationPat_rel);
+            this.relationSur_rel = new global::System.Data.DataRelation("Sur_rel", new global::System.Data.DataColumn[] {
+                        this.tableSurnames.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Surname_IDColumn}, false);
+            this.Relations.Add(this.relationSur_rel);
+            this.relationAdr_rel = new global::System.Data.DataRelation("Adr_rel", new global::System.Data.DataColumn[] {
+                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Addr_IDColumn}, false);
+            this.Relations.Add(this.relationAdr_rel);
+            this.relationName_rel = new global::System.Data.DataRelation("Name_rel", new global::System.Data.DataColumn[] {
+                        this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Name_IDColumn}, false);
+            this.Relations.Add(this.relationName_rel);
             this.relationPatient_Anamnesis = new global::System.Data.DataRelation("Patient_Anamnesis", new global::System.Data.DataColumn[] {
                         this.tablePatient.IDColumn}, new global::System.Data.DataColumn[] {
                         this.tableAnamnesis.Patient_IDColumn}, false);
             this.Relations.Add(this.relationPatient_Anamnesis);
+            this.relationAdr_rel1 = new global::System.Data.DataRelation("Adr_rel1", new global::System.Data.DataColumn[] {
+                        this.tablePat_Tab.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Addr_IDColumn}, false);
+            this.Relations.Add(this.relationAdr_rel1);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -562,6 +574,8 @@ namespace Stability {
             
             private global::System.Data.DataColumn columnAddr_ID;
             
+            private global::System.Data.DataColumn columnHeight;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public PatientDataTable() {
@@ -653,6 +667,14 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn HeightColumn {
+                get {
+                    return this.columnHeight;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -688,16 +710,20 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public PatientRow AddPatientRow(long Name_ID, SurnamesRow parentSurnamesRowBySur_rel, PatronymicsRow parentPatronymicsRowByPat_rel, System.DateTime Birthdate, bool Sex, AddressesRow parentAddressesRowByAdr_rel) {
+            public PatientRow AddPatientRow(NamesRow parentNamesRowByName_rel, SurnamesRow parentSurnamesRowBySur_rel, PatronymicsRow parentPatronymicsRowByPat_rel, System.DateTime Birthdate, bool Sex, AddressesRow parentAddressesRowByAdr_rel, short Height) {
                 PatientRow rowPatientRow = ((PatientRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
-                        Name_ID,
+                        null,
                         null,
                         null,
                         Birthdate,
                         Sex,
-                        null};
+                        null,
+                        Height};
+                if ((parentNamesRowByName_rel != null)) {
+                    columnValuesArray[1] = parentNamesRowByName_rel[0];
+                }
                 if ((parentSurnamesRowBySur_rel != null)) {
                     columnValuesArray[2] = parentSurnamesRowBySur_rel[0];
                 }
@@ -743,6 +769,7 @@ namespace Stability {
                 this.columnBirthdate = base.Columns["Birthdate"];
                 this.columnSex = base.Columns["Sex"];
                 this.columnAddr_ID = base.Columns["Addr_ID"];
+                this.columnHeight = base.Columns["Height"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -762,6 +789,8 @@ namespace Stability {
                 base.Columns.Add(this.columnSex);
                 this.columnAddr_ID = new global::System.Data.DataColumn("Addr_ID", typeof(long), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAddr_ID);
+                this.columnHeight = new global::System.Data.DataColumn("Height", typeof(short), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnHeight);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AutoIncrement = true;
@@ -770,7 +799,7 @@ namespace Stability {
                 this.columnID.AllowDBNull = false;
                 this.columnID.ReadOnly = true;
                 this.columnID.Unique = true;
-                this.columnName_ID.AllowDBNull = false;
+                this.columnHeight.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2059,6 +2088,8 @@ namespace Stability {
             
             private global::System.Data.DataColumn columnFlat;
             
+            private global::System.Data.DataColumn columnHeight;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public Pat_TabDataTable() {
@@ -2166,6 +2197,14 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn HeightColumn {
+                get {
+                    return this.columnHeight;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2201,7 +2240,7 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public Pat_TabRow AddPat_TabRow(long ID, string Surname, string Name, string Patronymic, System.DateTime Birthdate, bool Sex, string Street, short House, short Flat) {
+            public Pat_TabRow AddPat_TabRow(long ID, string Surname, string Name, string Patronymic, System.DateTime Birthdate, bool Sex, string Street, short House, short Flat, short Height) {
                 Pat_TabRow rowPat_TabRow = ((Pat_TabRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ID,
@@ -2212,7 +2251,8 @@ namespace Stability {
                         Sex,
                         Street,
                         House,
-                        Flat};
+                        Flat,
+                        Height};
                 rowPat_TabRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowPat_TabRow);
                 return rowPat_TabRow;
@@ -2244,6 +2284,7 @@ namespace Stability {
                 this.columnStreet = base.Columns["Street"];
                 this.columnHouse = base.Columns["House"];
                 this.columnFlat = base.Columns["Flat"];
+                this.columnHeight = base.Columns["Height"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2267,6 +2308,8 @@ namespace Stability {
                 base.Columns.Add(this.columnHouse);
                 this.columnFlat = new global::System.Data.DataColumn("Flat", typeof(short), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFlat);
+                this.columnHeight = new global::System.Data.DataColumn("Height", typeof(short), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnHeight);
                 this.columnID.ReadOnly = true;
                 this.columnSurname.ReadOnly = true;
                 this.columnSurname.Caption = "Фамилия";
@@ -2282,6 +2325,7 @@ namespace Stability {
                 this.columnStreet.MaxLength = 100;
                 this.columnHouse.ReadOnly = true;
                 this.columnFlat.ReadOnly = true;
+                this.columnHeight.ReadOnly = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2545,7 +2589,7 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public AnamnesisRow AddAnamnesisRow(PatientRow parentPatientRowByPatient_Anamnesis, System.DateTime Datetime, byte Weight, string Info, byte[] Entries) {
+            public AnamnesisRow AddAnamnesisRow(PatientRow parentPatientRowByPatient_Anamnesis, System.DateTime Datetime, double Weight, string Info, byte[] Entries) {
                 AnamnesisRow rowAnamnesisRow = ((AnamnesisRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -2603,7 +2647,7 @@ namespace Stability {
                 base.Columns.Add(this.columnPatient_ID);
                 this.columnDatetime = new global::System.Data.DataColumn("Datetime", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDatetime);
-                this.columnWeight = new global::System.Data.DataColumn("Weight", typeof(byte), null, global::System.Data.MappingType.Element);
+                this.columnWeight = new global::System.Data.DataColumn("Weight", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnWeight);
                 this.columnInfo = new global::System.Data.DataColumn("Info", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnInfo);
@@ -2775,7 +2819,12 @@ namespace Stability {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public long Name_ID {
                 get {
-                    return ((long)(this[this.tablePatient.Name_IDColumn]));
+                    try {
+                        return ((long)(this[this.tablePatient.Name_IDColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Name_ID\' in table \'Patient\' is DBNull.", e);
+                    }
                 }
                 set {
                     this[this.tablePatient.Name_IDColumn] = value;
@@ -2864,12 +2913,23 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public AddressesRow AddressesRow {
+            public short Height {
                 get {
-                    return ((AddressesRow)(this.GetParentRow(this.Table.ParentRelations["Adr_rel"])));
+                    return ((short)(this[this.tablePatient.HeightColumn]));
                 }
                 set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Adr_rel"]);
+                    this[this.tablePatient.HeightColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public PatronymicsRow PatronymicsRow {
+                get {
+                    return ((PatronymicsRow)(this.GetParentRow(this.Table.ParentRelations["Pat_rel"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["Pat_rel"]);
                 }
             }
             
@@ -2886,13 +2946,47 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public PatronymicsRow PatronymicsRow {
+            public AddressesRow AddressesRow {
                 get {
-                    return ((PatronymicsRow)(this.GetParentRow(this.Table.ParentRelations["Pat_rel"])));
+                    return ((AddressesRow)(this.GetParentRow(this.Table.ParentRelations["Adr_rel"])));
                 }
                 set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Pat_rel"]);
+                    this.SetParentRow(value, this.Table.ParentRelations["Adr_rel"]);
                 }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public NamesRow NamesRow {
+                get {
+                    return ((NamesRow)(this.GetParentRow(this.Table.ParentRelations["Name_rel"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["Name_rel"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public Pat_TabRow Pat_TabRow {
+                get {
+                    return ((Pat_TabRow)(this.GetParentRow(this.Table.ParentRelations["Adr_rel1"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["Adr_rel1"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsName_IDNull() {
+                return this.IsNull(this.tablePatient.Name_IDColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetName_IDNull() {
+                this[this.tablePatient.Name_IDColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3000,6 +3094,17 @@ namespace Stability {
                 }
                 set {
                     this[this.tableNames.NameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public PatientRow[] GetPatientRows() {
+                if ((this.Table.ChildRelations["Name_rel"] == null)) {
+                    return new PatientRow[0];
+                }
+                else {
+                    return ((PatientRow[])(base.GetChildRows(this.Table.ChildRelations["Name_rel"])));
                 }
             }
         }
@@ -3381,6 +3486,22 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public short Height {
+                get {
+                    try {
+                        return ((short)(this[this.tablePat_Tab.HeightColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Height\' in table \'Pat_Tab\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tablePat_Tab.HeightColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsIDNull() {
                 return this.IsNull(this.tablePat_Tab.IDColumn);
             }
@@ -3486,6 +3607,29 @@ namespace Stability {
             public void SetFlatNull() {
                 this[this.tablePat_Tab.FlatColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsHeightNull() {
+                return this.IsNull(this.tablePat_Tab.HeightColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetHeightNull() {
+                this[this.tablePat_Tab.HeightColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public PatientRow[] GetPatientRows() {
+                if ((this.Table.ChildRelations["Adr_rel1"] == null)) {
+                    return new PatientRow[0];
+                }
+                else {
+                    return ((PatientRow[])(base.GetChildRows(this.Table.ChildRelations["Adr_rel1"])));
+                }
+            }
         }
         
         /// <summary>
@@ -3542,9 +3686,9 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public byte Weight {
+            public double Weight {
                 get {
-                    return ((byte)(this[this.tableAnamnesis.WeightColumn]));
+                    return ((double)(this[this.tableAnamnesis.WeightColumn]));
                 }
                 set {
                     this[this.tableAnamnesis.WeightColumn] = value;
@@ -4001,6 +4145,7 @@ namespace Stability.PatientBaseDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("Birthdate", "Birthdate");
             tableMapping.ColumnMappings.Add("Sex", "Sex");
             tableMapping.ColumnMappings.Add("Addr_ID", "Addr_ID");
+            tableMapping.ColumnMappings.Add("Height", "Height");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -4010,8 +4155,8 @@ namespace Stability.PatientBaseDataSetTableAdapters {
             this._adapter.InsertCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
             this._adapter.InsertCommand.CommandText = "INSERT INTO [Patient] ([Name_ID], [Surname_ID], [Patronymic_ID], [Birthdate], [Se" +
-                "x], [Addr_ID]) VALUES (@Name_ID, @Surname_ID, @Patronymic_ID, @Birthdate, @Sex, " +
-                "@Addr_ID)";
+                "x], [Addr_ID], [Height]) VALUES (@Name_ID, @Surname_ID, @Patronymic_ID, @Birthda" +
+                "te, @Sex, @Addr_ID, @Height)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Name_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Name_ID", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Surname_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Surname_ID", global::System.Data.DataRowVersion.Current, null));
@@ -4019,6 +4164,7 @@ namespace Stability.PatientBaseDataSetTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Birthdate", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Birthdate", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Sex", global::System.Data.SqlDbType.Bit, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Sex", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Addr_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Addr_ID", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Height", global::System.Data.SqlDbType.SmallInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Height", global::System.Data.DataRowVersion.Current, null));
             this._adapter.UpdateCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [Patient] SET [Name_ID] = @Name_ID, [Surname_ID] = @Surname_ID, [Patronymi" +
@@ -4052,10 +4198,10 @@ namespace Stability.PatientBaseDataSetTableAdapters {
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = @"SELECT        ID, Name_ID, Surname_ID, Patronymic_ID, Birthdate, Sex, Addr_ID
-FROM            Patient
-WHERE        (Name_ID = @Name_ID) AND (Surname_ID = @Surname_ID) AND (Patronymic_ID = @Patronymic_ID) AND (Birthdate = @Birthdate) AND (Sex = @Sex) AND 
-                         (Addr_ID = @Addr_ID)";
+            this._commandCollection[1].CommandText = "SELECT Addr_ID, Birthdate, ID, Name_ID, Patronymic_ID, Sex, Surname_ID FROM Patie" +
+                "nt WHERE (Name_ID = @Name_ID) AND (Surname_ID = @Surname_ID) AND (Patronymic_ID " +
+                "= @Patronymic_ID) AND (Birthdate = @Birthdate) AND (Sex = @Sex) AND (Addr_ID = @" +
+                "Addr_ID)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Name_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Name_ID", global::System.Data.DataRowVersion.Current, null));
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Surname_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Surname_ID", global::System.Data.DataRowVersion.Current, null));
@@ -4191,7 +4337,7 @@ WHERE        (Name_ID = @Name_ID) AND (Surname_ID = @Surname_ID) AND (Patronymic
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(global::System.Nullable<long> Name_ID, global::System.Nullable<long> Surname_ID, global::System.Nullable<long> Patronymic_ID, global::System.Nullable<global::System.DateTime> Birthdate, global::System.Nullable<bool> Sex, global::System.Nullable<long> Addr_ID) {
+        public virtual int Insert(global::System.Nullable<long> Name_ID, global::System.Nullable<long> Surname_ID, global::System.Nullable<long> Patronymic_ID, global::System.Nullable<global::System.DateTime> Birthdate, global::System.Nullable<bool> Sex, global::System.Nullable<long> Addr_ID, short Height) {
             if ((Name_ID.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((long)(Name_ID.Value));
             }
@@ -4228,6 +4374,7 @@ WHERE        (Name_ID = @Name_ID) AND (Surname_ID = @Surname_ID) AND (Patronymic
             else {
                 this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
+            this.Adapter.InsertCommand.Parameters[6].Value = ((short)(Height));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -5731,6 +5878,7 @@ WHERE        (Name_ID = @Name_ID) AND (Surname_ID = @Surname_ID) AND (Patronymic
             tableMapping.ColumnMappings.Add("Street", "Street");
             tableMapping.ColumnMappings.Add("House", "House");
             tableMapping.ColumnMappings.Add("Flat", "Flat");
+            tableMapping.ColumnMappings.Add("Height", "Height");
             this._adapter.TableMappings.Add(tableMapping);
         }
         
@@ -5744,10 +5892,11 @@ WHERE        (Name_ID = @Name_ID) AND (Surname_ID = @Surname_ID) AND (Patronymic
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlServerCe.SqlCeCommand[3];
+            this._commandCollection = new global::System.Data.SqlServerCe.SqlCeCommand[4];
             this._commandCollection[0] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT        Patient.ID, Names.Name, Surnames.Surname, Patronymics.Patronymic, Patient.Birthdate, Patient.Sex, Addresses.Street, Addresses.House, Addresses.Flat
+            this._commandCollection[0].CommandText = @"SELECT        Patient.ID, Names.Name, Surnames.Surname, Patronymics.Patronymic, Patient.Birthdate, Patient.Sex, Addresses.Street, Addresses.House, Addresses.Flat, 
+                         Patient.Height
 FROM            Addresses INNER JOIN
                          Patient ON Addresses.ID = Patient.Addr_ID INNER JOIN
                          Names ON Patient.Name_ID = Names.ID INNER JOIN
@@ -5758,7 +5907,8 @@ WHERE        (Patient.ID = @ID)";
             this._commandCollection[0].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "ID", global::System.Data.DataRowVersion.Current, null));
             this._commandCollection[1] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = @"SELECT        Patient.ID, Names.Name, Surnames.Surname, Patronymics.Patronymic, Patient.Birthdate, Patient.Sex, Addresses.Street, Addresses.House, Addresses.Flat
+            this._commandCollection[1].CommandText = @"SELECT        Patient.ID, Names.Name, Surnames.Surname, Patronymics.Patronymic, Patient.Birthdate, Patient.Sex, Addresses.Street, Addresses.House, Addresses.Flat, 
+                         Patient.Height
 FROM            Addresses INNER JOIN
                          Patient ON Addresses.ID = Patient.Addr_ID INNER JOIN
                          Names ON Patient.Name_ID = Names.ID INNER JOIN
@@ -5767,8 +5917,8 @@ FROM            Addresses INNER JOIN
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[2] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = @"SELECT        Patient.ID, Names.Name, Surnames.Surname, Patronymics.Patronymic, Patient.Birthdate, Patient.Sex, Addresses.Street, Addresses.House, 
-                         Addresses.Flat
+            this._commandCollection[2].CommandText = @"SELECT        Patient.ID, Names.Name, Surnames.Surname, Patronymics.Patronymic, Patient.Birthdate, Patient.Sex, Addresses.Street, Addresses.House, Addresses.Flat, 
+                         Patient.Height
 FROM            Addresses INNER JOIN
                          Patient ON Addresses.ID = Patient.Addr_ID INNER JOIN
                          Names ON Patient.Name_ID = Names.ID INNER JOIN
@@ -5779,6 +5929,20 @@ WHERE        (Names.Name = @Name) AND (Surnames.Surname = @Surname) AND (Patrony
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Name", global::System.Data.SqlDbType.NVarChar, 100, global::System.Data.ParameterDirection.Input, true, 0, 0, "Name", global::System.Data.DataRowVersion.Current, null));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Surname", global::System.Data.SqlDbType.NVarChar, 100, global::System.Data.ParameterDirection.Input, true, 0, 0, "Surname", global::System.Data.DataRowVersion.Current, null));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Patronymic", global::System.Data.SqlDbType.NVarChar, 60, global::System.Data.ParameterDirection.Input, true, 0, 0, "Patronymic", global::System.Data.DataRowVersion.Current, null));
+            this._commandCollection[3] = new global::System.Data.SqlServerCe.SqlCeCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = @"SELECT        Patient.ID, Names.Name, Surnames.Surname, Patronymics.Patronymic, Patient.Birthdate, Patient.Sex, Addresses.Street, Addresses.House, Addresses.Flat, 
+                         Patient.Height
+FROM            Addresses INNER JOIN
+                         Patient ON Addresses.ID = Patient.Addr_ID INNER JOIN
+                         Names ON Patient.Name_ID = Names.ID INNER JOIN
+                         Patronymics ON Patient.Patronymic_ID = Patronymics.ID INNER JOIN
+                         Surnames ON Patient.Surname_ID = Surnames.ID CROSS JOIN
+                         Anamnesis
+WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@From", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@To", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5842,6 +6006,19 @@ WHERE        (Names.Name = @Name) AND (Surnames.Surname = @Surname) AND (Patrony
             else {
                 this.Adapter.SelectCommand.Parameters[2].Value = ((string)(Patronymic));
             }
+            PatientBaseDataSet.Pat_TabDataTable dataTable = new PatientBaseDataSet.Pat_TabDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual PatientBaseDataSet.Pat_TabDataTable GetDataRange(System.DateTime From, System.DateTime To) {
+            this.Adapter.SelectCommand = this.CommandCollection[3];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((System.DateTime)(From));
+            this.Adapter.SelectCommand.Parameters[1].Value = ((System.DateTime)(To));
             PatientBaseDataSet.Pat_TabDataTable dataTable = new PatientBaseDataSet.Pat_TabDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -5983,14 +6160,14 @@ WHERE        (Names.Name = @Name) AND (Surnames.Surname = @Surname) AND (Patrony
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Original_Anamnesis_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Anamnesis_ID", global::System.Data.DataRowVersion.Original, null));
             this._adapter.InsertCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [Anamnesis] ([Patient_ID], [Datetime], [Weight], [Info], [Entries]) V" +
-                "ALUES (@Patient_ID, @Datetime, @Weight, @Info, @Entries)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO Anamnesis\r\n                         (Patient_ID, Datetime, Weight, In" +
+                "fo, Entries)\r\nVALUES        (@Patient_ID,@Datetime,@Weight,@Info,@Entries)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Patient_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Patient_ID", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Datetime", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Weight", global::System.Data.SqlDbType.TinyInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Weight", global::System.Data.DataRowVersion.Current, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Info", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Info", global::System.Data.DataRowVersion.Current, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Entries", global::System.Data.SqlDbType.Binary, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Entries", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Weight", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Weight", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Info", global::System.Data.SqlDbType.NVarChar, 1000, global::System.Data.ParameterDirection.Input, true, 0, 0, "Info", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Entries", global::System.Data.SqlDbType.Image, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Entries", global::System.Data.DataRowVersion.Current, null));
             this._adapter.UpdateCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [Anamnesis] SET [Patient_ID] = @Patient_ID, [Datetime] = @Datetime, [Weigh" +
@@ -6015,18 +6192,24 @@ WHERE        (Names.Name = @Name) AND (Surnames.Surname = @Surname) AND (Patrony
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlServerCe.SqlCeCommand[2];
+            this._commandCollection = new global::System.Data.SqlServerCe.SqlCeCommand[3];
             this._commandCollection[0] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT [Anamnesis_ID], [Patient_ID], [Datetime], [Weight], [Info], [Entries] FROM" +
-                " [Anamnesis]";
+            this._commandCollection[0].CommandText = "SELECT Anamnesis_ID, Patient_ID, Datetime, Weight, Info, Entries FROM Anamnesis";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT        Anamnesis_ID, Patient_ID, Datetime, Weight, Info, Entries\r\nFROM    " +
-                "        Anamnesis\r\nWHERE        (Patient_ID = @Patient_ID)";
+            this._commandCollection[1].CommandText = "SELECT Anamnesis_ID, Patient_ID, Datetime, Weight, Info, Entries FROM Anamnesis W" +
+                "HERE (Patient_ID = @Patient_ID)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Patient_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Patient_ID", global::System.Data.DataRowVersion.Current, null));
+            this._commandCollection[2] = new global::System.Data.SqlServerCe.SqlCeCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "SELECT Anamnesis_ID, Patient_ID, Datetime, Weight, Info, Entries FROM Anamnesis W" +
+                "HERE (Datetime BETWEEN @From AND @To)";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@From", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@To", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6065,6 +6248,19 @@ WHERE        (Names.Name = @Name) AND (Surnames.Surname = @Surname) AND (Patrony
             else {
                 this.Adapter.SelectCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
+            PatientBaseDataSet.AnamnesisDataTable dataTable = new PatientBaseDataSet.AnamnesisDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual PatientBaseDataSet.AnamnesisDataTable GetDataRange(System.DateTime From, System.DateTime To) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((System.DateTime)(From));
+            this.Adapter.SelectCommand.Parameters[1].Value = ((System.DateTime)(To));
             PatientBaseDataSet.AnamnesisDataTable dataTable = new PatientBaseDataSet.AnamnesisDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -6125,7 +6321,7 @@ WHERE        (Names.Name = @Name) AND (Surnames.Surname = @Surname) AND (Patrony
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(global::System.Nullable<long> Patient_ID, System.DateTime Datetime, byte Weight, string Info, byte[] Entries) {
+        public virtual int Insert(global::System.Nullable<long> Patient_ID, System.DateTime Datetime, double Weight, string Info, byte[] Entries) {
             if ((Patient_ID.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((long)(Patient_ID.Value));
             }
@@ -6133,7 +6329,7 @@ WHERE        (Names.Name = @Name) AND (Surnames.Surname = @Surname) AND (Patrony
                 this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
             this.Adapter.InsertCommand.Parameters[1].Value = ((System.DateTime)(Datetime));
-            this.Adapter.InsertCommand.Parameters[2].Value = ((byte)(Weight));
+            this.Adapter.InsertCommand.Parameters[2].Value = ((double)(Weight));
             if ((Info == null)) {
                 this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
@@ -6144,7 +6340,6 @@ WHERE        (Names.Name = @Name) AND (Surnames.Surname = @Surname) AND (Patrony
                 this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[4].SqlDbType = SqlDbType.Image;
                 this.Adapter.InsertCommand.Parameters[4].Value = ((byte[])(Entries));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;

@@ -257,13 +257,9 @@ namespace Stability
             }
 
             var t = new DeviceDataEntry(l);
-            var bin_format = new BinaryFormatter();
-            var mem_stream = new MemoryStream();
-            bin_format.Serialize(mem_stream, t);
-
-            var adp_anam = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
-
-            adp_anam.Insert(1, DateTime.Now, 59, "", mem_stream.ToArray());
+            var Base = new cDataBase();
+            var an = new cAnamnesisEntry() {Entry = t, Info = "", Weight = 59};
+            Base.AddAnamnesis(an);
         }
 
         private void Test2_OnClick(object sender, RoutedEventArgs e)
