@@ -3,7 +3,7 @@ using Stability.Model.Device;
 
 namespace Stability.Model
 {
-    class cHuman
+    public class cHuman
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -23,14 +23,14 @@ namespace Stability.Model
         }
     }
 
-    class cAddress
+    public class cAddress
     {
         public string Street { get; set; }
         public short House { get; set; }
         public short Flat { get; set; }
     }
 
-    class cPatient:cHuman
+    public class cPatient:cHuman
     {
         public cAddress Address { get; set; }
         public string PhoneNumber { get; set; }

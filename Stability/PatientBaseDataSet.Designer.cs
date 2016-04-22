@@ -38,13 +38,13 @@ namespace Stability {
         
         private AnamnesisDataTable tableAnamnesis;
         
-        private global::System.Data.DataRelation relationPat_rel;
-        
-        private global::System.Data.DataRelation relationSur_rel;
+        private global::System.Data.DataRelation relationName_rel;
         
         private global::System.Data.DataRelation relationAdr_rel;
         
-        private global::System.Data.DataRelation relationName_rel;
+        private global::System.Data.DataRelation relationSur_rel;
+        
+        private global::System.Data.DataRelation relationPat_rel;
         
         private global::System.Data.DataRelation relationPatient_Anamnesis;
         
@@ -350,10 +350,10 @@ namespace Stability {
                     this.tableAnamnesis.InitVars();
                 }
             }
-            this.relationPat_rel = this.Relations["Pat_rel"];
-            this.relationSur_rel = this.Relations["Sur_rel"];
-            this.relationAdr_rel = this.Relations["Adr_rel"];
             this.relationName_rel = this.Relations["Name_rel"];
+            this.relationAdr_rel = this.Relations["Adr_rel"];
+            this.relationSur_rel = this.Relations["Sur_rel"];
+            this.relationPat_rel = this.Relations["Pat_rel"];
             this.relationPatient_Anamnesis = this.Relations["Patient_Anamnesis"];
             this.relationAdr_rel1 = this.Relations["Adr_rel1"];
         }
@@ -381,9 +381,16 @@ namespace Stability {
             this.tableAnamnesis = new AnamnesisDataTable();
             base.Tables.Add(this.tableAnamnesis);
             global::System.Data.ForeignKeyConstraint fkc;
-            fkc = new global::System.Data.ForeignKeyConstraint("Pat_rel", new global::System.Data.DataColumn[] {
-                        this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Patronymic_IDColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Names_Patient", new global::System.Data.DataColumn[] {
+                        this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Name_IDColumn});
+            this.tablePatient.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            fkc = new global::System.Data.ForeignKeyConstraint("Adr_rel", new global::System.Data.DataColumn[] {
+                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Addr_IDColumn});
             this.tablePatient.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
@@ -395,36 +402,29 @@ namespace Stability {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("Adr_rel", new global::System.Data.DataColumn[] {
-                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Addr_IDColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("Pat_rel", new global::System.Data.DataColumn[] {
+                        this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Patronymic_IDColumn});
             this.tablePatient.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Names_Patient", new global::System.Data.DataColumn[] {
-                        this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Name_IDColumn});
-            this.tablePatient.Constraints.Add(fkc);
-            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
-            fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            this.relationPat_rel = new global::System.Data.DataRelation("Pat_rel", new global::System.Data.DataColumn[] {
-                        this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Patronymic_IDColumn}, false);
-            this.Relations.Add(this.relationPat_rel);
-            this.relationSur_rel = new global::System.Data.DataRelation("Sur_rel", new global::System.Data.DataColumn[] {
-                        this.tableSurnames.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Surname_IDColumn}, false);
-            this.Relations.Add(this.relationSur_rel);
-            this.relationAdr_rel = new global::System.Data.DataRelation("Adr_rel", new global::System.Data.DataColumn[] {
-                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Addr_IDColumn}, false);
-            this.Relations.Add(this.relationAdr_rel);
             this.relationName_rel = new global::System.Data.DataRelation("Name_rel", new global::System.Data.DataColumn[] {
                         this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
                         this.tablePatient.Name_IDColumn}, false);
             this.Relations.Add(this.relationName_rel);
+            this.relationAdr_rel = new global::System.Data.DataRelation("Adr_rel", new global::System.Data.DataColumn[] {
+                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Addr_IDColumn}, false);
+            this.Relations.Add(this.relationAdr_rel);
+            this.relationSur_rel = new global::System.Data.DataRelation("Sur_rel", new global::System.Data.DataColumn[] {
+                        this.tableSurnames.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Surname_IDColumn}, false);
+            this.Relations.Add(this.relationSur_rel);
+            this.relationPat_rel = new global::System.Data.DataRelation("Pat_rel", new global::System.Data.DataColumn[] {
+                        this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Patronymic_IDColumn}, false);
+            this.Relations.Add(this.relationPat_rel);
             this.relationPatient_Anamnesis = new global::System.Data.DataRelation("Patient_Anamnesis", new global::System.Data.DataColumn[] {
                         this.tablePatient.IDColumn}, new global::System.Data.DataColumn[] {
                         this.tableAnamnesis.Patient_IDColumn}, false);
@@ -2924,23 +2924,12 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public PatronymicsRow PatronymicsRow {
+            public NamesRow NamesRow {
                 get {
-                    return ((PatronymicsRow)(this.GetParentRow(this.Table.ParentRelations["Pat_rel"])));
+                    return ((NamesRow)(this.GetParentRow(this.Table.ParentRelations["Name_rel"])));
                 }
                 set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Pat_rel"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public SurnamesRow SurnamesRow {
-                get {
-                    return ((SurnamesRow)(this.GetParentRow(this.Table.ParentRelations["Sur_rel"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Sur_rel"]);
+                    this.SetParentRow(value, this.Table.ParentRelations["Name_rel"]);
                 }
             }
             
@@ -2957,12 +2946,23 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public NamesRow NamesRow {
+            public SurnamesRow SurnamesRow {
                 get {
-                    return ((NamesRow)(this.GetParentRow(this.Table.ParentRelations["Name_rel"])));
+                    return ((SurnamesRow)(this.GetParentRow(this.Table.ParentRelations["Sur_rel"])));
                 }
                 set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Name_rel"]);
+                    this.SetParentRow(value, this.Table.ParentRelations["Sur_rel"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public PatronymicsRow PatronymicsRow {
+                get {
+                    return ((PatronymicsRow)(this.GetParentRow(this.Table.ParentRelations["Pat_rel"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["Pat_rel"]);
                 }
             }
             
@@ -4198,10 +4198,10 @@ namespace Stability.PatientBaseDataSetTableAdapters {
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT Addr_ID, Birthdate, ID, Name_ID, Patronymic_ID, Sex, Surname_ID FROM Patie" +
-                "nt WHERE (Name_ID = @Name_ID) AND (Surname_ID = @Surname_ID) AND (Patronymic_ID " +
-                "= @Patronymic_ID) AND (Birthdate = @Birthdate) AND (Sex = @Sex) AND (Addr_ID = @" +
-                "Addr_ID)";
+            this._commandCollection[1].CommandText = @"SELECT        Addr_ID, Birthdate, ID, Name_ID, Patronymic_ID, Sex, Surname_ID, Height
+FROM            Patient
+WHERE        (Name_ID = @Name_ID) AND (Surname_ID = @Surname_ID) AND (Patronymic_ID = @Patronymic_ID) AND (Birthdate = @Birthdate) AND (Sex = @Sex) AND 
+                         (Addr_ID = @Addr_ID)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Name_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Name_ID", global::System.Data.DataRowVersion.Current, null));
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Surname_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Surname_ID", global::System.Data.DataRowVersion.Current, null));

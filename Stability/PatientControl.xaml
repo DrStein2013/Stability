@@ -3,16 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="200" MinHeight="300">
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="376">
     <Grid>
-        <GroupBox Header="Информация о пациенте">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="227*"/>
+           
+        </Grid.RowDefinitions>
+        <GroupBox Header="Информация о пациенте" Grid.RowSpan="2" Margin="0,0,0,0.5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="83*" MinHeight="83"/>
-                    <RowDefinition Height="48*" MinHeight="48"/>
-                    <RowDefinition Height="48*" MinHeight="48"/>
-                    <RowDefinition Height="48*" MinHeight="48"/>
+                    <RowDefinition Height="52*" MinHeight="52"/>
+                    <RowDefinition Height="52*" MinHeight="52"/>
+                    <RowDefinition Height="73*" MinHeight="48"/>
+                    <RowDefinition Height="146*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" HorizontalAlignment="Left" Width="164" >
                     <Grid.RowDefinitions>
@@ -24,21 +28,21 @@
                         <ColumnDefinition Width="16*"/>
                         <ColumnDefinition Width="25*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="text_Surname" Height="22" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,3"/>
+                    <TextBox x:Name="text_Surname" Height="22" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,3" VerticalContentAlignment="Center"/>
                     <Label Content="Фамилия:" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Right" Grid.Row="0" Grid.Column="0" Height="26" Width="62" Margin="0,1"/>
-                    <TextBox x:Name="text_Name" Height="22" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="0,3"/>
+                    <TextBox x:Name="text_Name" Height="22" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Margin="0,3" VerticalContentAlignment="Center"/>
                     <Label Content="Имя:" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Right" Grid.Row="1" Grid.Column="0" Height="26" Margin="0,1" Width="36"/>
-                    <TextBox x:Name="text_Patronymic" Height="22" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" Margin="0,2,0,3"/>
+                    <TextBox x:Name="text_Patronymic" Height="22" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" Margin="0,2,0,3" VerticalContentAlignment="Center"/>
                     <Label Content="Отчество:" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Right" Grid.Row="2" Grid.Column="0" Height="26" Margin="0,0,0,1" Width="63"/>
 
                 </Grid>
-                <GroupBox Header="Пол" Grid.Row="1" HorizontalAlignment="Left" Margin="0,0,0,0">
+                <GroupBox Header="Пол" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="164">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <RadioButton Content="Мужской" Margin="5,0,10,0"/>
-                        <RadioButton Content="Женский" Margin="0,0,5,0"/>
+                        <RadioButton x:Name="rad_Male" Content="Мужской" Margin="5,0,10,0" IsChecked="True"/>
+                        <RadioButton x:Name="rad_Female" Content="Женский" Margin="0,0,5,0"/>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="Дата рождения" Grid.Row="2" HorizontalAlignment="Left" Width="164">
+                <GroupBox Header="Дата рождения" Grid.Row="2" HorizontalAlignment="Left" Width="164" Margin="5,0,0,0">
                     <DatePicker x:Name="BirthDatePicker" FirstDayOfWeek="Monday" DisplayDateStart="1/1/1930" SelectedDateFormat="Short" VerticalContentAlignment="Center" BorderBrush="{x:Null}"/>
                 </GroupBox>
                 <Grid Grid.Row="3">
@@ -48,17 +52,36 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
                         <Label Content="Рост:" VerticalContentAlignment="Center"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="" Margin="0,2" Width="39"/>
+                        <TextBox x:Name="text_Height" Height="23" TextWrapping="Wrap" Text="" Margin="0,2" Width="39" PreviewTextInput="text_PreviewTextInput" MaxLength="3" VerticalContentAlignment="Center"/>
                         <Label Content="см" VerticalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
                         <Label Content="Вес:" VerticalContentAlignment="Center"/>
-                        <TextBox Height="23" TextWrapping="Wrap" Text="" Margin="0,2" Width="39"/>
+                        <TextBox x:Name="text_Weight" Height="23" TextWrapping="Wrap" Text="" Margin="0,2" Width="39" PreviewTextInput="text_Weight_PreviewTextInput" VerticalContentAlignment="Center"/>
                         <Label Content="кг" VerticalContentAlignment="Center"/>
                         <Button Content="Вес" Width="45"/>
 
                     </StackPanel>
                 </Grid>
+                <GroupBox Header="Адрес" Grid.Row="4" Margin="5">
+                    <Grid Grid.Row="4" Margin="-2,0,0,0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Улица:" Grid.Row="0" Grid.Column="0" Width="46" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="text_Street" TextWrapping="Wrap" Grid.Row="0" Grid.Column="1" Margin="0,1,0,1" VerticalContentAlignment="Center"/>
+                        <Label Content="Дом:" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="text_House" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,1,0,1" VerticalContentAlignment="Center" Width="45" PreviewTextInput="text_PreviewTextInput" MaxLength="4"/>
+                        <Label Content="Квартира:" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="text_Flat" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,1,0,1" VerticalContentAlignment="Center" Width="45" PreviewTextInput="text_PreviewTextInput" MaxLength="4"/>
+                    </Grid>
+                </GroupBox>
 
             </Grid>
         </GroupBox>

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using Stability.Enums;
 using Stability.Model.Port;
@@ -15,6 +17,23 @@ namespace Stability.Model.Device
         {
             AdcList = new List<double[]>();
             AdcList.AddRange(List);
+        }
+
+        public static DeviceDataEntry Deserialize(byte [] arrBytes)
+        {
+            var bin_format = new BinaryFormatter();
+            var mem_stream = new MemoryStream();
+            mem_stream.Write(arrBytes,0,arrBytes.Count());
+            mem_stream.Position = 0;
+            return (DeviceDataEntry)bin_format.Deserialize(mem_stream);
+        }
+
+        public static byte[] Serialize(DeviceDataEntry t)
+        {
+            var bin_format = new BinaryFormatter();
+            var mem_stream = new MemoryStream();
+            bin_format.Serialize(mem_stream, t);
+            return mem_stream.ToArray();
         }
 
         public List<double[]> AdcList { get; private set; }

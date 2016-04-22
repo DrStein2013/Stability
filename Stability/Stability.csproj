@@ -103,6 +103,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PatientBaseDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="PatientControl.xaml.cs">
+      <DependentUpon>PatientControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\IView.cs" />
     <Page Include="CalibrationWindow.xaml">
       <SubType>Designer</SubType>
@@ -138,6 +141,10 @@
     <Page Include="TenzoRadioButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PatientControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

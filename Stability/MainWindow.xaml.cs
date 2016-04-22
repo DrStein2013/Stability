@@ -197,9 +197,12 @@ namespace Stability
 
             var Base = new cDataBase();
 
-            grid.ItemsSource = Base.GetPatientBy(1);
-
-           /* string s = "ID = " + data[0].ID + " " + data[0].Имя + " " + data[0]["Фамилия"];
+            //grid.ItemsSource = Base.GetPatientBy(1);
+            PatientBaseDataSet.Pat_TabDataTable t = null;
+            var pat = Base.FindPatientBy(1, ref t);
+            grid.ItemsSource = t;
+            form_Pat.SetToForm(pat);
+            /* string s = "ID = " + data[0].ID + " " + data[0].Имя + " " + data[0]["Фамилия"];
             MessageBox.Show(s);*/
         }
 
@@ -213,6 +216,7 @@ namespace Stability
                 Patronymic = "Борисович",
                 Sex = true,
                 Birthdate = new DateTime(1992, 7, 7),
+                Height = 170,
                 Address = new cAddress() { Street = "Островского", House = 20, Flat = 97 },
                 PhoneNumber = "0632737032"
             };
