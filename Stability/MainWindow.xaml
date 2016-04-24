@@ -38,6 +38,7 @@
                 <MenuItem x:Name="FastWeightCalibItem" Header="Быстрая весовая калибровка" Click="FastWeightCalibItem_Click" />
                 <MenuItem x:Name="Test1" Header="Test1" Click="Test1_OnClick" />
                 <MenuItem x:Name="Test2" Header="Test2" Click="Test2_OnClick" />
+                <MenuItem x:Name="Test3" Header="Добавить пациента" Click="Test3_OnClick" />
             </MenuItem>
             <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>

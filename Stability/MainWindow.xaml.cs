@@ -281,6 +281,21 @@ namespace Stability
             d.AdcList.Add(new double[]{5,4,3,7});
 
         }
+
+        private void Test3_OnClick(object sender, RoutedEventArgs e)
+        {
+            string res;
+            var pat = form_Pat.GetPatient(out res);
+            if (pat == null)
+                MessageBox.Show(res, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
+            {
+                var Base = new cDataBase();
+                if (Base.AddPatient(pat))
+                    MessageBox.Show("Good");
+                else MessageBox.Show("Такой пациент уже существует в базе");
+            }
+        }
     }
 
 }
