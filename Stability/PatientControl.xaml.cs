@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Stability.Model;
 
 namespace Stability
@@ -8,13 +11,44 @@ namespace Stability
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class PatientControl : UserControl
+    public partial class PatientControl
     {
         public bool FieldsCanBeNull { get; set; }
+        public Brush IfEmptyBorderBrush { get; set; }
+        private Brush borderCurrBrush;
+        private List<TextBox> _list;
+
         public PatientControl()
         {
             InitializeComponent();
             FieldsCanBeNull = false;
+
+            borderCurrBrush = text_Name.BorderBrush;
+            IfEmptyBorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+
+            _list = new List<TextBox>(new[] 
+            {
+                text_Name,
+                text_Surname,
+                text_Patronymic,
+                text_Height,
+                text_Weight,
+                text_Street,
+                text_House,
+                text_Flat
+            });
+
+            foreach (var t in _list)
+            {
+                t.GotFocus += OnGotFocus;
+            }
+            BirthDatePicker.GotFocus += OnGotFocus;
+            BirthDatePicker.DisplayDateEnd = DateTime.Now;
+        }
+
+        private void OnGotFocus(object sender, RoutedEventArgs routedEventArgs)
+        {
+            ((Control) sender).BorderBrush = borderCurrBrush;
         }
 
         public PatientControl(cPatient p) : base()
@@ -71,6 +105,11 @@ namespace Stability
            //var p = new cPatient(){Name = text_Name.Text,Surname = text_Surname.Text,}
             Int16 height;
             double weight;
+
+            res = CheckIfEmpty();
+            if (res != "OK")
+                return null;
+
             res = CheckParams(out height, out weight);
             if (res != "OK")
                 return null;
@@ -81,7 +120,7 @@ namespace Stability
                 return null;
 
             var sex = (bool) rad_Male.IsChecked;
-            return new cPatient()
+            var pat = new cPatient()
             {
                 Address = adr,
                 Birthdate = BirthDatePicker.DisplayDate,
@@ -91,6 +130,15 @@ namespace Stability
                 Patronymic = text_Patronymic.Text,
                 Sex = sex
             };
+
+            if (pat.Age == 0)
+            {
+                res = "Возраст пациента указан не верно";
+                BirthDatePicker.BorderBrush = IfEmptyBorderBrush;
+                return null;
+            }
+
+            return pat;
         }
 
         private string CheckParams(out Int16 h, out double w)
@@ -135,7 +183,7 @@ namespace Stability
             else
                 return "Значение заполнено неверно!";
 
-            if (Int16.TryParse(text_House.Text, out f))
+            if (Int16.TryParse(text_Flat.Text, out f))
             {
                 if (h == 0)
                     return "Номер квартиры не может равняться нулю";
@@ -145,6 +193,23 @@ namespace Stability
 
             adr= new cAddress(){Street = text_Street.Text,Flat = f,House = h};
             return "OK";
+        }
+
+        private string CheckIfEmpty()
+        {
+            string res = "OK";
+            if (FieldsCanBeNull) 
+                return res;
+            
+           foreach (var t in _list)
+            {
+                if (t.Text.Equals(""))
+                {
+                    t.BorderBrush = IfEmptyBorderBrush;
+                    res = "Необходимо заполнить все информационные поля";
+                }
+            }
+            return res;
         }
     }
 }
