@@ -32,7 +32,7 @@ namespace Stability
             _presenter = new StabilityPresenter(new StabilityModel(), this);
             
             Thread.Sleep(200);
-            buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
+         //   buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
        //     but_ok.MouseEnter += buttonHandler.But_MouseEnter;
             // Button_Click_1(this,null);
         }

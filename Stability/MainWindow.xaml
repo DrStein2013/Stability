@@ -2,13 +2,39 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:PatientBaseDataSetTableAdapters="clr-namespace:Stability.PatientBaseDataSetTableAdapters" xmlns:local="clr-namespace:Stability" x:Class="Stability.MainWindow"
+          
     
     Title="MainWindow" Height="440" Width="793" Closing="OnClose">
     <Window.Resources>
+        
         <local:DateTimeConverter x:Key="DateTimeConverter"></local:DateTimeConverter>
         <local:SexesConverter x:Key="SexesConverter"></local:SexesConverter>
-
-        </Window.Resources>
+       
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+            <Border BorderBrush="Transparent" BorderThickness="0" 
+                    Name="border" 
+                    OverridesDefaultStyle="False"
+                    Width="30" 
+                    Height="30" 
+                    Background="{TemplateBinding Property=Background}"
+                    Padding="{TemplateBinding Property=Padding}"
+                    HorizontalAlignment="{TemplateBinding Property=HorizontalAlignment}"
+                    VerticalAlignment ="{TemplateBinding Property=VerticalAlignment}"
+                   >
+                   <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
+            </Border>
+             <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="border" Property="Width" Value="35"/>
+                    <Setter TargetName="border" Property="Height" Value="35"/>
+                 </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="border" Property="Width" Value="32"/>
+                    <Setter TargetName="border" Property="Height" Value="32"/>   
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
 
     <Grid Margin="0,0,0,0
           ">
@@ -72,21 +98,19 @@
         </DataGrid>
         
        <local:PatientControl x:Name="form_Pat" HorizontalAlignment="Left" Grid.Row="1" Width="200" Height="371" Margin="575,10,0,-351"/>
-        <ToolBar HorizontalAlignment="Left" Height="49" Margin="38,30,0,-49" Grid.Row="1" VerticalAlignment="Top" Width="128">
-            <Image x:Name="but_ok"  HorizontalAlignment="Center" Height="25" VerticalAlignment="Center" Width="25" Source="Resources/ok_but.png">
-               <Image.Style>
-                    <Style TargetType="Image">
-                        <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Opacity" Value="30" />
-                         
-                    </Trigger>
-                </Style.Triggers>
-                    </Style>
-                </Image.Style>
-            </Image>
+        <Button  Template="{DynamicResource ButtonTemplate}" Grid.Row="1" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0" Margin="19,40,722,-52" Style="{StaticResource shadow_Green}">
+            <Button.Background>
+                <ImageBrush ImageSource="Resources/ok_but.png"/>
+            </Button.Background>
+        </Button>
+        <Button Template="{DynamicResource ButtonTemplate}" Grid.Row="1" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0" Style="{StaticResource shadow_Blue}" Margin="74,40,653,-49">
+            <Button.Background>
+                <ImageBrush ImageSource="Resources/search.png"/>
+            </Button.Background>
+        </Button>
 
-        </ToolBar>
+
+
 
     </Grid>
 
