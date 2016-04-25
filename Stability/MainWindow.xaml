@@ -7,7 +7,8 @@
     <Window.Resources>
         <local:DateTimeConverter x:Key="DateTimeConverter"></local:DateTimeConverter>
         <local:SexesConverter x:Key="SexesConverter"></local:SexesConverter>
-    </Window.Resources>
+
+        </Window.Resources>
 
     <Grid Margin="0,0,0,0
           ">
@@ -42,7 +43,7 @@
             </MenuItem>
             <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>
-        <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Margin="38,19,0,-49" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
+        <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Margin="0,119,0,-149" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
         <TextBox x:Name="Tenz0" HorizontalAlignment="Left" Height="60" Margin="354,19,0,-49" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
         <TextBox x:Name="Tenz2" HorizontalAlignment="Left" Height="60" Margin="38,196,0,-226" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
         <TextBox x:Name="Tenz1" HorizontalAlignment="Left" Height="60" Margin="354,196,0,-226" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
@@ -71,6 +72,21 @@
         </DataGrid>
         
        <local:PatientControl x:Name="form_Pat" HorizontalAlignment="Left" Grid.Row="1" Width="200" Height="371" Margin="575,10,0,-351"/>
+        <ToolBar HorizontalAlignment="Left" Height="49" Margin="38,30,0,-49" Grid.Row="1" VerticalAlignment="Top" Width="128">
+            <Image x:Name="but_ok"  HorizontalAlignment="Center" Height="25" VerticalAlignment="Center" Width="25" Source="Resources/ok_but.png">
+               <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Opacity" Value="30" />
+                         
+                    </Trigger>
+                </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+        </ToolBar>
 
     </Grid>
 

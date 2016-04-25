@@ -315,6 +315,26 @@ namespace Stability
             //  but_ok.Effect.SetValue();
         }
 
+       public void But_MouseEnter(object sender, MouseEventArgs e)
+       {
+           var w = new DoubleAnimation();
+           var h = new DoubleAnimation();
+           w.From = _butW;
+           w.To = _butW + 5;
+           w.Duration = TimeSpan.FromMilliseconds(20);
+
+           h.From = _butH;
+           h.To = _butH + 5;
+           h.Duration = TimeSpan.FromMilliseconds(20);
+
+           ((Button)sender).BeginAnimation(Button.WidthProperty, w);
+           ((Button)sender).BeginAnimation(Button.HeightProperty, h);
+
+           //  var op = new DoubleAnimation(0.0, 100.0, TimeSpan.FromMilliseconds(1));
+           //  but_ok.Effect.BeginAnimation(DropShadowEffect.OpacityProperty,op);//SetValue(OpacityProperty,100.0);
+         //  ((Button)sender).Effect.SetCurrentValue(DropShadowEffect.OpacityProperty, 100.0);
+       }
+
         public void but_MouseLeave(object sender, MouseEventArgs e)
         {
             var a = new DoubleAnimation();

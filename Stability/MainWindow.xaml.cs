@@ -25,13 +25,16 @@ namespace Stability
     public partial class MainWindow : Window, IView
     {
         private StabilityPresenter _presenter;
+        private ButtonHandler buttonHandler;
         public MainWindow()
         {
             InitializeComponent();
             _presenter = new StabilityPresenter(new StabilityModel(), this);
             
             Thread.Sleep(200);
-           // Button_Click_1(this,null);
+            buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
+       //     but_ok.MouseEnter += buttonHandler.But_MouseEnter;
+            // Button_Click_1(this,null);
         }
 
         public void UpdateTenzView(string[] tenz)
@@ -296,6 +299,7 @@ namespace Stability
                 else MessageBox.Show("Такой пациент уже существует в базе");
             }
         }
+
     }
 
 }
