@@ -13,23 +13,23 @@
         <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
             <Border BorderBrush="Transparent" BorderThickness="0" 
                     Name="border" 
-                    OverridesDefaultStyle="False"
-                    Width="48" 
-                    Height="48" 
+                    Width="40" 
+                    Height="40" 
+                    Background="Transparent"
                     Padding="{TemplateBinding Property=Padding}"
                     HorizontalAlignment="{TemplateBinding Property=HorizontalAlignment}"
                     VerticalAlignment ="{TemplateBinding Property=VerticalAlignment}"
-                   >
+                    >
                    <ContentPresenter RecognizesAccessKey="True"></ContentPresenter>
             </Border>
-             <ControlTemplate.Triggers>
+            <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="border" Property="Width" Value="53"/>
-                    <Setter TargetName="border" Property="Height" Value="53"/>
-                 </Trigger>
-                <Trigger Property="IsPressed" Value="True">
                     <Setter TargetName="border" Property="Width" Value="50"/>
-                    <Setter TargetName="border" Property="Height" Value="50"/>   
+                    <Setter TargetName="border" Property="Height" Value="50"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="border" Property="Width" Value="45"/>
+                    <Setter TargetName="border" Property="Height" Value="45"/>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -45,7 +45,7 @@
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="MenuRow" Height="20*" MaxHeight="20" MinHeight="20"/>
-            <RowDefinition x:Name="ButsRow" Height="29*" MaxHeight="29" MinHeight="29"/>
+            <RowDefinition x:Name="MainRow" Height="29*" MinHeight="29"/>
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" Height="20" VerticalAlignment="Top">
@@ -68,38 +68,74 @@
             </MenuItem>
             <Ellipse x:Name="StatusMark" Height="15" Width="15" Fill="Red" IsEnabled="False" Stroke="Black"/>
         </Menu>
-        <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Margin="0,119,0,-149" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
-        <TextBox x:Name="Tenz0" HorizontalAlignment="Left" Height="60" Margin="354,19,0,-49" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
-        <TextBox x:Name="Tenz2" HorizontalAlignment="Left" Height="60" Margin="38,196,0,-226" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
-        <TextBox x:Name="Tenz1" HorizontalAlignment="Left" Height="60" Margin="354,196,0,-226" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
-        <Button x:Name="button1" Content="Start" HorizontalAlignment="Left" Height="60" Margin="199,19,0,-49" Grid.Row="1" VerticalAlignment="Top" Width="100" FontFamily="SketchFlow Print" FontSize="24" Click="Button_Click_1" />
-        <Button Content="Stop" HorizontalAlignment="Left" Height="60" Margin="199,196,0,-226" Grid.Row="1" VerticalAlignment="Top" Width="100" FontFamily="SketchFlow Print" FontSize="24" Click="Button_Click_2" />
-        <Expander x:Name="exp1" Header="Данные пациента" HorizontalAlignment="Left" Height="99" Margin="385,92,0,-161" Grid.Row="1" VerticalAlignment="Top" Width="129" RenderTransformOrigin="0.664,0.511" Expanded="Expander_Expanded" Collapsed="exp1_Collapsed">
-            <Grid x:Name="gr1" Background="#FFE5E5E5" Margin="24,0,25,0"/>
-        </Expander>
-        <Button x:Name="button4" Content="Weight" HorizontalAlignment="Left" Height="60" Margin="250,107,0,-137" Grid.Row="1" VerticalAlignment="Top" Width="119" FontFamily="SketchFlow Print" FontSize="24" Click="button4_Click" />
-        <TextBox x:Name="TextBoxWeight" HorizontalAlignment="Left" Height="60" Margin="118,107,0,-137" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
-        <DataGrid x:Name="grid" HorizontalAlignment="Left" Height="100" Margin="50,271,0,-341" Grid.Row="1" VerticalAlignment="Top" Width="503" CanUserReorderColumns="False" HeadersVisibility="Column" AutoGenerateColumns="False" ItemsSource="{Binding Path=DataTable1, Mode=OneWay}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=ID, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="ID"/>
-                <DataGridTextColumn Binding="{Binding Surname, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Фамилия"/>
-                <DataGridTextColumn Binding="{Binding Name, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Имя"/>
-                <DataGridTextColumn Binding="{Binding Patronymic, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Отчество"/>
-                <DataGridTextColumn Binding="{Binding Sex, Converter={StaticResource SexesConverter}, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Пол"/>
-                <DataGridTextColumn Binding="{Binding Birthdate, Converter={StaticResource DateTimeConverter}, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Дата рождения"/>
-                <DataGridTextColumn Binding="{Binding Street, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Улица"/>
-                <DataGridTextColumn Binding="{Binding House, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Дом"/>
-                <DataGridTextColumn Binding="{Binding Flat, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Кв-ра"/>
-            </DataGrid.Columns>
-            <DataGrid.DataContext>
-                <local:PatientBaseDataSet Locale="ru-RU" EnforceConstraints="False"/>
-            </DataGrid.DataContext>
-        </DataGrid>
-        
-       <local:PatientControl x:Name="form_Pat" HorizontalAlignment="Left" Grid.Row="1" Width="200" Height="371" Margin="575,10,0,-351"/>
-        <Button  Grid.Row="1" Padding="0" Template="{DynamicResource ButtonTemplate}" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0" Margin="24,41,704,-67" Style="{StaticResource shadow_Blue}">
-          <Path Data="M275.4,295.8c81.682,0,147.899-66.217,147.899-147.9C423.299,66.218,357.082,0,275.4,0c-81.683,0-147.9,66.217-147.9,147.9   C127.5,229.583,193.717,295.8,275.4,295.8z M345.461,206.604c-6.729,22.246-35.549,38.968-70.09,38.968   c-34.542,0-63.363-16.723-70.091-38.968H345.461z M586.5,510v20.4c0,5.634-4.566,10.2-10.199,10.2H515.1V601.8   c0,5.634-4.566,10.2-10.199,10.2h-20.4c-5.633,0-10.199-4.566-10.199-10.2v-61.199H413.1c-5.633,0-10.199-4.566-10.199-10.2V510   c0-5.633,4.566-10.199,10.199-10.199h61.201v-61.2c0-5.634,4.566-10.2,10.199-10.2h20.4c5.633,0,10.199,4.566,10.199,10.2v61.2   h61.201C581.934,499.8,586.5,504.367,586.5,510z M382.5,510v20.4c0,5.419,1.535,10.438,4.016,14.857   c-30.803,3.35-67.52,5.542-111.116,5.542c-142.607,0-212.393-23.302-237.979-34.686c-6.602-2.938-11.921-11.336-11.921-18.562   V448.8c0-73.056,55.624-133.663,126.599-141.78c2.157-0.247,5.355,0.677,7.113,1.949C191.938,332.66,232.002,346.8,275.4,346.8   s83.463-14.14,116.188-37.831c1.758-1.272,4.957-2.196,7.113-1.949c58.746,6.719,106.869,49.438,121.744,105.37   c-4.572-2.724-9.848-4.389-15.545-4.389h-20.4c-16.873,0-30.6,13.726-30.6,30.6v40.8H413.1C396.227,479.4,382.5,493.126,382.5,510z" Fill="#006DF0" Stretch="Fill"/>
-        </Button>
+        <Grid Grid.Row="1" x:Name="MainGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+           
+                <Grid x:Name="PatButGrid" Grid.Column="0" Margin="0,0,10,0" UseLayoutRounding="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ToolBar Grid.Row="0" Margin="0,3,3,3" Height="55" Background="#FFE4E4E4" IsHitTestVisible="True" UseLayoutRounding="True">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0,0,0">
+                        <Button   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" Click="Test3_OnClick" ToolTip="Добавить нового пациента">
+                            <Path Data="M275.4,295.8c81.682,0,147.899-66.217,147.899-147.9C423.299,66.218,357.082,0,275.4,0c-81.683,0-147.9,66.217-147.9,147.9   C127.5,229.583,193.717,295.8,275.4,295.8z M345.461,206.604c-6.729,22.246-35.549,38.968-70.09,38.968   c-34.542,0-63.363-16.723-70.091-38.968H345.461z M586.5,510v20.4c0,5.634-4.566,10.2-10.199,10.2H515.1V601.8   c0,5.634-4.566,10.2-10.199,10.2h-20.4c-5.633,0-10.199-4.566-10.199-10.2v-61.199H413.1c-5.633,0-10.199-4.566-10.199-10.2V510   c0-5.633,4.566-10.199,10.199-10.199h61.201v-61.2c0-5.634,4.566-10.2,10.199-10.2h20.4c5.633,0,10.199,4.566,10.199,10.2v61.2   h61.201C581.934,499.8,586.5,504.367,586.5,510z M382.5,510v20.4c0,5.419,1.535,10.438,4.016,14.857   c-30.803,3.35-67.52,5.542-111.116,5.542c-142.607,0-212.393-23.302-237.979-34.686c-6.602-2.938-11.921-11.336-11.921-18.562   V448.8c0-73.056,55.624-133.663,126.599-141.78c2.157-0.247,5.355,0.677,7.113,1.949C191.938,332.66,232.002,346.8,275.4,346.8   s83.463-14.14,116.188-37.831c1.758-1.272,4.957-2.196,7.113-1.949c58.746,6.719,106.869,49.438,121.744,105.37   c-4.572-2.724-9.848-4.389-15.545-4.389h-20.4c-16.873,0-30.6,13.726-30.6,30.6v40.8H413.1C396.227,479.4,382.5,493.126,382.5,510z" Fill="#006DF0" Stretch="Fill"/>
+                        </Button>
+                    
+                    <TextBox Margin="20,10,5,10" TextWrapping="Wrap" Text="Введите ID" VerticalAlignment="Center" BorderBrush="Black">
+                        <TextBox.Effect>
+                            <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
+                        </TextBox.Effect>
+                    </TextBox>
+                        <Button   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" ToolTip="Найти по ID">
+                            <Path Data="M23.111 20.058l-4.977-4.977c.965-1.52 1.523-3.322 1.523-5.251 0-5.42-4.409-9.83-9.829-9.83-5.42 0-9.828 4.41-9.828 9.83s4.408 9.83 9.829 9.83c1.834 0 3.552-.505 5.022-1.383l5.021 5.021c2.144 2.141 5.384-1.096 3.239-3.24zm-20.064-10.228c0-3.739 3.043-6.782 6.782-6.782s6.782 3.042 6.782 6.782-3.043 6.782-6.782 6.782-6.782-3.043-6.782-6.782zm2.01-1.764c1.984-4.599 8.664-4.066 9.922.749-2.534-2.974-6.993-3.294-9.922-.749z" Stretch="Fill" Fill="#FF006DF0"/>
+                        </Button>
+                    </StackPanel>
+                </ToolBar>
+                <local:PatientControl x:Name="form_Pat" Grid.Row="1" Width="200" Margin="5,5,0,0" HorizontalAlignment="Left"/>
+            </Grid>
+                <GridSplitter Width="10" Grid.Column="0"/>
+            
+            <Grid Grid.Column="1">
+                <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Margin="239,18,0,-48" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
+                <TextBox x:Name="Tenz0" HorizontalAlignment="Left" Height="60" Margin="521,18,0,-48" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
+                <TextBox x:Name="Tenz2" HorizontalAlignment="Left" Height="60" Margin="239,195,0,-225" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
+                <TextBox x:Name="Tenz1" HorizontalAlignment="Left" Height="60" Margin="521,195,0,-225" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
+                <Button x:Name="button1" Content="Start" HorizontalAlignment="Left" Height="60" Margin="366,18,0,-48" Grid.Row="1" VerticalAlignment="Top" Width="100" FontFamily="SketchFlow Print" FontSize="24" Click="Button_Click_1" />
+                <Button Content="Stop" HorizontalAlignment="Left" Height="60" Margin="366,195,0,-225" Grid.Row="1" VerticalAlignment="Top" Width="100" FontFamily="SketchFlow Print" FontSize="24" Click="Button_Click_2" />
+                <Expander x:Name="exp1" Header="Данные пациента" HorizontalAlignment="Left" Height="99" Margin="650,106,0,-175" Grid.Row="1" VerticalAlignment="Top" Width="129" RenderTransformOrigin="0.664,0.511" Expanded="Expander_Expanded" Collapsed="exp1_Collapsed">
+                    <Grid x:Name="gr1" Background="#FFE5E5E5" Margin="24,0,25,0"/>
+                </Expander>
+                <Button x:Name="button4" Content="Weight" HorizontalAlignment="Left" Height="60" Margin="494,106,0,-136" Grid.Row="1" VerticalAlignment="Top" Width="119" FontFamily="SketchFlow Print" FontSize="24" Click="button4_Click" />
+                <TextBox x:Name="TextBoxWeight" HorizontalAlignment="Left" Height="60" Margin="329,106,0,-136" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
+                <DataGrid x:Name="grid" HorizontalAlignment="Left" Height="100" Margin="282,279,0,-349" Grid.Row="1" VerticalAlignment="Top" Width="503" CanUserReorderColumns="False" HeadersVisibility="Column" AutoGenerateColumns="False" ItemsSource="{Binding Path=DataTable1, Mode=OneWay}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=ID, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="ID"/>
+                        <DataGridTextColumn Binding="{Binding Surname, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Фамилия"/>
+                        <DataGridTextColumn Binding="{Binding Name, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Имя"/>
+                        <DataGridTextColumn Binding="{Binding Patronymic, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Отчество"/>
+                        <DataGridTextColumn Binding="{Binding Sex, Converter={StaticResource SexesConverter}, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Пол"/>
+                        <DataGridTextColumn Binding="{Binding Birthdate, Converter={StaticResource DateTimeConverter}, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Дата рождения"/>
+                        <DataGridTextColumn Binding="{Binding Street, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Улица"/>
+                        <DataGridTextColumn Binding="{Binding House, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Дом"/>
+                        <DataGridTextColumn Binding="{Binding Flat, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Кв-ра"/>
+                    </DataGrid.Columns>
+                    <DataGrid.DataContext>
+                        <local:PatientBaseDataSet Locale="ru-RU" EnforceConstraints="False"/>
+                    </DataGrid.DataContext>
+                </DataGrid>
+
+                <Button  Grid.Row="1" Padding="0" Template="{DynamicResource ButtonTemplate}" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0" Margin="24,41,704,-67" Style="{StaticResource shadow_Blue}">
+                    <Path Data="M275.4,295.8c81.682,0,147.899-66.217,147.899-147.9C423.299,66.218,357.082,0,275.4,0c-81.683,0-147.9,66.217-147.9,147.9   C127.5,229.583,193.717,295.8,275.4,295.8z M345.461,206.604c-6.729,22.246-35.549,38.968-70.09,38.968   c-34.542,0-63.363-16.723-70.091-38.968H345.461z M586.5,510v20.4c0,5.634-4.566,10.2-10.199,10.2H515.1V601.8   c0,5.634-4.566,10.2-10.199,10.2h-20.4c-5.633,0-10.199-4.566-10.199-10.2v-61.199H413.1c-5.633,0-10.199-4.566-10.199-10.2V510   c0-5.633,4.566-10.199,10.199-10.199h61.201v-61.2c0-5.634,4.566-10.2,10.199-10.2h20.4c5.633,0,10.199,4.566,10.199,10.2v61.2   h61.201C581.934,499.8,586.5,504.367,586.5,510z M382.5,510v20.4c0,5.419,1.535,10.438,4.016,14.857   c-30.803,3.35-67.52,5.542-111.116,5.542c-142.607,0-212.393-23.302-237.979-34.686c-6.602-2.938-11.921-11.336-11.921-18.562   V448.8c0-73.056,55.624-133.663,126.599-141.78c2.157-0.247,5.355,0.677,7.113,1.949C191.938,332.66,232.002,346.8,275.4,346.8   s83.463-14.14,116.188-37.831c1.758-1.272,4.957-2.196,7.113-1.949c58.746,6.719,106.869,49.438,121.744,105.37   c-4.572-2.724-9.848-4.389-15.545-4.389h-20.4c-16.873,0-30.6,13.726-30.6,30.6v40.8H413.1C396.227,479.4,382.5,493.126,382.5,510z" Fill="#006DF0" Stretch="Fill"/>
+                </Button>
+            </Grid>
+        </Grid>
+
+
     </Grid>
 
     
