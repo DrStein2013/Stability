@@ -17,21 +17,37 @@ namespace Stability.Model
         public double[] Data { get; set; }
     }
 
+    public class PatientModelResponseArg : EventArgs
+    {
+        public BaseAction Action { get; set; }
+        public bool Error { get; set; }
+        public string Response { get; set; }
+        public long ID { get; set; }
+        public cPatient Patient { get; set; }
+        public PatientBaseDataSet.Pat_TabDataTable PatientTable { get; set; }
+    }
+
     public interface IStabilityModel
     {
         event EventHandler<TenzEventArgs> UpdateDataView;
         event EventHandler<TenzEventArgs> UpdateWeightKoef;
-        event EventHandler<WeightEventArgs> UpdateWeight; 
+        event EventHandler<WeightEventArgs> UpdateWeight;
+        event EventHandler<PatientModelResponseArg> UpdatePatient;
+
         void DeviceCmdFromView(DeviceCmdArgEvent c);
+        void PatientEventFromView(PatientModelResponseArg p);
         void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig);
     }
 
     public class StabilityModel : IStabilityModel
     {
         private readonly StabilityDevice _device;
+        private readonly cDataBase _base;
+
         public event EventHandler<TenzEventArgs> UpdateDataView;
         public event EventHandler<TenzEventArgs> UpdateWeightKoef;
-        public event EventHandler<WeightEventArgs> UpdateWeight; 
+        public event EventHandler<WeightEventArgs> UpdateWeight;
+        public event EventHandler<PatientModelResponseArg> UpdatePatient;
         public bool ShowAdcs { get; set; }
         private readonly Timer _viewUpdaterTimer;
 
@@ -40,7 +56,8 @@ namespace Stability.Model
             var conf = MainConfig.PortConfig;
             IoC.GetKernel().Bind<IPort>().To<CComPort>().InSingletonScope().WithConstructorArgument("config", conf);
             _device = new StabilityDevice();
-            
+            _base = new cDataBase();
+
             _device.CalibrationDone +=
                 (sender, args) =>
                 {
@@ -94,6 +111,39 @@ namespace Stability.Model
                     break;
                 default:
                     break;
+            }
+        }
+
+        public void PatientEventFromView(PatientModelResponseArg p)
+        {
+            switch (p.Action)
+            {
+               case BaseAction.Add:
+                    long id=0;
+                    if (_base.AddPatient(p.Patient,ref id))
+                        p.Response = "Новый пациент успешно добавлен";
+                    else
+                    {
+                        p.Response = "Такой пациент уже существует в базе";
+                        p.Error = true;
+                    }
+                    p.ID = id;
+                    if(UpdatePatient!=null)
+                        UpdatePatient.Invoke(this,p);
+                break;
+               case BaseAction.Find:
+                    var tab = new PatientBaseDataSet.Pat_TabDataTable();
+                    var pat = _base.FindPatientBy(p.ID,ref tab);
+                    if (pat == null)
+                    {
+                        p.Error = true;
+                        p.Response = "Пациент с таким ID отсутствует в базе";
+                    }
+                    p.Patient = pat;
+                    p.PatientTable = tab;
+                    if(UpdatePatient!=null)
+                        UpdatePatient.Invoke(this, p);
+                break;
             }
         }
 

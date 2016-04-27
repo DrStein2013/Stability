@@ -25,4 +25,12 @@
     {
         Female = 0, Male
     }
+
+    public enum BaseAction
+    {
+        Add = 0,
+        Find,
+        Delete,
+        Update
+    }
 }

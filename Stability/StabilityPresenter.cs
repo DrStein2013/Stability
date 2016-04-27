@@ -48,7 +48,10 @@ namespace Stability
                 (sender, args) =>
                     win.TextBoxWeight.Dispatcher.BeginInvoke(
                         new Action(() => win.TextBoxWeight.Text = args.Weight.ToString("F2")));
-               
+            
+            //_model.UpdatePatient +=
+            _view.PatientEvent += (sender, arg) => _model.PatientEventFromView(arg);
+            _model.UpdatePatient += (sender, arg) => _view.UpdatePatientData(arg);
             IoC.Resolve<IPort>().PortStatusChanged += _view.COnPortStatusChanged;
         }
 

@@ -182,8 +182,14 @@ namespace Stability
             return;
         }
 
+        public void UpdatePatientData(PatientModelResponseArg patientModelResponseArg)
+        {
+            throw new NotImplementedException();
+        }
+
         public event EventHandler ViewUpdated;
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
+        public event EventHandler<PatientModelResponseArg> PatientEvent;
 
         private void comboPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -15,7 +15,7 @@ namespace Stability
     {
         public bool FieldsCanBeNull { get; set; }
         public Brush IfEmptyBorderBrush { get; set; }
-        private Brush borderCurrBrush;
+        private readonly Brush borderCurrBrush;
         private List<TextBox> _list;
 
         public PatientControl()
@@ -58,6 +58,8 @@ namespace Stability
 
         public void SetToForm(cPatient p)
         {
+            if (p == null) return; 
+            ClearAll();
             text_Name.Text = p.Name;
             text_Surname.Text = p.Surname;
             text_Patronymic.Text = p.Patronymic;
@@ -193,6 +195,19 @@ namespace Stability
 
             adr= new cAddress(){Street = text_Street.Text,Flat = f,House = h};
             return "OK";
+        }
+
+        private void SetCurrBrush()
+        {
+            _list.ForEach(box => box.BorderBrush = borderCurrBrush);
+        }
+
+        public void ClearAll()
+        {
+            SetCurrBrush();
+            _list.ForEach(box => box.Text="");
+            BirthDatePicker.SelectedDate = null;
+            rad_Male.IsChecked = true;
         }
 
         private string CheckIfEmpty()

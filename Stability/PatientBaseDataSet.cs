@@ -80,13 +80,24 @@ namespace Stability.PatientBaseDataSetTableAdapters
             return r[0].ID;
         }
 
-         public bool Exists(global::System.Nullable<long> Name_ID, global::System.Nullable<long> Surname_ID,
+        public long _Insert(global::System.Nullable<long> Name_ID, global::System.Nullable<long> Surname_ID,
+        global::System.Nullable<long> Patronymic_ID, global::System.Nullable<global::System.DateTime> Birthdate,
+        global::System.Nullable<bool> Sex, global::System.Nullable<long> Addr_ID, short Height)
+        {
+          
+            Insert(Name_ID, Surname_ID, Patronymic_ID, Birthdate, Sex, Addr_ID, Height);
+            var r = GetDataBy(Name_ID, Surname_ID, Patronymic_ID, Birthdate, Sex, Addr_ID);
+            return r[0].ID;
+        }
+
+        public bool Exists(global::System.Nullable<long> Name_ID, global::System.Nullable<long> Surname_ID,
             global::System.Nullable<long> Patronymic_ID, global::System.Nullable<global::System.DateTime> Birthdate,
-            global::System.Nullable<bool> Sex, global::System.Nullable<long> Addr_ID)
+            global::System.Nullable<bool> Sex, global::System.Nullable<long> Addr_ID, ref long ID)
         {
             var r = GetDataBy(Name_ID, Surname_ID, Patronymic_ID, Birthdate, Sex, Addr_ID);
              if (r.Count == 0)
                  return false;
+             ID = r[0].ID;
              return true;
         }
     }

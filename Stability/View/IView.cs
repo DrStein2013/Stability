@@ -1,5 +1,6 @@
 ﻿using System;
 using Stability.Enums;
+using Stability.Model;
 using Stability.Model.Port;
 
 namespace Stability.View
@@ -22,8 +23,10 @@ namespace Stability.View
     {
         void UpdateTenzView(string[] tenz);
         void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs);
+        void UpdatePatientData(PatientModelResponseArg patientModelResponseArg);
 
         event EventHandler ViewUpdated;
         event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
+        event EventHandler<PatientModelResponseArg> PatientEvent;
     }
 }

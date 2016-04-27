@@ -35,7 +35,7 @@ namespace Stability.Model
         public cAddress Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Profession { get; set; }
-        public long ID { get; private set; }
+       // public long ID { get; private set; }
 
         public cPatient()
         {
@@ -50,7 +50,7 @@ namespace Stability.Model
             Height = t.Height;
             Birthdate = t.Birthdate;
             Address = new cAddress() {Street = t.Street, House = t.House, Flat = t.Flat};
-            ID = t.ID;
+  //          ID = t.ID;
         }
     }
 
@@ -64,7 +64,7 @@ namespace Stability.Model
 
     class cDataBase
     {
-        public bool  AddPatient(cPatient pat)
+        public bool  AddPatient(cPatient pat, ref long ID)
         {
             var adp_name = new PatientBaseDataSetTableAdapters.NamesTableAdapter();
             var adp_surname = new PatientBaseDataSetTableAdapters.SurnamesTableAdapter();
@@ -82,9 +82,10 @@ namespace Stability.Model
             t.Height = pat.Height;
             t.Addr_ID = adp_addr.InsertGetID(pat.Address.Street, pat.Address.House, pat.Address.Flat);
 
-            if (!adp_pat.Exists(t.Name_ID, t.Surname_ID, t.Patronymic_ID, t.Birthdate, t.Sex, t.Addr_ID))
+
+           if (!adp_pat.Exists(t.Name_ID, t.Surname_ID, t.Patronymic_ID, t.Birthdate, t.Sex, t.Addr_ID,ref ID))
             {
-                adp_pat.Insert(t.Name_ID, t.Surname_ID, t.Patronymic_ID, t.Birthdate, t.Sex, t.Addr_ID,t.Height);
+                ID = adp_pat._Insert(t.Name_ID, t.Surname_ID, t.Patronymic_ID, t.Birthdate, t.Sex, t.Addr_ID,t.Height);
                 return true;
             }
 

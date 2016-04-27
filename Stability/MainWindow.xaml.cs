@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Stability.Enums;
@@ -16,6 +17,7 @@ using Stability.Model.Device;
 using Stability.Model.Port;
 using Stability.View;
 using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace Stability
 {
@@ -53,6 +55,21 @@ namespace Stability
                 Dispatcher.BeginInvoke(new Action(() => StatusMark.Fill = new SolidColorBrush(Colors.Red)));
         }
 
+        public void UpdatePatientData(PatientModelResponseArg patientModelResponseArg)
+        {
+            var Img = patientModelResponseArg.Error ? MessageBoxImage.Error : MessageBoxImage.Information;
+            var Cap = patientModelResponseArg.Error ? "Ошибка" : "Готово";
+            if (!patientModelResponseArg.Error)
+            {
+                grid.ItemsSource = patientModelResponseArg.PatientTable;
+                form_Pat.SetToForm(patientModelResponseArg.Patient);
+            }
+            text_ID.Text = patientModelResponseArg.ID.ToString();
+            text_ID.Foreground = new SolidColorBrush((Color)text_ID.Resources["TextColorBlack"]);
+            if(patientModelResponseArg.Response!=null)
+                MessageBox.Show(patientModelResponseArg.Response, Cap, MessageBoxButton.OK,Img);
+        }
+
         private void OnExit(object sender, RoutedEventArgs e)
         {
            Close();
@@ -86,6 +103,7 @@ namespace Stability
         
         public event EventHandler ViewUpdated;
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
+        public event EventHandler<PatientModelResponseArg> PatientEvent;
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -203,8 +221,14 @@ namespace Stability
             //grid.ItemsSource = Base.GetPatientBy(1);
             PatientBaseDataSet.Pat_TabDataTable t = null;
             var pat = Base.FindPatientBy(1, ref t);
-            grid.ItemsSource = t;
-            form_Pat.SetToForm(pat);
+            if (pat != null)
+            {
+                grid.ItemsSource = t;
+                form_Pat.SetToForm(pat);
+            }
+            else
+                MessageBox.Show("Пациент с таким ID отсутствует в базе", "Error", MessageBoxButton.OK,
+                                MessageBoxImage.Error);
             /* string s = "ID = " + data[0].ID + " " + data[0].Имя + " " + data[0]["Фамилия"];
             MessageBox.Show(s);*/
         }
@@ -224,7 +248,7 @@ namespace Stability
                 PhoneNumber = "0632737032"
             };
             var Base = new cDataBase();
-            Base.AddPatient(pat);
+         //   Base.AddPatient(pat);
 
             MessageBox.Show("Good");
             /*var r = adp_name.GetByName(name);
@@ -288,19 +312,85 @@ namespace Stability
         private void Test3_OnClick(object sender, RoutedEventArgs e)
         {
             string res;
+            text_ID.Text = "";
+            text_ID_LostFocus(text_ID,null);
             var pat = form_Pat.GetPatient(out res);
             if (pat == null)
                 MessageBox.Show(res, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
                 var Base = new cDataBase();
-                if (Base.AddPatient(pat))
+              //  if (Base.AddPatient(pat))
                     MessageBox.Show("Good");
-                else MessageBox.Show("Такой пациент уже существует в базе");
+               // else MessageBox.Show("Такой пациент уже существует в базе");
             }
         }
 
-    }
+        private void text_ID_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (((TextBox) sender).Text.Equals("Введите ID"))
+            {
+                ((TextBox) sender).Text = "";
+                ((TextBox) sender).Foreground = new SolidColorBrush((Color) ((TextBox) sender).Resources["TextColorBlack"]);
+            }
+        }
+
+        private void text_ID_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (((TextBox)sender).Text.Equals(""))
+            {
+                ((TextBox)sender).Text = "Введите ID";
+                ((TextBox)sender).Foreground = new SolidColorBrush((Color)((TextBox)sender).Resources["TextColorGray"]);
+            }
+        }
+
+        private void text_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = true;
+            try
+            {
+                if (Char.IsDigit(e.Text, 0))
+                    e.Handled = false;
+            }
+            catch
+            {
+                e.Handled = true;
+            }
+        }
+
+
+        private void but_find_Click(object sender, RoutedEventArgs e)
+        {
+            long id;
+            if (Int64.TryParse(text_ID.Text, out id))
+            {
+               PatientEvent.Invoke(this,new PatientModelResponseArg{Action = BaseAction.Find,ID = id});
+            }
+            else MessageBox.Show("Значение ID введено неверно", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void but_Add_Click(object sender, RoutedEventArgs e)
+        {
+            string res;
+            text_ID.Text = "";
+            text_ID_LostFocus(text_ID, null);
+            var pat = form_Pat.GetPatient(out res);
+            if (pat == null)
+                MessageBox.Show(res, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            else
+                if(PatientEvent!=null)
+                    PatientEvent.Invoke(this, new PatientModelResponseArg() { Action = BaseAction.Add, Patient = pat });
+            
+        }
+
+        private void text_ID_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+                but_find_Click(this,null);
+        }
+
+    
+     }
 
 }
 
