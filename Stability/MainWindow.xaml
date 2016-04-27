@@ -105,7 +105,12 @@
                     </StackPanel>
                 </ToolBar>
                 <local:PatientControl x:Name="form_Pat" Grid.Row="1" Width="200" Margin="5,5,0,0" HorizontalAlignment="Left"/>
-                <DataGrid x:Name="grid_Anam" Grid.Row="2" Margin="2" ItemsSource="{Binding Anamnesis}" AutoGenerateColumns="False" >
+                <DataGrid x:Name="grid_Anam" Grid.Row="2" Margin="2" ItemsSource="{Binding Anamnesis}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" AutoGenerateColumns="False" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Datetime, Converter={StaticResource DateTimeConverter}}" ClipboardContentBinding="{x:Null}" Header="Дата проведения"/>
+                        <DataGridTextColumn Binding="{Binding Weight}" ClipboardContentBinding="{x:Null}" Header="Вес"/>
+                        <DataGridTextColumn Binding="{Binding Info}" ClipboardContentBinding="{x:Null}" Header="Информация"/>
+                    </DataGrid.Columns>
                     <DataGrid.DataContext>
                         <local:PatientBaseDataSet Locale="ru-RU"/>
                     </DataGrid.DataContext>
