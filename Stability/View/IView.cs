@@ -24,9 +24,11 @@ namespace Stability.View
         void UpdateTenzView(string[] tenz);
         void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs);
         void UpdatePatientData(PatientModelResponseArg patientModelResponseArg);
+        void UpdateAnamnesisData(AnamnesisModelResponseArg anamnesisModelResponseArg);
 
         event EventHandler ViewUpdated;
         event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         event EventHandler<PatientModelResponseArg> PatientEvent;
+        event EventHandler<AnamnesisModelResponseArg> AnamnesisEvent;
     }
 }

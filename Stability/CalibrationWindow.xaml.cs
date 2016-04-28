@@ -187,9 +187,15 @@ namespace Stability
             throw new NotImplementedException();
         }
 
+        public void UpdateAnamnesisData(AnamnesisModelResponseArg anamnesisModelResponseArg)
+        {
+            throw new NotImplementedException();
+        }
+
         public event EventHandler ViewUpdated;
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         public event EventHandler<PatientModelResponseArg> PatientEvent;
+        public event EventHandler<AnamnesisModelResponseArg> AnamnesisEvent;
 
         private void comboPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

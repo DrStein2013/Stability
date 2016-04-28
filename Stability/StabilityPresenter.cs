@@ -52,6 +52,9 @@ namespace Stability
             //_model.UpdatePatient +=
             _view.PatientEvent += (sender, arg) => _model.PatientEventFromView(arg);
             _model.UpdatePatient += (sender, arg) => _view.UpdatePatientData(arg);
+
+            _view.AnamnesisEvent += (sender, arg) => _model.AnamnesisEventFromView(arg);
+            _model.UpdateAnamnesis += (sender, arg) => _view.UpdateAnamnesisData(arg);
             IoC.Resolve<IPort>().PortStatusChanged += _view.COnPortStatusChanged;
         }
 

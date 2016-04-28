@@ -155,7 +155,7 @@ namespace Stability.Model
         public cAnamnesisEntry GetAnamnesisBy(long Pat_ID)
         {
             var adp_anam = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
-            var data = adp_anam.GetDataBy(1);
+            var data = adp_anam.GetDataBy(Pat_ID);
             if (data.Count != 0)
             {
                 return new cAnamnesisEntry()
@@ -167,6 +167,12 @@ namespace Stability.Model
                 };
             }
             return null;
+        }
+
+        public PatientBaseDataSet.AnamnesisDataTable GetAnamesisRangeBy(long Pat_ID)
+        {
+            var adp_anam = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
+            return adp_anam.GetDataBy(Pat_ID);
         }
 
         public PatientBaseDataSet.AnamnesisDataTable GetAnamesisRange(DateTime From, DateTime To)

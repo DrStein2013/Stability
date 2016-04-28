@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Data;
+
 #pragma warning disable 1591
 
 namespace Stability {
@@ -6340,6 +6342,7 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
                 this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
+                this.Adapter.InsertCommand.Parameters[4].SqlDbType = SqlDbType.Image;
                 this.Adapter.InsertCommand.Parameters[4].Value = ((byte[])(Entries));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;

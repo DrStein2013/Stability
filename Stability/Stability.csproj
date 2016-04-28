@@ -266,6 +266,8 @@
     <Content Include="PatientBase.sdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\delete.svg" />
+    <Content Include="Resources\save.svg" />
     <Content Include="Resources\sign.svg" />
     <Resource Include="Resources\pat_add.png" />
     <Resource Include="Resources\pat_del.png" />

@@ -17,14 +17,23 @@ namespace Stability.Model
         public double[] Data { get; set; }
     }
 
-    public class PatientModelResponseArg : EventArgs
+    public abstract class DateBaseResponseArg : EventArgs
     {
         public BaseAction Action { get; set; }
         public bool Error { get; set; }
-        public string Response { get; set; }
+        public string Response { get; set; }  
+    }
+
+    public class PatientModelResponseArg : DateBaseResponseArg
+    {
         public long ID { get; set; }
         public cPatient Patient { get; set; }
         public PatientBaseDataSet.Pat_TabDataTable PatientTable { get; set; }
+    }
+
+    public class AnamnesisModelResponseArg : DateBaseResponseArg
+    {
+       public PatientBaseDataSet.AnamnesisDataTable Table { get; set; }
     }
 
     public interface IStabilityModel
@@ -33,9 +42,11 @@ namespace Stability.Model
         event EventHandler<TenzEventArgs> UpdateWeightKoef;
         event EventHandler<WeightEventArgs> UpdateWeight;
         event EventHandler<PatientModelResponseArg> UpdatePatient;
+        event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis; 
 
         void DeviceCmdFromView(DeviceCmdArgEvent c);
         void PatientEventFromView(PatientModelResponseArg p);
+        void AnamnesisEventFromView(AnamnesisModelResponseArg p);
         void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig);
     }
 
@@ -43,11 +54,14 @@ namespace Stability.Model
     {
         private readonly StabilityDevice _device;
         private readonly cDataBase _base;
+        private cPatient _currentPatient;
+        private long _currentPatientId;
 
         public event EventHandler<TenzEventArgs> UpdateDataView;
         public event EventHandler<TenzEventArgs> UpdateWeightKoef;
         public event EventHandler<WeightEventArgs> UpdateWeight;
         public event EventHandler<PatientModelResponseArg> UpdatePatient;
+        public event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis;
         public bool ShowAdcs { get; set; }
         private readonly Timer _viewUpdaterTimer;
 
@@ -120,14 +134,18 @@ namespace Stability.Model
             {
                case BaseAction.Add:
                     long id=0;
-                    if (_base.AddPatient(p.Patient,ref id))
+                    if (_base.AddPatient(p.Patient, ref id))
+                    {
                         p.Response = "Новый пациент успешно добавлен";
+                        _currentPatient = p.Patient;
+                    }
                     else
                     {
                         p.Response = "Такой пациент уже существует в базе";
                         p.Error = true;
                     }
                     p.ID = id;
+                    
                     if(UpdatePatient!=null)
                         UpdatePatient.Invoke(this,p);
                 break;
@@ -141,9 +159,28 @@ namespace Stability.Model
                     }
                     p.Patient = pat;
                     p.PatientTable = tab;
+                    _currentPatientId = p.ID;
                     if(UpdatePatient!=null)
                         UpdatePatient.Invoke(this, p);
                 break;
+            }
+        }
+
+        public void AnamnesisEventFromView(AnamnesisModelResponseArg p)
+        {
+            switch (p.Action)
+            {
+                    case BaseAction.Find:
+                       var tab =  _base.GetAnamesisRangeBy(_currentPatientId);
+                       if (tab.Count == 0)
+                       {
+                           p.Error = true;
+                           p.Response = "Замеры для текущего пациента отсутствуют";
+                       }
+                        p.Table = tab;
+                        if(UpdateAnamnesis!= null)
+                            UpdateAnamnesis.Invoke(this,p);
+                    break;
             }
         }
 
