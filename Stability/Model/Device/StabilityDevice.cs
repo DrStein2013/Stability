@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -36,7 +37,34 @@ namespace Stability.Model.Device
             return mem_stream.ToArray();
         }
 
+        public   ObservableCollection<cDeviceItem> GetCollection()
+        {
+            var res = new ObservableCollection<cDeviceItem>();
+            foreach (var a in AdcList)
+            {
+                res.Add(new cDeviceItem(a));
+            }
+            return res;
+        }
+
         public List<double[]> AdcList { get; private set; }
+    }
+    
+    public class cDeviceItem
+    {
+       public cDeviceItem() { }
+       public cDeviceItem(double[] mas)
+       {
+           CH_1 = mas[0];
+           CH_2 = mas[1];
+           CH_3 = mas[2];
+           CH_4 = mas[3];
+       }
+
+        public double CH_1 { get; set; }
+        public double CH_2 { get; set; }
+        public double CH_3 { get; set; }
+        public double CH_4 { get; set; }
     }
 
     public class WeightEventArgs : EventArgs

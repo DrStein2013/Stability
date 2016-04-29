@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -117,6 +119,7 @@ namespace Stability
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         public event EventHandler<PatientModelResponseArg> PatientEvent;
         public event EventHandler<AnamnesisModelResponseArg> AnamnesisEvent;
+        public event EventHandler<EventArgs> LoadDataEntry;
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -179,7 +182,7 @@ namespace Stability
 
         private void WeightParamItem_OnClick(object sender, RoutedEventArgs e)
         {
-
+            SetDataToGridRes(null);
         }
 
         private void Test1_OnClick(object sender, RoutedEventArgs e)
@@ -292,6 +295,23 @@ namespace Stability
             if(e.Key == Key.Enter)
                 but_find_Click(this,null);
         }
+
+        private void grid_Anam_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var RV =  grid_Anam.SelectedValue as DataRowView;
+           
+            var bin_format = new BinaryFormatter();
+            var mem_stream = new MemoryStream();
+            mem_stream.Write((byte[]) RV.Row["Entries"], 0, ((byte[])RV.Row["Entries"]).Count());
+            mem_stream.Position = 0;
+            DeviceDataEntry d = (DeviceDataEntry)bin_format.Deserialize(mem_stream);
+            SetDataToGridRes(d); 
+        }
+
+       private void SetDataToGridRes(DeviceDataEntry d)
+       {
+           grid_Result.ItemsSource = d.GetCollection();
+       }
 
     
      }

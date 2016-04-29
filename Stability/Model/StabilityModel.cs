@@ -36,7 +36,7 @@ namespace Stability.Model
        public PatientBaseDataSet.AnamnesisDataTable Table { get; set; }
     }
 
-    public interface IStabilityModel
+   public interface IStabilityModel
     {
         event EventHandler<TenzEventArgs> UpdateDataView;
         event EventHandler<TenzEventArgs> UpdateWeightKoef;
@@ -56,6 +56,7 @@ namespace Stability.Model
         private readonly cDataBase _base;
         private cPatient _currentPatient;
         private long _currentPatientId;
+        private PatientBaseDataSet.AnamnesisDataTable _currentPatAnamnesis;
 
         public event EventHandler<TenzEventArgs> UpdateDataView;
         public event EventHandler<TenzEventArgs> UpdateWeightKoef;
@@ -178,6 +179,7 @@ namespace Stability.Model
                            p.Response = "Замеры для текущего пациента отсутствуют";
                        }
                         p.Table = tab;
+                        _currentPatAnamnesis = tab;
                         if(UpdateAnamnesis!= null)
                             UpdateAnamnesis.Invoke(this,p);
                     break;
