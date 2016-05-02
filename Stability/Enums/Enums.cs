@@ -14,6 +14,8 @@
     {
         START_MEASURE = 0,
         STOP_MEASURE,
+        START_RECORDING,
+        STOP_RECORDING,
         ZERO_CALIBRATE,
         STARTUP_CALIBRATE,
         WEIGHT_CALIBRATE,
@@ -32,5 +34,12 @@
         Find,
         Delete,
         Update
+    }
+
+    public enum BaseEntryState
+    {
+        New = 0,
+        Loaded,
+        Modified
     }
 }

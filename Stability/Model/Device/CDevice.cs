@@ -8,6 +8,7 @@ namespace Stability.Model.Device
     {
         //protected Queue<Pack> RxData;
         protected IPort Port { get; private set; }
+        public EventHandler MeasurementsDone; 
 
         public CDevice()
         {

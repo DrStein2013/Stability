@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -18,6 +19,7 @@ using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
 using Stability.View;
+using Color = System.Windows.Media.Color;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -36,6 +38,7 @@ namespace Stability
             _presenter = new StabilityPresenter(new StabilityModel(), this);
             
             Thread.Sleep(200);
+            
          //   buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
        //     but_ok.MouseEnter += buttonHandler.But_MouseEnter;
             // Button_Click_1(this,null);
@@ -182,7 +185,7 @@ namespace Stability
 
         private void WeightParamItem_OnClick(object sender, RoutedEventArgs e)
         {
-            SetDataToGridRes(null);
+           
         }
 
         private void Test1_OnClick(object sender, RoutedEventArgs e)
@@ -299,16 +302,19 @@ namespace Stability
         private void grid_Anam_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var RV =  grid_Anam.SelectedValue as DataRowView;
-           
-            var bin_format = new BinaryFormatter();
-            var mem_stream = new MemoryStream();
-            mem_stream.Write((byte[]) RV.Row["Entries"], 0, ((byte[])RV.Row["Entries"]).Count());
-            mem_stream.Position = 0;
-            DeviceDataEntry d = (DeviceDataEntry)bin_format.Deserialize(mem_stream);
-            SetDataToGridRes(d); 
+            if (RV != null)
+            {
+                var bin_format = new BinaryFormatter();
+                var mem_stream = new MemoryStream();
+                mem_stream.Write((byte[]) RV.Row["Entries"], 0, ((byte[]) RV.Row["Entries"]).Count());
+                mem_stream.Position = 0;
+                DeviceDataEntry d = (DeviceDataEntry) bin_format.Deserialize(mem_stream);
+                UpdateDataInGridRes(d);
+                text_Info.Text = (string) RV.Row["Info"];
+            }
         }
 
-       private void SetDataToGridRes(DeviceDataEntry d)
+        public void UpdateDataInGridRes(DeviceDataEntry d)
        {
            grid_Result.ItemsSource = d.GetCollection();
        }

@@ -10,7 +10,8 @@ using Stability.View;
 
 namespace Stability
 {
-    class Presenter
+    
+  class Presenter
     {
         protected IStabilityModel _model;
         protected IView _view;
@@ -49,14 +50,16 @@ namespace Stability
                     win.TextBoxWeight.Dispatcher.BeginInvoke(
                         new Action(() => win.TextBoxWeight.Text = args.Weight.ToString("F2")));
             
-            //_model.UpdatePatient +=
             _view.PatientEvent += (sender, arg) => _model.PatientEventFromView(arg);
             _model.UpdatePatient += (sender, arg) => _view.UpdatePatientData(arg);
 
             _view.AnamnesisEvent += (sender, arg) => _model.AnamnesisEventFromView(arg);
             _model.UpdateAnamnesis += (sender, arg) => _view.UpdateAnamnesisData(arg);
+
+            _model.UpdateDataEntry += (sender, args) => _view.UpdateDataInGridRes(args.Data);
             IoC.Resolve<IPort>().PortStatusChanged += _view.COnPortStatusChanged;
         }
+
 
         private void ModelOnUpdateDataView(object sender, TenzEventArgs tenzEventArgs)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Stability.Enums;
 using Stability.Model;
+using Stability.Model.Device;
 using Stability.Model.Port;
 
 namespace Stability.View
@@ -16,6 +17,7 @@ namespace Stability.View
     public class DeviceCmdArgEvent : EventArgs
     {
         public DeviceCmd cmd { get; set; }
+        public int MeasureTime { get; set; }
         public CalibrationParams Params { get; set; }
     }
 
@@ -25,6 +27,7 @@ namespace Stability.View
         void COnPortStatusChanged(object sender, PortStatusChangedEventArgs portStatusChangedEventArgs);
         void UpdatePatientData(PatientModelResponseArg patientModelResponseArg);
         void UpdateAnamnesisData(AnamnesisModelResponseArg anamnesisModelResponseArg);
+        void UpdateDataInGridRes(DeviceDataEntry d);
 
         event EventHandler ViewUpdated;
         event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;

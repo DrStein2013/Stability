@@ -211,11 +211,17 @@ namespace Stability
             throw new NotImplementedException();
         }
 
+        public void UpdateDataInGridRes(DeviceDataEntry d)
+        {
+            throw new NotImplementedException();
+        }
+
         public event EventHandler ViewUpdated;
         
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         public event EventHandler<PatientModelResponseArg> PatientEvent;
         public event EventHandler<AnamnesisModelResponseArg> AnamnesisEvent;
+        public event EventHandler<EventArgs> ResultUpdEvent;
 
         private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using Stability.Enums;
 using Stability.Model;
+using Stability.Model.Device;
 using Stability.Model.Port;
 using Stability.View;
 
@@ -192,10 +193,16 @@ namespace Stability
             throw new NotImplementedException();
         }
 
+        public void UpdateDataInGridRes(DeviceDataEntry d)
+        {
+            throw new NotImplementedException();
+        }
+
         public event EventHandler ViewUpdated;
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         public event EventHandler<PatientModelResponseArg> PatientEvent;
         public event EventHandler<AnamnesisModelResponseArg> AnamnesisEvent;
+        public event EventHandler<EventArgs> ResultUpdEvent;
 
         private void comboPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

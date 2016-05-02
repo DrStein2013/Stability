@@ -40,9 +40,10 @@ namespace Stability.Model.Device
         public   ObservableCollection<cDeviceItem> GetCollection()
         {
             var res = new ObservableCollection<cDeviceItem>();
-            foreach (var a in AdcList)
+            for (int index = 0; index < AdcList.Count; index++)
             {
-                res.Add(new cDeviceItem(a));
+                var a = AdcList[index];
+                res.Add(new cDeviceItem(a) { Num = index+1 });
             }
             return res;
         }
@@ -61,6 +62,7 @@ namespace Stability.Model.Device
            CH_4 = mas[3];
        }
 
+        public int Num { get; set; }
         public double CH_1 { get; set; }
         public double CH_2 { get; set; }
         public double CH_3 { get; set; }
@@ -70,6 +72,12 @@ namespace Stability.Model.Device
     public class WeightEventArgs : EventArgs
     {
         public double Weight { get; set; }
+    }
+
+    public class ProgressEventArgs : EventArgs
+    {
+        public int EntryCount { get; set; }    
+        public int TimerCount { get; set; }
     }
 
     public class StabilityExchangeConfig
@@ -93,6 +101,8 @@ namespace Stability.Model.Device
         private event EventHandler ParseDone;
         public event EventHandler  CalibrationDone;
         public event EventHandler<WeightEventArgs> WeightMeasured;
+        public event EventHandler<DeviceEntryResponseArgs> MeasurementsDone;
+        public event EventHandler<ProgressEventArgs> ProgressResp;
 
         private readonly List<double[]> _adcList = new List<double[]>();
         private readonly List<double[]> _weList = new List<double[]>();
@@ -107,10 +117,12 @@ namespace Stability.Model.Device
         private double[] vl_prev = new double[4];
       
         private bool _isStarted;
+        private bool _isRecording;
         private int _periodBuf;
         private bool _zeroCorrection = true;
         private bool _startupCalib;
 
+        private long MeasurementCount;
         public StabilityDevice()
         {
             Port.RxEvent+=PortOnRxEvent;
@@ -281,6 +293,36 @@ namespace Stability.Model.Device
             w_count = 0;
             ParseDone += WeightCalc;
             StartMeasurement();
+        }
+
+        public void StartRecording(int RecTime)
+        {
+            if (!_isRecording)
+            {
+                _isRecording = true;
+                ParseDone += OnParseRecord;
+                MeasurementCount = RecTime/MainConfig.ExchangeConfig.Period;
+            }
+
+        }
+
+        public void StopRecording()
+        {
+            ParseDone -= OnParseRecord;
+            _isRecording = false;
+            MeasurementsDone(this, new DeviceEntryResponseArgs() { Data = new DeviceDataEntry(_adcList) });
+        }
+
+        private void OnParseRecord(object sender, EventArgs eventArgs)
+        {
+            var cnt = _adcList.Count;
+            if (cnt < MeasurementCount)
+                _adcList.Add((double[]) CurrAdcVals.Clone());
+            else
+                StopRecording();
+
+            var Time = (cnt*MainConfig.ExchangeConfig.Period)/1000;
+            ProgressResp(this, new ProgressEventArgs(){EntryCount = cnt, TimerCount = Time});
         }
 
         public void StartMeasurement()

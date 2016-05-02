@@ -36,13 +36,19 @@ namespace Stability.Model
        public PatientBaseDataSet.AnamnesisDataTable Table { get; set; }
     }
 
+    public class DeviceEntryResponseArgs : EventArgs
+    {
+        public DeviceDataEntry Data { get; set; }
+    }
+
    public interface IStabilityModel
     {
         event EventHandler<TenzEventArgs> UpdateDataView;
         event EventHandler<TenzEventArgs> UpdateWeightKoef;
         event EventHandler<WeightEventArgs> UpdateWeight;
         event EventHandler<PatientModelResponseArg> UpdatePatient;
-        event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis; 
+        event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis;
+        event EventHandler<DeviceEntryResponseArgs> UpdateDataEntry; 
 
         void DeviceCmdFromView(DeviceCmdArgEvent c);
         void PatientEventFromView(PatientModelResponseArg p);
@@ -63,6 +69,7 @@ namespace Stability.Model
         public event EventHandler<WeightEventArgs> UpdateWeight;
         public event EventHandler<PatientModelResponseArg> UpdatePatient;
         public event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis;
+        public event EventHandler<DeviceEntryResponseArgs> UpdateDataEntry;
         public bool ShowAdcs { get; set; }
         private readonly Timer _viewUpdaterTimer;
 
@@ -81,8 +88,8 @@ namespace Stability.Model
                 };
 
             _device.WeightMeasured+=DeviceOnWeightMeasured;
-
-            _viewUpdaterTimer = new Timer(ViewTimerHandler, null,100, 60);
+            _device.MeasurementsDone += (sender, args) => UpdateDataEntry.Invoke(sender, args);
+            _viewUpdaterTimer = new Timer(ViewTimerHandler, null,100, 60);           
         }
 
         private void DeviceOnWeightMeasured(object sender, WeightEventArgs weightEventArgs)
@@ -108,6 +115,12 @@ namespace Stability.Model
                     break;
                     case DeviceCmd.STOP_MEASURE:
                         _device.StopMeasurement();
+                    break;
+                    case DeviceCmd.START_RECORDING:
+                        _device.StartRecording(deviceCmdArgEvent.MeasureTime);
+                    break;
+                    case DeviceCmd.STOP_RECORDING:
+                        _device.StopRecording();
                     break;
                     case DeviceCmd.ZERO_CALIBRATE:
                         _device.Calibrate(null,false,100);
