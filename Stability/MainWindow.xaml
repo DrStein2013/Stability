@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Stability" 
         xmlns:Device="clr-namespace:Stability.Model.Device"
+        xmlns:zedGraph="clr-namespace:ZedGraph;assembly=ZedGraph"
         x:Class="Stability.MainWindow"
       
     Title="Stability" Height="583" Width="793" Closing="OnClose" UseLayoutRounding="True" WindowStartupLocation="CenterScreen">
@@ -170,6 +171,9 @@
                 </GroupBox>
 
             </Grid>
+             <WindowsFormsHost Grid.Column="1">
+                <zedGraph:ZedGraphControl x:Name="testGraph" Name="testGraph" />
+            </WindowsFormsHost>
             <Grid Grid.Column="1">
                 <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True"/>
                 <TextBox x:Name="Tenz0" HorizontalAlignment="Left" Height="60" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True" Margin="250,0,0,0"/>

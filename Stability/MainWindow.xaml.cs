@@ -19,6 +19,7 @@ using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
 using Stability.View;
+using ZedGraph;
 using Color = System.Windows.Media.Color;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -185,7 +186,7 @@ namespace Stability
 
         private void WeightParamItem_OnClick(object sender, RoutedEventArgs e)
         {
-           
+           DrawGraph();
         }
 
         private void Test1_OnClick(object sender, RoutedEventArgs e)
@@ -319,6 +320,52 @@ namespace Stability
            grid_Result.ItemsSource = d.GetCollection();
        }
 
+
+        private void DrawGraph()
+        {
+            // Получим панель для рисования
+            GraphPane pane = testGraph.GraphPane;
+            testGraph.BackColor = System.Drawing.Color.Gray;
+            testGraph.Invalidate();
+            // Очистим список кривых на тот случай, если до этого сигналы уже были нарисованы
+            pane.CurveList.Clear();
+
+            // Создадим список точек
+            PointPairList list = new PointPairList();
+            
+            double xmin = -50;
+            double xmax = 50;
+
+            // Заполняем список точек
+            for (double x = xmin; x <= xmax; x += 0.01)
+            {
+                // добавим в список точку
+                list.Add(x, f(x));
+            }
+
+            // Создадим кривую с названием "Sinc", 
+            // которая будет рисоваться голубым цветом (Color.Blue),
+            // Опорные точки выделяться не будут (SymbolType.None)
+            LineItem myCurve = pane.AddCurve("Sinc", list, System.Drawing.Color.Blue, SymbolType.None);
+
+            // Вызываем метод AxisChange (), чтобы обновить данные об осях. 
+            // В противном случае на рисунке будет показана только часть графика, 
+            // которая умещается в интервалы по осям, установленные по умолчанию
+            testGraph.AxisChange();
+
+            // Обновляем график
+            testGraph.Invalidate();
+        }
+
+        private double f(double x)
+        {
+            if (x == 0)
+            {
+                return 1;
+            }
+
+            return Math.Sin(x) / x;
+        }
     
      }
 
