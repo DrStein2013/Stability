@@ -277,6 +277,9 @@
     <Content Include="PatientBase.sdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\but_rec.svg" />
+    <Content Include="Resources\but_st.svg" />
+    <Content Include="Resources\but_stop.svg" />
     <Content Include="Resources\delete.svg" />
     <Content Include="Resources\save.svg" />
     <Content Include="Resources\sign.svg" />

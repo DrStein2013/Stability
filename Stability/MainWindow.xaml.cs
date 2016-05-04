@@ -366,6 +366,18 @@ namespace Stability
 
             return Math.Sin(x) / x;
         }
+
+        private void but_rec_Click(object sender, RoutedEventArgs e)
+        {
+            but_rec.Visibility = Visibility.Collapsed;
+            but_stop.Visibility = Visibility.Visible;
+        }
+
+        private void but_stop_Click(object sender, RoutedEventArgs e)
+        {
+            but_stop.Visibility = Visibility.Collapsed;
+            but_rec.Visibility = Visibility.Visible;
+        }
     
      }
 
