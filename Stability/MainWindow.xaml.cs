@@ -378,6 +378,11 @@ namespace Stability
             but_stop.Visibility = Visibility.Collapsed;
             but_rec.Visibility = Visibility.Visible;
         }
+
+        private void slider_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ((Slider) sender).Value += e.Delta > 0 ? 1 : -1;
+        }
     
      }
 

@@ -6,7 +6,7 @@
         xmlns:zedGraph="clr-namespace:ZedGraph;assembly=ZedGraph"
         x:Class="Stability.MainWindow"
       
-    Title="Stability" Height="583" Width="932" Closing="OnClose" UseLayoutRounding="True" WindowStartupLocation="CenterScreen">
+    Title="Stability" Height="601" Width="932" Closing="OnClose" UseLayoutRounding="True" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
         <local:DateConverter x:Key="DateConverter"/>
@@ -49,6 +49,7 @@
         <Grid.RowDefinitions>
             <RowDefinition x:Name="MenuRow" Height="20*" MaxHeight="20" MinHeight="20"/>
             <RowDefinition x:Name="MainRow" Height="29*" MinHeight="29"/>
+            <RowDefinition x:Name="InfoRow" Height="40*" MaxHeight="40" MinHeight="40"/>
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" Height="20" VerticalAlignment="Top">
@@ -225,7 +226,7 @@
                             </Grid>
                         </Button>
                         <TextBox Margin="0,0,5,0" Text="{Binding Value, ElementName=slider, Mode=TwoWay, StringFormat=\{0:F0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe Print" FontSize="22" Width="60"/>
-                        <Slider x:Name="slider" ToolTip="Время" Maximum="120" Width="71" VerticalAlignment="Center" TickPlacement="Both" Ticks="{x:Null}" Minimum="30" Value="30" SmallChange="0" LargeChange="5" AutoToolTipPlacement="TopLeft" />
+                        <Slider x:Name="slider" ToolTip="Время" Maximum="120" Width="71" VerticalAlignment="Center" TickPlacement="BottomRight" Ticks="{x:Null}" Minimum="30" Value="30" SmallChange="1" LargeChange="5" AutoToolTipPlacement="TopLeft" TickFrequency="10" MouseWheel="slider_MouseWheel" />
                         <Button x:Name="but_rec"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Red}" VerticalContentAlignment="Center" ToolTip="Запустить вычитку данных" Margin="10,0,0,0" Click="but_rec_Click">
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Path Stretch="Fill" Fill="Red">
@@ -253,10 +254,18 @@
                         
                     </StackPanel>
                 </ToolBar>
-            </Grid>
+              </Grid>
         </Grid>
 
-
+        <StatusBar Grid.Row="2">
+            <Label  FontFamily="Segoe Print" FontSize="18" Content="Таймер:" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="0"/>
+            <TextBox x:Name="text_Timer" IsReadOnly="True" IsUndoEnabled="False" FontFamily="Segoe Print" FontSize="20" Width="60" Text="{Binding TimerCount, Mode=OneWay, StringFormat=\{0:D\}}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0">
+                <TextBox.DataContext>
+                    <Device:ProgressEventArgs/>
+                </TextBox.DataContext>
+            </TextBox>
+            <Label  FontFamily="Segoe Print" FontSize="18" Content="сек." VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="0"/>
+        </StatusBar>
     </Grid>
 
 
