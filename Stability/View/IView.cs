@@ -28,6 +28,7 @@ namespace Stability.View
         void UpdatePatientData(PatientModelResponseArg patientModelResponseArg);
         void UpdateAnamnesisData(AnamnesisModelResponseArg anamnesisModelResponseArg);
         void UpdateDataInGridRes(DeviceDataEntry d);
+        void UpdateProgress(ProgressEventArgs progress);
 
         event EventHandler ViewUpdated;
         event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
