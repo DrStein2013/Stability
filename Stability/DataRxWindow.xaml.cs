@@ -216,6 +216,11 @@ namespace Stability
             throw new NotImplementedException();
         }
 
+        public void UpdateProgress(ProgressEventArgs progress)
+        {
+            throw new NotImplementedException();
+        }
+
         public event EventHandler ViewUpdated;
         
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
