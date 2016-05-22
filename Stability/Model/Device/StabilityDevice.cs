@@ -123,6 +123,7 @@ namespace Stability.Model.Device
         private bool _startupCalib;
 
         private long MeasurementCount;
+
         public StabilityDevice()
         {
             Port.RxEvent+=PortOnRxEvent;

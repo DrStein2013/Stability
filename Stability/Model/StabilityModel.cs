@@ -48,7 +48,8 @@ namespace Stability.Model
         event EventHandler<WeightEventArgs> UpdateWeight;
         event EventHandler<PatientModelResponseArg> UpdatePatient;
         event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis;
-        event EventHandler<DeviceEntryResponseArgs> UpdateDataEntry; 
+        event EventHandler<DeviceEntryResponseArgs> UpdateDataEntry;
+        event EventHandler<ProgressEventArgs> UpdateProgress;
 
         void DeviceCmdFromView(DeviceCmdArgEvent c);
         void PatientEventFromView(PatientModelResponseArg p);
@@ -70,6 +71,8 @@ namespace Stability.Model
         public event EventHandler<PatientModelResponseArg> UpdatePatient;
         public event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis;
         public event EventHandler<DeviceEntryResponseArgs> UpdateDataEntry;
+        public event EventHandler<ProgressEventArgs> UpdateProgress;
+
         public bool ShowAdcs { get; set; }
         private readonly Timer _viewUpdaterTimer;
 
@@ -88,7 +91,11 @@ namespace Stability.Model
                 };
 
             _device.WeightMeasured+=DeviceOnWeightMeasured;
-            _device.MeasurementsDone += (sender, args) => UpdateDataEntry.Invoke(sender, args);
+
+            //На ивент ниже необходимо подписать функцию, которая перегонит данные из АЦП в 
+            //класс анализа, откуда уже можно брать данные для графиков и т.д.
+            _device.MeasurementsDone += (sender, args) => UpdateDataEntry.BeginInvoke(sender, args, null, null);
+            _device.ProgressResp += (sender, args) => UpdateProgress.BeginInvoke(sender, args, null, null);
             _viewUpdaterTimer = new Timer(ViewTimerHandler, null,100, 60);           
         }
 

@@ -32,16 +32,29 @@ namespace Stability
     public partial class MainWindow : Window, IView
     {
         private StabilityPresenter _presenter;
-        private ButtonHandler buttonHandler;
+        private bool isStarted = false;
+
         public MainWindow()
         {
             InitializeComponent();
             _presenter = new StabilityPresenter(new StabilityModel(), this);
             
             Thread.Sleep(200);
+            GraphPane pane = testGraph.GraphPane;
+
+
+            pane.Chart.Fill.Brush = new SolidBrush(System.Drawing.Color.LightGray);
+            pane.Fill.Color = System.Drawing.Color.LightGray;
+            // Очистим список кривых на тот случай, если до этого сигналы уже были нарисованы
+            pane.CurveList.Clear();
+
+            pane.AddCurve("Tenz0", new PointPairList(), System.Drawing.Color.Green, SymbolType.None);
+            pane.AddCurve("Tenz1", new PointPairList(), System.Drawing.Color.Blue, SymbolType.None);
+            pane.AddCurve("Tenz2", new PointPairList(), System.Drawing.Color.Red, SymbolType.None);
+            pane.AddCurve("Tenz3", new PointPairList(), System.Drawing.Color.Orange, SymbolType.None);
             
-         //   buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
-       //     but_ok.MouseEnter += buttonHandler.But_MouseEnter;
+            //   buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
+            //     but_ok.MouseEnter += buttonHandler.But_MouseEnter;
             // Button_Click_1(this,null);
         }
 
@@ -118,7 +131,13 @@ namespace Stability
              if (!c.Connect(out s))
                 MessageBox.Show(this, s, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-        
+
+        public void UpdateProgress(ProgressEventArgs progress)
+        {
+            Dispatcher.BeginInvoke(new Action(()=> bar_meas.Value = progress.EntryCount));
+            Dispatcher.BeginInvoke(new Action(() => text_Timer.Text = progress.TimerCount.ToString()));      
+        }
+
         public event EventHandler ViewUpdated;
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         public event EventHandler<PatientModelResponseArg> PatientEvent;
@@ -186,7 +205,7 @@ namespace Stability
 
         private void WeightParamItem_OnClick(object sender, RoutedEventArgs e)
         {
-           DrawGraph();
+           //DrawGraph();
         }
 
         private void Test1_OnClick(object sender, RoutedEventArgs e)
@@ -317,19 +336,43 @@ namespace Stability
 
         public void UpdateDataInGridRes(DeviceDataEntry d)
        {
-           grid_Result.ItemsSource = d.GetCollection();
+           //grid_Result.ItemsSource = d.GetCollection();
+           Dispatcher.BeginInvoke(new Action(() => grid_Result.ItemsSource = d.GetCollection()));
+            DrawGraph(d);
        }
 
+        private void DrawGraph(DeviceDataEntry d)
+        {
+            var crvList = testGraph.GraphPane.CurveList;
+
+            for (int i = 0,j=0; i < d.AdcList.Count(); i++,j+=50)
+            {
+                var entry = d.AdcList[i];
+                double time = j/1000.0;
+                crvList[0].AddPoint(time, entry[0]);
+                crvList[1].AddPoint(time, entry[1]);
+                crvList[2].AddPoint(time, entry[2]);
+                crvList[3].AddPoint(time, entry[3]);
+            }
+            // Вызываем метод AxisChange (), чтобы обновить данные об осях. 
+            // В противном случае на рисунке будет показана только часть графика, 
+            // которая умещается в интервалы по осям, установленные по умолчанию
+            testGraph.AxisChange();
+
+            // Обновляем график
+            testGraph.Invalidate();
+        }
 
         private void DrawGraph()
         {
             // Получим панель для рисования
             GraphPane pane = testGraph.GraphPane;
-            testGraph.BackColor = System.Drawing.Color.Gray;
-            testGraph.Invalidate();
+
+
+            pane.Chart.Fill.Brush = new SolidBrush(System.Drawing.Color.LightGray);
+            pane.Fill.Color = System.Drawing.Color.LightGray;
             // Очистим список кривых на тот случай, если до этого сигналы уже были нарисованы
             pane.CurveList.Clear();
-
             // Создадим список точек
             PointPairList list = new PointPairList();
             
@@ -347,7 +390,6 @@ namespace Stability
             // которая будет рисоваться голубым цветом (Color.Blue),
             // Опорные точки выделяться не будут (SymbolType.None)
             LineItem myCurve = pane.AddCurve("Sinc", list, System.Drawing.Color.Blue, SymbolType.None);
-
             // Вызываем метод AxisChange (), чтобы обновить данные об осях. 
             // В противном случае на рисунке будет показана только часть графика, 
             // которая умещается в интервалы по осям, установленные по умолчанию
@@ -369,8 +411,20 @@ namespace Stability
 
         private void but_rec_Click(object sender, RoutedEventArgs e)
         {
-            but_rec.Visibility = Visibility.Collapsed;
-            but_stop.Visibility = Visibility.Visible;
+            if (isStarted)
+            {
+                but_rec.Visibility = Visibility.Collapsed;
+                but_stop.Visibility = Visibility.Visible;
+                var time = (int) slider.Value*1000;
+                bar_meas.Maximum = time / MainConfig.ExchangeConfig.Period;
+                if (DeviceCmdEvent != null)
+                    DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.START_RECORDING,  MeasureTime = time});
+            }
+            else
+            {
+                MessageBox.Show("Необходимо запустить процесс замера перед началом записи", "Устройство не меряет",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void but_stop_Click(object sender, RoutedEventArgs e)
@@ -382,6 +436,17 @@ namespace Stability
         private void slider_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             ((Slider) sender).Value += e.Delta > 0 ? 1 : -1;
+        }
+
+        private void but_st_Click(object sender, RoutedEventArgs e)
+        {
+            var  c = !isStarted ? DeviceCmd.START_MEASURE : DeviceCmd.STOP_MEASURE;
+
+            isStarted ^= true;
+
+            if (DeviceCmdEvent != null)
+                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() {cmd = c});
+            
         }
     
      }
