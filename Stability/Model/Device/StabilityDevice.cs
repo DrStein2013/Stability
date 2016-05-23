@@ -77,7 +77,8 @@ namespace Stability.Model.Device
     public class ProgressEventArgs : EventArgs
     {
         public int EntryCount { get; set; }    
-        public int TimerCount { get; set; }
+        public double TimerCount { get; set; }
+        public double[] Vals { get; set; }
     }
 
     public class StabilityExchangeConfig
@@ -317,13 +318,15 @@ namespace Stability.Model.Device
         private void OnParseRecord(object sender, EventArgs eventArgs)
         {
             var cnt = _adcList.Count;
+            
             if (cnt < MeasurementCount)
                 _adcList.Add((double[]) CurrAdcVals.Clone());
             else
                 StopRecording();
 
-            var Time = (cnt*MainConfig.ExchangeConfig.Period)/1000;
-            ProgressResp(this, new ProgressEventArgs(){EntryCount = cnt, TimerCount = Time});
+
+            var Time = (cnt*MainConfig.ExchangeConfig.Period)/1000.0;
+            ProgressResp(this, new ProgressEventArgs() { EntryCount = cnt, TimerCount = Time, Vals = (double[])CurrAdcVals.Clone() });
         }
 
         public void StartMeasurement()

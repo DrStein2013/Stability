@@ -226,7 +226,7 @@
                             </Grid>
                         </Button>
                         <TextBox Margin="0,0,5,0" Text="{Binding Value, ElementName=slider, Mode=TwoWay, StringFormat=\{0:F0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe Print" FontSize="22" Width="60"/>
-                        <Slider x:Name="slider" ToolTip="Время" Maximum="120" Width="71" VerticalAlignment="Center" TickPlacement="BottomRight" Ticks="{x:Null}" Minimum="30" Value="30" SmallChange="1" LargeChange="5" AutoToolTipPlacement="TopLeft" TickFrequency="10" MouseWheel="slider_MouseWheel" />
+                        <Slider x:Name="slider" ToolTip="Время" Maximum="120" Width="71" VerticalAlignment="Center" TickPlacement="BottomRight" Ticks="{x:Null}" Minimum="30" Value="30" SmallChange="1" LargeChange="5" AutoToolTipPlacement="TopLeft" TickFrequency="10" MouseWheel="slider_MouseWheel" ValueChanged="slider_ValueChanged" />
                         <Button x:Name="but_rec"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Red}" VerticalContentAlignment="Center" ToolTip="Запустить вычитку данных" Margin="10,0,0,0" Click="but_rec_Click">
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Path Stretch="Fill" Fill="Red">

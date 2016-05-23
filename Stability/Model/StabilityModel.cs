@@ -41,6 +41,12 @@ namespace Stability.Model
         public DeviceDataEntry Data { get; set; }
     }
 
+    public class GraphEntryResponseArgs : EventArgs
+    {
+        public double Time { get; set; }
+        public double[] Points { get; set; }
+    }
+
    public interface IStabilityModel
     {
         event EventHandler<TenzEventArgs> UpdateDataView;
@@ -50,6 +56,7 @@ namespace Stability.Model
         event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis;
         event EventHandler<DeviceEntryResponseArgs> UpdateDataEntry;
         event EventHandler<ProgressEventArgs> UpdateProgress;
+       // event EventHandler<GraphEntryResponseArgs> GraphUpdate;
 
         void DeviceCmdFromView(DeviceCmdArgEvent c);
         void PatientEventFromView(PatientModelResponseArg p);
@@ -72,6 +79,7 @@ namespace Stability.Model
         public event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis;
         public event EventHandler<DeviceEntryResponseArgs> UpdateDataEntry;
         public event EventHandler<ProgressEventArgs> UpdateProgress;
+        //public event EventHandler<GraphEntryResponseArgs> GraphUpdate;
 
         public bool ShowAdcs { get; set; }
         private readonly Timer _viewUpdaterTimer;

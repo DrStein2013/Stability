@@ -52,7 +52,10 @@ namespace Stability
             pane.AddCurve("Tenz1", new PointPairList(), System.Drawing.Color.Blue, SymbolType.None);
             pane.AddCurve("Tenz2", new PointPairList(), System.Drawing.Color.Red, SymbolType.None);
             pane.AddCurve("Tenz3", new PointPairList(), System.Drawing.Color.Orange, SymbolType.None);
-            
+
+            pane.XAxis.Scale.Max = 30;
+            pane.XAxis.Scale.MajorStep = 10;
+            pane.XAxis.Scale.MinorStep = 2;
             //   buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
             //     but_ok.MouseEnter += buttonHandler.But_MouseEnter;
             // Button_Click_1(this,null);
@@ -135,7 +138,17 @@ namespace Stability
         public void UpdateProgress(ProgressEventArgs progress)
         {
             Dispatcher.BeginInvoke(new Action(()=> bar_meas.Value = progress.EntryCount));
-            Dispatcher.BeginInvoke(new Action(() => text_Timer.Text = progress.TimerCount.ToString()));      
+            Dispatcher.BeginInvoke(new Action(() => text_Timer.Text = progress.TimerCount.ToString("f1")));
+            Dispatcher.BeginInvoke(new Action(delegate
+            {
+                var curv = testGraph.GraphPane.CurveList;
+                for (int i =0;i<progress.Vals.Count();i++)
+                {
+                    curv[i].AddPoint(progress.TimerCount, progress.Vals[i]);
+                }
+                testGraph.AxisChange();
+                testGraph.Invalidate();
+            }));
         }
 
         public event EventHandler ViewUpdated;
@@ -344,7 +357,7 @@ namespace Stability
         private void DrawGraph(DeviceDataEntry d)
         {
             var crvList = testGraph.GraphPane.CurveList;
-
+            crvList.ForEach(item => item.Clear());
             for (int i = 0,j=0; i < d.AdcList.Count(); i++,j+=50)
             {
                 var entry = d.AdcList[i];
@@ -435,7 +448,7 @@ namespace Stability
 
         private void slider_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            ((Slider) sender).Value += e.Delta > 0 ? 1 : -1;
+            ((Slider)sender).Value += e.Delta > 0 ? 1 : -1;
         }
 
         private void but_st_Click(object sender, RoutedEventArgs e)
@@ -447,6 +460,13 @@ namespace Stability
             if (DeviceCmdEvent != null)
                 DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() {cmd = c});
             
+        }
+
+        private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            testGraph.GraphPane.XAxis.Scale.Max = e.NewValue;
+            testGraph.AxisChange();
+            testGraph.Invalidate();
         }
     
      }
