@@ -30,15 +30,18 @@
 
     public enum BaseAction
     {
-        Add = 0,
+        AddPatient = 0,
         Find,
         Delete,
-        Update
+        Update,
+        AddNewEntry,
+        ClearEntry
     }
 
     public enum BaseEntryState
     {
-        New = 0,
+        Empty = 0,
+        New,
         Loaded,
         Modified
     }

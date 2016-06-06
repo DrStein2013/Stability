@@ -21,7 +21,8 @@ namespace Stability.Model
     {
         public BaseAction Action { get; set; }
         public bool Error { get; set; }
-        public string Response { get; set; }  
+        public string Response { get; set; }
+        public BaseEntryState BaseEntryState { get; set; }
     }
 
     public class PatientModelResponseArg : DateBaseResponseArg
@@ -47,6 +48,7 @@ namespace Stability.Model
         public double[] Points { get; set; }
     }
 
+  
    public interface IStabilityModel
     {
         event EventHandler<TenzEventArgs> UpdateDataView;
@@ -72,6 +74,8 @@ namespace Stability.Model
         private long _currentPatientId;
         private PatientBaseDataSet.AnamnesisDataTable _currentPatAnamnesis;
 
+        private BaseEntryState _baseEntryState;
+
         public event EventHandler<TenzEventArgs> UpdateDataView;
         public event EventHandler<TenzEventArgs> UpdateWeightKoef;
         public event EventHandler<WeightEventArgs> UpdateWeight;
@@ -90,7 +94,8 @@ namespace Stability.Model
             IoC.GetKernel().Bind<IPort>().To<CComPort>().InSingletonScope().WithConstructorArgument("config", conf);
             _device = new StabilityDevice();
             _base = new cDataBase();
-
+            _baseEntryState = BaseEntryState.Empty;
+           
             _device.CalibrationDone +=
                 (sender, args) =>
                 {
@@ -103,6 +108,7 @@ namespace Stability.Model
             //На ивент ниже необходимо подписать функцию, которая перегонит данные из АЦП в 
             //класс анализа, откуда уже можно брать данные для графиков и т.д.
             _device.MeasurementsDone += (sender, args) => UpdateDataEntry.BeginInvoke(sender, args, null, null);
+            _device.MeasurementsDone += (sender, args) => _baseEntryState = BaseEntryState.New;
             _device.ProgressResp += (sender, args) => UpdateProgress.BeginInvoke(sender, args, null, null);
             _viewUpdaterTimer = new Timer(ViewTimerHandler, null,100, 60);           
         }
@@ -161,7 +167,7 @@ namespace Stability.Model
         {
             switch (p.Action)
             {
-               case BaseAction.Add:
+               case BaseAction.AddPatient:
                     long id=0;
                     if (_base.AddPatient(p.Patient, ref id))
                     {

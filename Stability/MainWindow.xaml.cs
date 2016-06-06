@@ -104,6 +104,7 @@ namespace Stability
             grid_Anam.ItemsSource = anamnesisModelResponseArg.Table;
         }
 
+
         private void OnExit(object sender, RoutedEventArgs e)
         {
            Close();
@@ -322,7 +323,7 @@ namespace Stability
                 MessageBox.Show(res, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             else
                 if(PatientEvent!=null)
-                    PatientEvent.Invoke(this, new PatientModelResponseArg() { Action = BaseAction.Add, Patient = pat });
+                    PatientEvent.Invoke(this, new PatientModelResponseArg() { Action = BaseAction.AddPatient, Patient = pat });
             
         }
 
