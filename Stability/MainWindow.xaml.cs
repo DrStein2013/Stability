@@ -469,6 +469,24 @@ namespace Stability
             testGraph.AxisChange();
             testGraph.Invalidate();
         }
+
+        private void but_save_Click(object sender, RoutedEventArgs e)
+        {
+            double w = 0.0;
+            var res = form_Pat.GetWeight(out w);
+            if (res == "OK")
+            {
+                object[] d = new object[] {text_Info.Text, w};
+                AnamnesisEvent.Invoke(this,
+                    new AnamnesisModelResponseArg() 
+                    {
+                        Action = BaseAction.AddNewEntry,
+                        EntryObjects = d
+                    });
+            }
+            else
+                MessageBox.Show(res, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     
      }
 
