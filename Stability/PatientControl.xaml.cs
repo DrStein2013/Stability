@@ -130,7 +130,8 @@ namespace Stability
                 Name = text_Name.Text,
                 Surname = text_Surname.Text,
                 Patronymic = text_Patronymic.Text,
-                Sex = sex
+                Sex = sex,
+                Weight = weight
             };
 
             if (pat.Age == 0)
@@ -141,6 +142,24 @@ namespace Stability
             }
 
             return pat;
+        }
+
+        public string GetWeight(out double w)
+        {
+            w = 0.0;
+            if (Double.TryParse(text_Weight.Text, NumberStyles.Any, CultureInfo.CreateSpecificCulture("en-GB"), out w))
+            {
+                if (w < 0.1)
+                    return "Значение веса слишком мало!";
+
+                if (w > 150.0)
+                    return "Значение веса не может превышать 150 кг.!";
+
+            }
+            else
+                return "Значение веса введено неверно!";
+
+            return "OK";
         }
 
         private string CheckParams(out Int16 h, out double w)

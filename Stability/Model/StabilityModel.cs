@@ -22,7 +22,6 @@ namespace Stability.Model
         public BaseAction Action { get; set; }
         public bool Error { get; set; }
         public string Response { get; set; }
-        public BaseEntryState BaseEntryState { get; set; }
     }
 
     public class PatientModelResponseArg : DateBaseResponseArg
@@ -35,9 +34,11 @@ namespace Stability.Model
     public class AnamnesisModelResponseArg : DateBaseResponseArg
     {
        public PatientBaseDataSet.AnamnesisDataTable Table { get; set; }
+       public BaseEntryState EntryState { get; set; }
+       public object[] EntryObjects;    //0 - string, 1 - weight;
     }
 
-    public class DeviceEntryResponseArgs : EventArgs
+   public class DeviceEntryResponseArgs : EventArgs
     {
         public DeviceDataEntry Data { get; set; }
     }
@@ -63,6 +64,7 @@ namespace Stability.Model
         void DeviceCmdFromView(DeviceCmdArgEvent c);
         void PatientEventFromView(PatientModelResponseArg p);
         void AnamnesisEventFromView(AnamnesisModelResponseArg p);
+       
         void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig);
     }
 
@@ -216,6 +218,20 @@ namespace Stability.Model
                         _currentPatAnamnesis = tab;
                         if(UpdateAnamnesis!= null)
                             UpdateAnamnesis.Invoke(this,p);
+                    break;
+                    case BaseAction.AddNewEntry:
+                        var inf = (string)p.EntryObjects[0];
+                        var weight = (double) p.EntryObjects[1];
+                        var entry = new cAnamnesisEntry()
+                        {
+                            Entry = _device.GetDataEntry(),
+                            Info = inf,
+                            MeasureDate = DateTime.Now,
+                            Weight = weight
+                        };
+                            _base.AddAnamnesis(entry,_currentPatientId);
+                        p.Action = BaseAction.Find;
+                        AnamnesisEventFromView(p);
                     break;
             }
         }
