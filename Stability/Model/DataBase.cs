@@ -11,6 +11,7 @@ namespace Stability.Model
         public bool Sex { get; set; }
         public DateTime Birthdate { get; set; }
         public short Height { get; set; }
+        public double Weight { get; set; }
 
         public int Age
         {
