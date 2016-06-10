@@ -220,18 +220,37 @@ namespace Stability.Model
                             UpdateAnamnesis.Invoke(this,p);
                     break;
                     case BaseAction.AddNewEntry:
-                        var inf = (string)p.EntryObjects[0];
-                        var weight = (double) p.EntryObjects[1];
-                        var entry = new cAnamnesisEntry()
+                        if (_baseEntryState == BaseEntryState.New)
                         {
-                            Entry = _device.GetDataEntry(),
-                            Info = inf,
-                            MeasureDate = DateTime.Now,
-                            Weight = weight
-                        };
-                            _base.AddAnamnesis(entry,_currentPatientId);
-                        p.Action = BaseAction.Find;
-                        AnamnesisEventFromView(p);
+                            var inf = (string) p.EntryObjects[0];
+                            var weight = (double) p.EntryObjects[1];
+                            var entry = new cAnamnesisEntry()
+                            {
+                                Entry = _device.GetDataEntry(),
+                                Info = inf,
+                                MeasureDate = DateTime.Now,
+                                Weight = weight
+                            };
+                            _base.AddAnamnesis(entry, _currentPatientId);
+                            p.Action = BaseAction.Find;
+                            AnamnesisEventFromView(p);
+                            _baseEntryState = BaseEntryState.Loaded;
+                        }
+                    break;
+                    case BaseAction.ClearEntry:
+                        if (_baseEntryState == BaseEntryState.New)
+                        {
+                            if (p.EntryState == BaseEntryState.New)
+                            {
+                                p.EntryState = _baseEntryState;
+                                p.Response = "Желаете сохранить текущие данные?";
+                                p.Error = false;
+                                if (UpdateAnamnesis != null)
+                                    UpdateAnamnesis.Invoke(this, p);
+                            }
+                            else if(p.EntryState == BaseEntryState.Empty)
+                                _baseEntryState = BaseEntryState.Empty;
+                         }
                     break;
             }
         }

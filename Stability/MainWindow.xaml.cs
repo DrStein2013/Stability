@@ -94,14 +94,45 @@ namespace Stability
 
         public void UpdateAnamnesisData(AnamnesisModelResponseArg anamnesisModelResponseArg)
         {
-            var Img = anamnesisModelResponseArg.Error ? MessageBoxImage.Information : MessageBoxImage.Information;
-            var Cap = anamnesisModelResponseArg.Error ? "Нет записей" : "Готово";
-            if (anamnesisModelResponseArg.Error)
+            switch (anamnesisModelResponseArg.Action)
             {
-                if (anamnesisModelResponseArg.Response != null)
+                case BaseAction.ClearEntry:
+                    if (anamnesisModelResponseArg.EntryState == BaseEntryState.New)
+                    {
+
+                        var res = MessageBox.Show(anamnesisModelResponseArg.Response, "Сохранить?",
+                            MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (res == MessageBoxResult.Yes)
+                            but_save_Click(this, null);
+                        else
+                        {
+                            anamnesisModelResponseArg.EntryState = BaseEntryState.Empty;
+                            AnamnesisEvent.Invoke(this, anamnesisModelResponseArg);
+                            grid_Result.ItemsSource = null;
+                        }
+                    }
+                 break;
+                case BaseAction.Find:
+                    if (anamnesisModelResponseArg.Error)
+                        MessageBox.Show(anamnesisModelResponseArg.Response, "Ошибка", MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    else
+                        grid_Anam.ItemsSource = anamnesisModelResponseArg.Table;
+                    break;
+            }
+            
+           // var Img = anamnesisModelResponseArg.Error ? MessageBoxImage.Information : MessageBoxImage.Information;
+           // var Cap = anamnesisModelResponseArg.Error ? "Нет записей" : "Готово";
+           /* if (anamnesisModelResponseArg.Error)
+            {
+                if (anamnesisModelResponseArg.Action == BaseAction.ClearEntry)
+                {
+                    
+                }
+                else if (anamnesisModelResponseArg.Response != null)
                     MessageBox.Show(anamnesisModelResponseArg.Response, Cap, MessageBoxButton.OK, Img);
             }
-            grid_Anam.ItemsSource = anamnesisModelResponseArg.Table;
+            grid_Anam.ItemsSource = anamnesisModelResponseArg.Table;*/
         }
 
 
@@ -486,6 +517,16 @@ namespace Stability
             }
             else
                 MessageBox.Show(res, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void but_del_Click(object sender, RoutedEventArgs e)
+        {
+            AnamnesisEvent.Invoke(this,
+                    new AnamnesisModelResponseArg()
+                    {
+                        Action = BaseAction.ClearEntry,
+                        EntryState = BaseEntryState.New
+                    });
         }
     
      }
