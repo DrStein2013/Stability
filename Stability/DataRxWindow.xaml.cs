@@ -216,6 +216,11 @@ namespace Stability
             throw new NotImplementedException();
         }
 
+        public void UpdateButtons()
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateProgress(ProgressEventArgs progress)
         {
             throw new NotImplementedException();

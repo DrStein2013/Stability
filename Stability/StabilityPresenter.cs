@@ -56,7 +56,11 @@ namespace Stability
             _view.AnamnesisEvent += (sender, arg) => _model.AnamnesisEventFromView(arg);
             _model.UpdateAnamnesis += (sender, arg) => _view.UpdateAnamnesisData(arg);
 
-            _model.UpdateDataEntry += (sender, args) => _view.UpdateDataInGridRes(args.Data);
+            _model.UpdateDataEntry += (sender, args) =>
+            {
+                view.UpdateDataInGridRes(args.Data); 
+                view.UpdateButtons();
+            };
             _model.UpdateProgress += (sender, args) => _view.UpdateProgress(args);
             IoC.Resolve<IPort>().PortStatusChanged += _view.COnPortStatusChanged;
         }

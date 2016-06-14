@@ -301,6 +301,7 @@ namespace Stability.Model.Device
         {
             if (!_isRecording)
             {
+                _adcList.Clear();
                 _isRecording = true;
                 ParseDone += OnParseRecord;
                 MeasurementCount = RecTime/MainConfig.ExchangeConfig.Period;

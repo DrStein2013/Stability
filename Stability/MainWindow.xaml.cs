@@ -108,9 +108,9 @@ namespace Stability
                         {
                             anamnesisModelResponseArg.EntryState = BaseEntryState.Empty;
                             AnamnesisEvent.Invoke(this, anamnesisModelResponseArg);
-                            grid_Result.ItemsSource = null;
+                            ClearGridGraph();
                         }
-                    }
+                    } 
                  break;
                 case BaseAction.Find:
                     if (anamnesisModelResponseArg.Error)
@@ -135,6 +135,12 @@ namespace Stability
             grid_Anam.ItemsSource = anamnesisModelResponseArg.Table;*/
         }
 
+        private void ClearGridGraph()
+        {
+            grid_Result.ItemsSource = null;
+            var crvList = testGraph.GraphPane.CurveList;
+            crvList.ForEach(item => item.Clear());
+        }
 
         private void OnExit(object sender, RoutedEventArgs e)
         {
@@ -165,6 +171,15 @@ namespace Stability
             var c = IoC.Resolve<IPort>();
              if (!c.Connect(out s))
                 MessageBox.Show(this, s, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public void UpdateButtons()
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                but_stop.Visibility = Visibility.Collapsed;
+                but_rec.Visibility = Visibility.Visible;
+            }));
         }
 
         public void UpdateProgress(ProgressEventArgs progress)
@@ -383,7 +398,7 @@ namespace Stability
        {
            //grid_Result.ItemsSource = d.GetCollection();
            Dispatcher.BeginInvoke(new Action(() => grid_Result.ItemsSource = d.GetCollection()));
-            DrawGraph(d);
+           DrawGraph(d);
        }
 
         private void DrawGraph(DeviceDataEntry d)
@@ -458,6 +473,7 @@ namespace Stability
         {
             if (isStarted)
             {
+                but_del_Click(this,null);
                 but_rec.Visibility = Visibility.Collapsed;
                 but_stop.Visibility = Visibility.Visible;
                 var time = (int) slider.Value*1000;
@@ -474,8 +490,11 @@ namespace Stability
 
         private void but_stop_Click(object sender, RoutedEventArgs e)
         {
-            but_stop.Visibility = Visibility.Collapsed;
-            but_rec.Visibility = Visibility.Visible;
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                but_stop.Visibility = Visibility.Collapsed;
+                but_rec.Visibility = Visibility.Visible;
+            }));
         }
 
         private void slider_MouseWheel(object sender, MouseWheelEventArgs e)
