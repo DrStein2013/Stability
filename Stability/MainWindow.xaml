@@ -6,14 +6,14 @@
         xmlns:zedGraph="clr-namespace:ZedGraph;assembly=ZedGraph"
         x:Class="Stability.MainWindow"
       
-    Title="Stability" Height="601" Width="932" Closing="OnClose" UseLayoutRounding="True" WindowStartupLocation="CenterScreen">
+    Title="Stability" Height="601" Width="980" Closing="OnClose" UseLayoutRounding="True" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
         <local:DateConverter x:Key="DateConverter"/>
         <local:DateTimeConverter x:Key="DateTimeConverter"/>
         <local:SexesConverter x:Key="SexesConverter"/>
         <Device:cDeviceItem x:Key="DeviceItem"/>
-        
+
         <ControlTemplate x:Key="ButtonTemplate" TargetType="{x:Type Button}">
             <Border BorderBrush="Transparent" BorderThickness="0" 
                     x:Name="border" 
@@ -172,15 +172,13 @@
                 </GroupBox>
 
             </Grid>
-            
+
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                <TextBox x:Name="Tenz0" HorizontalAlignment="Right" Height="60" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                 <TextBox x:Name="Tenz2" HorizontalAlignment="Left" Height="60" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                 <TextBox x:Name="Tenz1" HorizontalAlignment="Right" Height="60" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                 <!--Button x:Name="button1" Content="Start" HorizontalAlignment="Left" Height="60" Margin="120,18,0,-48" Grid.Row="1" VerticalAlignment="Top" Width="100" FontFamily="SketchFlow Print" FontSize="24" Click="Button_Click_1" /-->
@@ -211,7 +209,7 @@
                 <ToolBar Grid.Row="2" Background="#FFE4E4E4" IsHitTestVisible="True" UseLayoutRounding="True" Height="55" Margin="3,3,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0,0,0">
                         <Button x:Name="but_st"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Green}" VerticalContentAlignment="Center" ToolTip="Запустить вычитку данных" Margin="0,0,10,0" Click="but_st_Click">
-                           <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Path Stretch="Fill" Fill="#FF22CF11">
                                     <Path.Data>
                                         M287.86,155.604v26.038c0,18.019-14.589,32.626-32.625,32.626c-18,0-32.626-14.607-32.626-32.626v-26.038   
@@ -222,7 +220,7 @@
                                         c18.037,0,32.625,14.611,32.625,32.63v22.285c67.887,14.976,118.85,75.529,118.85,147.843   
                                         C406.71,336.245,338.762,404.202,255.235,404.202z
                                     </Path.Data>
-                                   </Path>
+                                </Path>
                             </Grid>
                         </Button>
                         <TextBox Margin="0,0,5,0" Text="{Binding Value, ElementName=slider, Mode=TwoWay, StringFormat=\{0:F0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe Print" FontSize="22" Width="60"/>
@@ -231,7 +229,7 @@
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Path Stretch="Fill" Fill="Red">
                                     <Path.Data>
-                                       M293.002,78.53C249.646,3.435,153.618-22.296,78.529,21.068C3.434,64.418-22.298,160.442,21.066,235.534     
+                                        M293.002,78.53C249.646,3.435,153.618-22.296,78.529,21.068C3.434,64.418-22.298,160.442,21.066,235.534     
                                        c43.35,75.095,139.375,100.83,214.465,57.47C310.627,249.639,336.371,153.62,293.002,78.53z M219.834,265.801
                                        c-60.067,34.692-136.894,14.106-171.576-45.973C13.568,159.761,34.161,82.935,94.23,48.26
                                        c60.071-34.69,136.894-14.106,171.578,45.971C300.493,154.307,279.906,231.117,219.834,265.801z M213.555,150.652l-82.214-47.949   
@@ -251,10 +249,60 @@
                                 </Path>
                             </Grid>
                         </Button>
-                        
+
                     </StackPanel>
                 </ToolBar>
-              </Grid>
+                
+                <Grid Grid.Row="0" Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="227*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="Tenz3" HorizontalAlignment="Left" Height="60" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="Tenz0" HorizontalAlignment="Right" Height="60" Grid.Row="0" Grid.Column="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" FontFamily="Segoe Print" FontSize="22" IsReadOnly="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <ToolBar Grid.Row="0" Grid.Column="1" Margin="0" Background="#FFE4E4E4" UseLayoutRounding="True" >
+                        <StackPanel Height="55" Orientation="Horizontal">
+                            <StackPanel Margin="0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <Label Content="Тип графика:" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5,2"/>
+                            <ComboBox x:Name="combo_GraphType" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" SelectedIndex="0">
+                                <ComboBoxItem Content="Показания тензодатчиков"/>
+                                <ComboBoxItem Content="Стабилограммы"/>
+                            </ComboBox>
+                            </StackPanel>
+                     
+                            <Button x:Name="but_setflt"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" ToolTip="Запустить вычитку данных" Margin="10,0,0,0">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Path Stretch="Fill" Fill="#006DF0">
+                                        <Path.Data>
+                                            M450.192,12.16c-38.5-23.7-88.7-11.7-112.4,26.8s-11.7,88.7,26.4,112.4c5.8,3.5,11.7,6.2,17.9,8.2l-52.1,161.4   
+                                            c-24.5-12.8-52.5-12.1-75.4,0l-84.4-127.9c3.1-3.9,5.4-8.2,7.4-12.8c11.3-27.2-1.6-58.3-28.8-69.6s-58.3,1.6-69.6,28.8   
+                                            c-10.9,26.4,1.2,56.8,27.2,68.4l-63.7,190.4c-17.9,1.2-34.2,13.2-40.1,31.1c-7.8,24.1,5.1,49.8,29.2,57.5   
+                                            c24.1,7.8,49.8-5.1,57.5-29.2c7.4-22.6-3.9-46.7-25.3-56l63.4-189.4c8.9,0,18.3-1.9,26.1-6.2l83.2,127.5   
+                                            c-5.1,4.7-9.7,10.5-13.6,16.7c-23.7,38.1-11.7,88.3,26.4,112s88.3,11.7,112-26.4c20.6-33.4,14.4-75.8-13.2-101.9l55.2-170.7   
+                                            c28.4,1.2,56.8-12.4,73.1-38.5C500.392,86.36,488.292,35.86,450.192,12.16z
+                                        </Path.Data>
+                                    </Path>
+                                </Grid>
+                            </Button>
+                            <Button x:Name="but_resetflt"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" ToolTip="Запустить вычитку данных" Margin="10,0,0,0">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Path Stretch="Fill" Fill="#006DF0">
+                                        <Path.Data>
+                                            M450.192,12.16c-38.5-23.7-88.7-11.7-112.4,26.8s-11.7,88.7,26.4,112.4c5.8,3.5,11.7,6.2,17.9,8.2l-52.1,161.4   
+                                            c-24.5-12.8-52.5-12.1-75.4,0l-84.4-127.9c3.1-3.9,5.4-8.2,7.4-12.8c11.3-27.2-1.6-58.3-28.8-69.6s-58.3,1.6-69.6,28.8   
+                                            c-10.9,26.4,1.2,56.8,27.2,68.4l-63.7,190.4c-17.9,1.2-34.2,13.2-40.1,31.1c-7.8,24.1,5.1,49.8,29.2,57.5   
+                                            c24.1,7.8,49.8-5.1,57.5-29.2c7.4-22.6-3.9-46.7-25.3-56l63.4-189.4c8.9,0,18.3-1.9,26.1-6.2l83.2,127.5   
+                                            c-5.1,4.7-9.7,10.5-13.6,16.7c-23.7,38.1-11.7,88.3,26.4,112s88.3,11.7,112-26.4c20.6-33.4,14.4-75.8-13.2-101.9l55.2-170.7   
+                                            c28.4,1.2,56.8-12.4,73.1-38.5C500.392,86.36,488.292,35.86,450.192,12.16z
+                                        </Path.Data>
+                                    </Path>
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </ToolBar>
+                </Grid>
+            </Grid>
         </Grid>
 
         <StatusBar Grid.Row="2">

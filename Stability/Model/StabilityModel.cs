@@ -71,6 +71,7 @@ namespace Stability.Model
     public class StabilityModel : IStabilityModel
     {
         private readonly StabilityDevice _device;
+        //private StabilityAnalyzer _analyzer;
         private readonly cDataBase _base;
         private cPatient _currentPatient;
         private long _currentPatientId;

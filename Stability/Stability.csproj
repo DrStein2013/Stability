@@ -281,6 +281,9 @@
     <Content Include="Resources\but_st.svg" />
     <Content Include="Resources\but_stop.svg" />
     <Content Include="Resources\delete.svg" />
+    <Content Include="Resources\filter.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\save.svg" />
     <Content Include="Resources\sign.svg" />
     <Resource Include="Resources\pat_add.png" />

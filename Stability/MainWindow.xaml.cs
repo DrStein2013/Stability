@@ -56,6 +56,10 @@ namespace Stability
             pane.XAxis.Scale.Max = 30;
             pane.XAxis.Scale.MajorStep = 10;
             pane.XAxis.Scale.MinorStep = 2;
+            pane.XAxis.Title.Text = "Время, сек";
+            pane.YAxis.Title.Text = "Значение, V";
+            pane.Title.Text = "Показания тензодатчиков";
+
             //   buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
             //     but_ok.MouseEnter += buttonHandler.But_MouseEnter;
             // Button_Click_1(this,null);
