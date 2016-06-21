@@ -206,6 +206,7 @@ namespace Stability
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         public event EventHandler<PatientModelResponseArg> PatientEvent;
         public event EventHandler<AnamnesisModelResponseArg> AnamnesisEvent;
+        public event EventHandler<AnalyzerCmdResponseArg> AnalyzerEvent;
         public event EventHandler<EventArgs> LoadDataEntry;
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -395,6 +396,14 @@ namespace Stability
                 DeviceDataEntry d = (DeviceDataEntry) bin_format.Deserialize(mem_stream);
                 UpdateDataInGridRes(d);
                 text_Info.Text = (string) RV.Row["Info"];
+                AnalyzerEvent.Invoke(this,
+               new AnalyzerCmdResponseArg()
+               {
+                   Cmd = AnalyzerCmd.SetTenzos,
+                   DevDatEntry = d,
+                   FltType = FilterType.MovingAverage,
+                   FltParams = new[] { 2 }
+               });
             }
         }
 
@@ -550,6 +559,27 @@ namespace Stability
                         Action = BaseAction.ClearEntry,
                         EntryState = BaseEntryState.New
                     });
+        }
+
+        private void but_setflt_Click(object sender, RoutedEventArgs e)
+        {
+            AnalyzerEvent.Invoke(this,
+                new AnalyzerCmdResponseArg()
+                {
+                    Cmd = AnalyzerCmd.ApplyFilter,
+                    FltType = FilterType.MovingAverage,
+                    FltParams = new[] {combo_GraphType.SelectedIndex, 10}
+                });
+        }
+
+        private void but_resetflt_Click(object sender, RoutedEventArgs e)
+        {
+            AnalyzerEvent.Invoke(this,
+                new AnalyzerCmdResponseArg()
+                {
+                    Cmd = AnalyzerCmd.ResetAll,
+                    FltParams = new[] { combo_GraphType.SelectedIndex }
+                });
         }
     
      }

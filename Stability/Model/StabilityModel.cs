@@ -6,6 +6,7 @@ using Stability.Enums;
 using Stability.Model.Device;
 using Stability.Model.Port;
 using System.Threading;
+using Stability.Model.Analyzer;
 using Stability.View;
 
 
@@ -49,6 +50,13 @@ namespace Stability.Model
         public double[] Points { get; set; }
     }
 
+    public class AnalyzerCmdResponseArg : EventArgs
+    {
+        public AnalyzerCmd Cmd { get; set; }
+        public FilterType FltType { get; set; }
+        public DeviceDataEntry DevDatEntry { get; set; }
+        public int[] FltParams { get; set; }
+    }
   
    public interface IStabilityModel
     {
@@ -58,20 +66,21 @@ namespace Stability.Model
         event EventHandler<PatientModelResponseArg> UpdatePatient;
         event EventHandler<AnamnesisModelResponseArg> UpdateAnamnesis;
         event EventHandler<DeviceEntryResponseArgs> UpdateDataEntry;
-        event EventHandler<ProgressEventArgs> UpdateProgress;
+        event EventHandler<ProgressEventArgs> UpdateProgress; 
        // event EventHandler<GraphEntryResponseArgs> GraphUpdate;
 
         void DeviceCmdFromView(DeviceCmdArgEvent c);
         void PatientEventFromView(PatientModelResponseArg p);
         void AnamnesisEventFromView(AnamnesisModelResponseArg p);
-       
+        void AnalyzerCmdFromView(AnalyzerCmdResponseArg p); 
+
         void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig);
     }
 
     public class StabilityModel : IStabilityModel
     {
         private readonly StabilityDevice _device;
-        //private StabilityAnalyzer _analyzer;
+        private StabilityAnalyzer _analyzer;
         private readonly cDataBase _base;
         private cPatient _currentPatient;
         private long _currentPatientId;
@@ -96,6 +105,7 @@ namespace Stability.Model
             var conf = MainConfig.PortConfig;
             IoC.GetKernel().Bind<IPort>().To<CComPort>().InSingletonScope().WithConstructorArgument("config", conf);
             _device = new StabilityDevice();
+            _analyzer = new StabilityAnalyzer();
             _base = new cDataBase();
             _baseEntryState = BaseEntryState.Empty;
            
@@ -253,6 +263,25 @@ namespace Stability.Model
                                 _baseEntryState = BaseEntryState.Empty;
                          }
                     break;
+            }
+        }
+
+        public void AnalyzerCmdFromView(AnalyzerCmdResponseArg p)
+        {
+            switch (p.Cmd)
+            {
+              case AnalyzerCmd.SetTenzos:
+                _analyzer.PureTenzoList = p.DevDatEntry.AdcList; 
+               break;
+              case AnalyzerCmd.ResetAll:
+                var ls = _analyzer.ResetLists();
+                UpdateDataEntry.BeginInvoke(this, new DeviceEntryResponseArgs() { Data = ls }, null, null);
+               break;
+              case AnalyzerCmd.ApplyFilter:
+                var l = _analyzer.Filter(p.FltType, p.FltParams);
+                var lst = new DeviceDataEntry(l);
+                UpdateDataEntry.BeginInvoke(this, new DeviceEntryResponseArgs() { Data = lst }, null, null);
+               break;
             }
         }
 

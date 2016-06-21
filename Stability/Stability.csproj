@@ -95,6 +95,9 @@
       <DependentUpon>DataRxWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Model\Analyzer\Analyzer.cs" />
+    <Compile Include="Model\Analyzer\Filter.cs" />
+    <Compile Include="Model\Analyzer\IAnalyzer.cs" />
     <Compile Include="Model\DataBase.cs" />
     <Compile Include="SimpleWindow.xaml.cs">
       <DependentUpon>SimpleWindow.xaml</DependentUpon>

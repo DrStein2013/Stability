@@ -62,6 +62,8 @@ namespace Stability
                 view.UpdateButtons();
             };
             _model.UpdateProgress += (sender, args) => _view.UpdateProgress(args);
+
+            _view.AnalyzerEvent += (sender, arg) => _model.AnalyzerCmdFromView(arg);
             IoC.Resolve<IPort>().PortStatusChanged += _view.COnPortStatusChanged;
         }
 

@@ -35,5 +35,6 @@ namespace Stability.View
         event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         event EventHandler<PatientModelResponseArg> PatientEvent;
         event EventHandler<AnamnesisModelResponseArg> AnamnesisEvent;
+        event EventHandler<AnalyzerCmdResponseArg> AnalyzerEvent;
     }
 }

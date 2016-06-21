@@ -271,7 +271,7 @@
                             </ComboBox>
                             </StackPanel>
                      
-                            <Button x:Name="but_setflt"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" ToolTip="Запустить вычитку данных" Margin="10,0,0,0">
+                            <Button x:Name="but_setflt"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" ToolTip="Применить фильтр" Margin="10,0,0,0" Click="but_setflt_Click">
                                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Path Stretch="Fill" Fill="#006DF0">
                                         <Path.Data>
@@ -285,7 +285,7 @@
                                     </Path>
                                 </Grid>
                             </Button>
-                            <Button x:Name="but_resetflt"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" ToolTip="Запустить вычитку данных" Margin="10,0,0,0">
+                            <Button x:Name="but_resetflt"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" ToolTip="Запустить вычитку данных" Margin="10,0,0,0" Click="but_resetflt_Click">
                                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Path Stretch="Fill" Fill="#006DF0">
                                         <Path.Data>

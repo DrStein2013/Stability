@@ -1,4 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\Артур\Documents\Visual Studio 2012\Projects\Stability.git\packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\Артур\Documents\Visual Studio 2012\Projects\Stability.git\packages\C5.2.3.0.1\lib\net40\C5.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\Артур\Documents\Visual Studio 2012\Projects\Stability.git\packages\TDigest.1.0.6\lib\TDigest.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

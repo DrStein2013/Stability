@@ -45,4 +45,19 @@
         Loaded,
         Modified
     }
+
+    public enum FilterType
+    {
+        MovingAverage
+    }
+
+    public enum AnalyzerCmd
+    {
+        ResetAll=0,
+        SetTenzos,
+        ApplyFilter,
+        CalcStabilograms,
+        CalcFFT,
+        CalcKoefs
+    }
 }

@@ -231,6 +231,7 @@ namespace Stability
         public event EventHandler<DeviceCmdArgEvent> DeviceCmdEvent;
         public event EventHandler<PatientModelResponseArg> PatientEvent;
         public event EventHandler<AnamnesisModelResponseArg> AnamnesisEvent;
+        public event EventHandler<AnalyzerCmdResponseArg> AnalyzerEvent;
         public event EventHandler<EventArgs> ResultUpdEvent;
 
         private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
