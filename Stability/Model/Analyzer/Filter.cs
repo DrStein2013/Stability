@@ -14,7 +14,8 @@ namespace Stability.Model.Analyzer
             {
                case FilterType.MovingAverage:
                     return MovingAverage(fltParams[0], input);
-                    break;
+               case FilterType.MovingMedian:
+                    return MovingMedian(fltParams[0], input);
             }
             return null;
         }
@@ -24,15 +25,15 @@ namespace Stability.Model.Analyzer
         {
             var interval = new List<double[]>(window);
             List<double[]> MAs = new List<double[]>();
-            
+            //int k = 0;
             for (int i = 0; i < input.Count; i++)
              {
                  if (i > input.Count - window)                
-                     window--;
+                     window--; //k++
                 
                  for (int j = 0; j < window; j++)
                  {
-                     interval.Add(input[i+j]);   
+                     interval.Add(input[i+j/*-k*/]);   
                  }
 
                  var cnt = interval[0].Count();
@@ -40,10 +41,41 @@ namespace Stability.Model.Analyzer
                  for (int j = 0; j < cnt; j++)
                   bufmas[j] = interval.Average(doubles => doubles[j]);
 
-                 interval.Clear();
+                 interval.Clear(); 
                  MAs.Add(bufmas);
              }
              return MAs;
+        }
+
+        private List<double[]> MovingMedian(int window, List<double[]> input)
+        {
+            var cnt = input[0].Count();
+            var median_entry = new double[cnt];
+            var interval = new List<double>();
+            
+            List<double[]> MAs = new List<double[]>();
+
+            for (int i = 0; i < input.Count; i++)   //цикл по всему списку
+            {
+                if (i > input.Count - window)
+                    window--; //winmod++
+
+                for (int k = 0; k < cnt; k++) //цикл по количеству записей в одном элементе списка
+                {
+                    interval.Clear();
+                    for (int j = 0; j < window; j++) //цикл по окну
+                    {
+                        interval.Add(input[i + j][k]);
+                    }
+                    interval.Sort();
+                    if (window%2 == 0)
+                        median_entry[k] = (interval[window/2 - 1] + interval[window/2])/2;
+                    else median_entry[k] = interval[window/2];
+                }
+
+                MAs.Add(median_entry);
+            }
+            return MAs;
         }
     }
 }

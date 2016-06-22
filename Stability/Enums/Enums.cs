@@ -48,7 +48,8 @@
 
     public enum FilterType
     {
-        MovingAverage
+        MovingAverage=0,
+        MovingMedian
     }
 
     public enum AnalyzerCmd
