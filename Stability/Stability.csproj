@@ -95,6 +95,9 @@
       <DependentUpon>DataRxWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Enums\Enums.cs" />
+    <Compile Include="FilterDlgBox.xaml.cs">
+      <DependentUpon>FilterDlgBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\Analyzer\Analyzer.cs" />
     <Compile Include="Model\Analyzer\Filter.cs" />
     <Compile Include="Model\Analyzer\IAnalyzer.cs" />
@@ -124,6 +127,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataRxWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FilterDlgBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

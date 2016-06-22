@@ -1,0 +1,27 @@
+﻿<Window x:Class="Stability.FilterDlgBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Настройки фильтра" Height="300" Width="300" ResizeMode="NoResize" SizeToContent="Height" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner" Topmost="True">
+    <StackPanel Background="#FFD1CBCB">
+        <Label Content="Укажите параметры фильтра" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Тип фильтра:" HorizontalAlignment="Left" Margin="25,0,0,0"/>
+            <ComboBox SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged">
+                <ComboBoxItem Content="Скользящее среднее"/>
+                <ComboBoxItem Content="Скользящая медиана"/>
+            </ComboBox>
+        </StackPanel>
+        <Grid Margin="0,10,0,0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="34*"/>
+                <ColumnDefinition Width="113*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Окно:" HorizontalAlignment="Right" Margin="0,0,0,0" Width="42"/>
+            <TextBox x:Name="text_WinFlt" Width="50" Margin="2,0,0,0" Grid.Column="1" HorizontalAlignment="Left" Text="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="text_PreviewTextInput"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,10" FlowDirection="RightToLeft">
+            <Button Content="Отмена" Width="50" Height="30" IsCancel="True" HorizontalAlignment="Right" Margin="10,0" />
+            <Button IsDefault="True" Content="OK" Width="50" Height="30" Margin="0,0,10,0" Click="Button_Click" />
+            </StackPanel>
+    </StackPanel>
+</Window>
