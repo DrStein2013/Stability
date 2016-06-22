@@ -563,13 +563,17 @@ namespace Stability
 
         private void but_setflt_Click(object sender, RoutedEventArgs e)
         {
-            AnalyzerEvent.Invoke(this,
-                new AnalyzerCmdResponseArg()
-                {
-                    Cmd = AnalyzerCmd.ApplyFilter,
-                    FltType = FilterType.MovingAverage,
-                    FltParams = new[] {combo_GraphType.SelectedIndex, 10}
-                });
+            var dlg = new FilterDlgBox {Owner = this};
+            dlg.ShowDialog();
+
+            if(dlg.DialogResult != null && dlg.DialogResult.Value)
+                AnalyzerEvent.Invoke(this,
+                    new AnalyzerCmdResponseArg()
+                    {
+                     Cmd = AnalyzerCmd.ApplyFilter,
+                     FltType = dlg.FlType,
+                     FltParams = new[] {combo_GraphType.SelectedIndex, dlg.WindowFlt}
+                    });
         }
 
         private void but_resetflt_Click(object sender, RoutedEventArgs e)
