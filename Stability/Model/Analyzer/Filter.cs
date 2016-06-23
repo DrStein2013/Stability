@@ -25,15 +25,15 @@ namespace Stability.Model.Analyzer
         {
             var interval = new List<double[]>(window);
             List<double[]> MAs = new List<double[]>();
-            //int k = 0;
+            int winmod = 0;
             for (int i = 0; i < input.Count; i++)
-             {
-                 if (i > input.Count - window)                
-                     window--; //k++
+            {
+                if (i > input.Count - window)
+                    winmod++;//window--;
                 
                  for (int j = 0; j < window; j++)
                  {
-                     interval.Add(input[i+j/*-k*/]);   
+                     interval.Add(input[i+j-winmod]);   
                  }
 
                  var cnt = interval[0].Count();
@@ -50,13 +50,13 @@ namespace Stability.Model.Analyzer
         private List<double[]> MovingMedian(int window, List<double[]> input)
         {
             var cnt = input[0].Count();
-            var median_entry = new double[cnt];
             var interval = new List<double>();
             
             List<double[]> MAs = new List<double[]>();
 
             for (int i = 0; i < input.Count; i++)   //цикл по всему списку
             {
+                var median_entry = new double[cnt];
                 if (i > input.Count - window)
                     window--; //winmod++
 
