@@ -54,6 +54,7 @@ namespace Stability.Model
     {
         public AnalyzerCmd Cmd { get; set; }
         public FilterType FltType { get; set; }
+        public GraphTypes GraphType { get; set; }
         public DeviceDataEntry DevDatEntry { get; set; }
         public int[] FltParams { get; set; }
     }
@@ -268,19 +269,24 @@ namespace Stability.Model
 
         public void AnalyzerCmdFromView(AnalyzerCmdResponseArg p)
         {
+            DeviceDataEntry ls;
             switch (p.Cmd)
             {
               case AnalyzerCmd.SetTenzos:
                 _analyzer.PureTenzoList = p.DevDatEntry.AdcList; 
                break;
               case AnalyzerCmd.ResetAll:
-                var ls = _analyzer.ResetLists();
+                ls = _analyzer.ResetLists();
                 UpdateDataEntry.BeginInvoke(this, new DeviceEntryResponseArgs() { Data = ls }, null, null);
                break;
               case AnalyzerCmd.ApplyFilter:
                 var l = _analyzer.Filter(p.FltType, p.FltParams);
                 var lst = new DeviceDataEntry(l);
                 UpdateDataEntry.BeginInvoke(this, new DeviceEntryResponseArgs() { Data = lst }, null, null);
+               break;
+              case AnalyzerCmd.CalculateGraph:
+                 ls = _analyzer.Calculate(p.GraphType);
+                 UpdateDataEntry.BeginInvoke(this, new DeviceEntryResponseArgs() { Data = ls }, null, null);
                break;
             }
         }

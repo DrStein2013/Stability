@@ -21,6 +21,7 @@ using Stability.Model.Port;
 using Stability.View;
 using ZedGraph;
 using Color = System.Windows.Media.Color;
+using ComboBox = System.Windows.Forms.ComboBox;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -584,6 +585,13 @@ namespace Stability
                     Cmd = AnalyzerCmd.ResetAll,
                     FltParams = new[] { combo_GraphType.SelectedIndex }
                 });
+        }
+
+        private void combo_GraphType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var combo = ((ComboBox) sender);
+            var graphtype = (GraphTypes) combo.SelectedIndex;
+
         }
     
      }

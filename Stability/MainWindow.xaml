@@ -265,7 +265,7 @@
                         <StackPanel Height="55" Orientation="Horizontal">
                             <StackPanel Margin="0" VerticalAlignment="Center" HorizontalAlignment="Left">
                             <Label Content="Тип графика:" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5,2"/>
-                            <ComboBox x:Name="combo_GraphType" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" SelectedIndex="0">
+                            <ComboBox x:Name="combo_GraphType" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" SelectedIndex="0" SelectionChanged="combo_GraphType_SelectionChanged">
                                 <ComboBoxItem Content="Показания тензодатчиков"/>
                                 <ComboBoxItem Content="Стабилограммы"/>
                             </ComboBox>

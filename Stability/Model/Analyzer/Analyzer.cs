@@ -55,6 +55,17 @@ namespace Stability.Model.Analyzer
             return null;
         }
 
+        public DeviceDataEntry Calculate(GraphTypes type)
+        {
+            switch (type)
+            {
+              case GraphTypes.StabilogramVals:
+                    return GetStabilograms();
+              break;
+            }
+            return new DeviceDataEntry(null);
+        }
+
         public DeviceDataEntry ResetLists()
         {
             _tenzoList.Clear();
@@ -63,6 +74,11 @@ namespace Stability.Model.Analyzer
             _stabilogramsList.Clear();
             _fftList.Clear();
             return new DeviceDataEntry(_pureTenzoList);
+        }
+
+        private DeviceDataEntry GetStabilograms()
+        {
+            return new DeviceDataEntry(null);
         }
     }
     

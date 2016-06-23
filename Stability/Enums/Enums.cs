@@ -57,8 +57,12 @@
         ResetAll=0,
         SetTenzos,
         ApplyFilter,
-        CalcStabilograms,
-        CalcFFT,
-        CalcKoefs
+        CalculateGraph
+    }
+
+    public enum GraphTypes
+    {
+        TenzoVals = 0,
+        StabilogramVals
     }
 }
