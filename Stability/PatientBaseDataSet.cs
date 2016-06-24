@@ -3,7 +3,6 @@
 
 namespace Stability.PatientBaseDataSetTableAdapters
 {
-
     partial class AddressesTableAdapter
     {
 

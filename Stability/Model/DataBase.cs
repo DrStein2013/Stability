@@ -61,6 +61,10 @@ namespace Stability.Model
         public double Weight { get; set; }
         public string Info { get; set; }
         public DeviceDataEntry Entry { get; set; }
+        public double W_k0 { get; set; }
+        public double W_k1 { get; set; }
+        public double W_k2 { get; set; }
+        public double W_k3 { get; set; }
     }
 
     class cDataBase
@@ -149,7 +153,9 @@ namespace Stability.Model
         public void AddAnamnesis(cAnamnesisEntry entry, long Pat_ID = 0)
         {
             var adp_anam = new PatientBaseDataSetTableAdapters.AnamnesisTableAdapter();
-            int i = adp_anam.Insert(Pat_ID, DateTime.Now, entry.Weight, entry.Info, DeviceDataEntry.Serialize(entry.Entry));
+            int i = adp_anam.Insert(Pat_ID, DateTime.Now, entry.Weight, entry.Info,
+                                    DeviceDataEntry.Serialize(entry.Entry), entry.W_k0, entry.W_k1, entry.W_k2,
+                                    entry.W_k3);
             i += 1;
         }
 
@@ -164,7 +170,11 @@ namespace Stability.Model
                     Entry = DeviceDataEntry.Deserialize(data[0].Entries),
                     Weight = data[0].Weight,
                     Info = data[0].Info,
-                    MeasureDate = data[0].Datetime
+                    MeasureDate = data[0].Datetime,
+                    W_k0 = data[0].W_k0,
+                    W_k1 = data[0].W_k1,
+                    W_k2 = data[0].W_k2,
+                    W_k3 = data[0].W_k3
                 };
             }
             return null;

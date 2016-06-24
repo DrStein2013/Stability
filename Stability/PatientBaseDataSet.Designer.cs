@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Data;
-
 #pragma warning disable 1591
 
 namespace Stability {
@@ -2473,6 +2471,14 @@ namespace Stability {
             
             private global::System.Data.DataColumn columnEntries;
             
+            private global::System.Data.DataColumn columnW_k0;
+            
+            private global::System.Data.DataColumn columnW_k1;
+            
+            private global::System.Data.DataColumn columnW_k2;
+            
+            private global::System.Data.DataColumn columnW_k3;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public AnamnesisDataTable() {
@@ -2556,6 +2562,38 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn W_k0Column {
+                get {
+                    return this.columnW_k0;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn W_k1Column {
+                get {
+                    return this.columnW_k1;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn W_k2Column {
+                get {
+                    return this.columnW_k2;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn W_k3Column {
+                get {
+                    return this.columnW_k3;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2591,7 +2629,7 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public AnamnesisRow AddAnamnesisRow(PatientRow parentPatientRowByPatient_Anamnesis, System.DateTime Datetime, double Weight, string Info, byte[] Entries) {
+            public AnamnesisRow AddAnamnesisRow(PatientRow parentPatientRowByPatient_Anamnesis, System.DateTime Datetime, double Weight, string Info, byte[] Entries, double W_k0, double W_k1, double W_k2, double W_k3) {
                 AnamnesisRow rowAnamnesisRow = ((AnamnesisRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -2599,7 +2637,11 @@ namespace Stability {
                         Datetime,
                         Weight,
                         Info,
-                        Entries};
+                        Entries,
+                        W_k0,
+                        W_k1,
+                        W_k2,
+                        W_k3};
                 if ((parentPatientRowByPatient_Anamnesis != null)) {
                     columnValuesArray[1] = parentPatientRowByPatient_Anamnesis[0];
                 }
@@ -2638,6 +2680,10 @@ namespace Stability {
                 this.columnWeight = base.Columns["Weight"];
                 this.columnInfo = base.Columns["Info"];
                 this.columnEntries = base.Columns["Entries"];
+                this.columnW_k0 = base.Columns["W_k0"];
+                this.columnW_k1 = base.Columns["W_k1"];
+                this.columnW_k2 = base.Columns["W_k2"];
+                this.columnW_k3 = base.Columns["W_k3"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2655,6 +2701,14 @@ namespace Stability {
                 base.Columns.Add(this.columnInfo);
                 this.columnEntries = new global::System.Data.DataColumn("Entries", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEntries);
+                this.columnW_k0 = new global::System.Data.DataColumn("W_k0", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnW_k0);
+                this.columnW_k1 = new global::System.Data.DataColumn("W_k1", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnW_k1);
+                this.columnW_k2 = new global::System.Data.DataColumn("W_k2", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnW_k2);
+                this.columnW_k3 = new global::System.Data.DataColumn("W_k3", typeof(double), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnW_k3);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnAnamnesis_ID}, true));
                 this.columnAnamnesis_ID.AutoIncrement = true;
@@ -3731,6 +3785,70 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public double W_k0 {
+                get {
+                    try {
+                        return ((double)(this[this.tableAnamnesis.W_k0Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'W_k0\' in table \'Anamnesis\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableAnamnesis.W_k0Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public double W_k1 {
+                get {
+                    try {
+                        return ((double)(this[this.tableAnamnesis.W_k1Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'W_k1\' in table \'Anamnesis\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableAnamnesis.W_k1Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public double W_k2 {
+                get {
+                    try {
+                        return ((double)(this[this.tableAnamnesis.W_k2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'W_k2\' in table \'Anamnesis\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableAnamnesis.W_k2Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public double W_k3 {
+                get {
+                    try {
+                        return ((double)(this[this.tableAnamnesis.W_k3Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'W_k3\' in table \'Anamnesis\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableAnamnesis.W_k3Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public PatientRow PatientRow {
                 get {
                     return ((PatientRow)(this.GetParentRow(this.Table.ParentRelations["Patient_Anamnesis"])));
@@ -3774,6 +3892,54 @@ namespace Stability {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetEntriesNull() {
                 this[this.tableAnamnesis.EntriesColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsW_k0Null() {
+                return this.IsNull(this.tableAnamnesis.W_k0Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetW_k0Null() {
+                this[this.tableAnamnesis.W_k0Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsW_k1Null() {
+                return this.IsNull(this.tableAnamnesis.W_k1Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetW_k1Null() {
+                this[this.tableAnamnesis.W_k1Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsW_k2Null() {
+                return this.IsNull(this.tableAnamnesis.W_k2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetW_k2Null() {
+                this[this.tableAnamnesis.W_k2Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsW_k3Null() {
+                return this.IsNull(this.tableAnamnesis.W_k3Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetW_k3Null() {
+                this[this.tableAnamnesis.W_k3Column] = global::System.Convert.DBNull;
             }
         }
         
@@ -6170,6 +6336,10 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Weight", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Weight", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Info", global::System.Data.SqlDbType.NVarChar, 1000, global::System.Data.ParameterDirection.Input, true, 0, 0, "Info", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Entries", global::System.Data.SqlDbType.Image, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Entries", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("W_k0", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, null, global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("W_k1", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, null, global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("W_k2", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, null, global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("W_k3", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, null, global::System.Data.DataRowVersion.Current, null));
             this._adapter.UpdateCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [Anamnesis] SET [Patient_ID] = @Patient_ID, [Datetime] = @Datetime, [Weigh" +
@@ -6323,7 +6493,7 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(global::System.Nullable<long> Patient_ID, System.DateTime Datetime, double Weight, string Info, byte[] Entries) {
+        public virtual int Insert(global::System.Nullable<long> Patient_ID, System.DateTime Datetime, double Weight, string Info, byte[] Entries, global::System.Nullable<double> W_k0, global::System.Nullable<double> W_k1, global::System.Nullable<double> W_k2, global::System.Nullable<double> W_k3) {
             if ((Patient_ID.HasValue == true)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((long)(Patient_ID.Value));
             }
@@ -6342,8 +6512,31 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
                 this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[4].SqlDbType = SqlDbType.Image;
                 this.Adapter.InsertCommand.Parameters[4].Value = ((byte[])(Entries));
+            }
+            if ((W_k0.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((double)(W_k0.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            if ((W_k1.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[6].Value = ((double)(W_k1.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
+            }
+            if ((W_k2.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[7].Value = ((double)(W_k2.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[7].Value = global::System.DBNull.Value;
+            }
+            if ((W_k3.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[8].Value = ((double)(W_k3.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[8].Value = global::System.DBNull.Value;
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
