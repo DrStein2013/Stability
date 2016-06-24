@@ -21,9 +21,9 @@ using Stability.Model.Port;
 using Stability.View;
 using ZedGraph;
 using Color = System.Windows.Media.Color;
-using ComboBox = System.Windows.Forms.ComboBox;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
+using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace Stability
 {
@@ -262,11 +262,11 @@ namespace Stability
 
         private void FastWeightCalibItem_Click(object sender, RoutedEventArgs e)
         {
-       /*    var win = new SimpleWindow("Вес для калибровки","Введите значения веса для калибровки:");
+          var win = new SimpleWindow("Вес для калибровки","Введите значения веса для калибровки:");
     
            if((bool)win.ShowDialog())
              if (DeviceCmdEvent != null)
-                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.WEIGHT_CALIBRATE_FAST,Params = new CalibrationParams(){Weight = win.Value,EntryCount = 100}});*/
+                DeviceCmdEvent.Invoke(this, new DeviceCmdArgEvent() { cmd = DeviceCmd.WEIGHT_CALIBRATE_FAST,Params = new CalibrationParams(){Weight = win.Value,EntryCount = 100}});
         }
 
         private void WeightParamItem_OnClick(object sender, RoutedEventArgs e)
