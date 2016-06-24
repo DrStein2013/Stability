@@ -241,7 +241,11 @@ namespace Stability.Model
                                 Entry = _device.GetDataEntry(),
                                 Info = inf,
                                 MeasureDate = DateTime.Now,
-                                Weight = weight
+                                Weight = weight,
+                                W_k0 = _device.WeightKoefs[0],
+                                W_k1 = _device.WeightKoefs[1],
+                                W_k2 = _device.WeightKoefs[2],
+                                W_k3 = _device.WeightKoefs[3]
                             };
                             _base.AddAnamnesis(entry, _currentPatientId);
                             p.Action = BaseAction.Find;
@@ -273,7 +277,10 @@ namespace Stability.Model
             switch (p.Cmd)
             {
               case AnalyzerCmd.SetTenzos:
-                _analyzer.PureTenzoList = p.DevDatEntry.AdcList; 
+                 var e = p.DevDatEntry;
+                _analyzer.Weight = e.Weight;
+                _analyzer.W_k = new []{e.W_k0,e.W_k1,e.W_k2,e.W_k3};
+                _analyzer.PureTenzoList = e.AdcList; 
                break;
               case AnalyzerCmd.ResetAll:
                 ls = _analyzer.ResetLists();
