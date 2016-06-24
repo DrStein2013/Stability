@@ -21,12 +21,17 @@ namespace Stability.Model.Analyzer
 
     class StabilityAnalyzer : Analyzer
     {
+        public double[] W_k { get; set; }
+        public double Weight { get; set; }
         public List<double[]> PureTenzoList
         {  set { _pureTenzoList = value;
               _tenzoList = value;
             //  value.CopyTo(_tenzoList.ToArray());
             } 
         }
+
+        private readonly double g = 9.8;    //Ускорение свободного падения
+        private readonly double R = 0.175;  //Растояние от цетра окружности, описаной вокруг платформы весов, до датчика, м
 
         private List<double[]> _pureTenzoList;
         private List<double[]> _tenzoList;
@@ -78,7 +83,25 @@ namespace Stability.Model.Analyzer
 
         private DeviceDataEntry GetStabilograms()
         {
-            return new DeviceDataEntry(null);
+            _stabilogramsList.Clear();
+            var kx = W_k[0] - W_k[2];
+            var ky = W_k[3] - W_k[1];
+
+            var KX = R/kx*g;
+            var KY = R/ky*g;
+
+            foreach (var V in _tenzoList)
+            {
+                var Vxi = V[0] - V[2];
+                var Vyi = V[3] - V[1];
+
+                var xi = KY*Vyi/Weight;
+                var yi = KX*Vxi/Weight;
+
+                _stabilogramsList.Add(new double[] { xi, yi });
+            }
+
+            return new DeviceDataEntry(_stabilogramsList);
         }
     }
     
