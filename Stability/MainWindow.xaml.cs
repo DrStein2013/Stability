@@ -395,6 +395,11 @@ namespace Stability
                 mem_stream.Write((byte[]) RV.Row["Entries"], 0, ((byte[]) RV.Row["Entries"]).Count());
                 mem_stream.Position = 0;
                 DeviceDataEntry d = (DeviceDataEntry) bin_format.Deserialize(mem_stream);
+                d.W_k0 = (double)RV.Row["W_k0"];
+                d.W_k1 = (double)RV.Row["W_k1"];
+                d.W_k2 = (double)RV.Row["W_k2"];
+                d.W_k3 = (double)RV.Row["W_k3"];
+                d.Weight = (double)RV.Row["Weight"];
                 UpdateDataInGridRes(d);
                 text_Info.Text = (string) RV.Row["Info"];
                 AnalyzerEvent.Invoke(this,
@@ -402,8 +407,7 @@ namespace Stability
                {
                    Cmd = AnalyzerCmd.SetTenzos,
                    DevDatEntry = d,
-                   FltType = FilterType.MovingAverage,
-                   FltParams = new[] { 2 }
+                   
                });
             }
         }
