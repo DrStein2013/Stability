@@ -49,6 +49,11 @@ namespace Stability.Model.Device
         }
 
         public List<double[]> AdcList { get; private set; }
+        public double Weight { get; set; }
+        public double W_k0 { get; set; }
+        public double W_k1 { get; set; }
+        public double W_k2 { get; set; }
+        public double W_k3 { get; set; }
     }
     
     public class cDeviceItem
