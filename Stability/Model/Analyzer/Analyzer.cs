@@ -64,6 +64,8 @@ namespace Stability.Model.Analyzer
         {
             switch (type)
             {
+              case GraphTypes.TenzoVals:
+                    return ResetLists();
               case GraphTypes.StabilogramVals:
                     return GetStabilograms();
               break;
@@ -100,7 +102,13 @@ namespace Stability.Model.Analyzer
 
                 _stabilogramsList.Add(new double[] { xi, yi });
             }
-
+         /*   var masx = new double[600];
+            var masy = new double[600];
+            for (int i = 0; i < 600; i++)
+            {
+                masx[i] = _stabilogramsList[i][0];
+                masy[i] = _stabilogramsList[i][1];
+            }*/
             return new DeviceDataEntry(_stabilogramsList);
         }
     }

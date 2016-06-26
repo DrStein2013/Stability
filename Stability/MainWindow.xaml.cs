@@ -595,7 +595,13 @@ namespace Stability
         {
             var combo = ((ComboBox) sender);
             var graphtype = (GraphTypes) combo.SelectedIndex;
-
+            if(AnalyzerEvent != null)
+            AnalyzerEvent.Invoke(this,
+                new AnalyzerCmdResponseArg()
+                {
+                    Cmd = AnalyzerCmd.CalculateGraph,
+                    GraphType = graphtype
+                });
         }
     
      }

@@ -63,7 +63,9 @@ namespace Stability.Model.Device
        {
            CH_1 = mas[0];
            CH_2 = mas[1];
-           CH_3 = mas[2];
+           if((mas.Count() == 3)||(mas.Count() == 4))
+            CH_3 = mas[2];
+           if (mas.Count() == 4)
            CH_4 = mas[3];
        }
 
