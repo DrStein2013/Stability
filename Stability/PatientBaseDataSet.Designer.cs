@@ -38,13 +38,13 @@ namespace Stability {
         
         private AnamnesisDataTable tableAnamnesis;
         
-        private global::System.Data.DataRelation relationName_rel;
-        
-        private global::System.Data.DataRelation relationAdr_rel;
+        private global::System.Data.DataRelation relationPat_rel;
         
         private global::System.Data.DataRelation relationSur_rel;
         
-        private global::System.Data.DataRelation relationPat_rel;
+        private global::System.Data.DataRelation relationAdr_rel;
+        
+        private global::System.Data.DataRelation relationName_rel;
         
         private global::System.Data.DataRelation relationPatient_Anamnesis;
         
@@ -350,10 +350,10 @@ namespace Stability {
                     this.tableAnamnesis.InitVars();
                 }
             }
-            this.relationName_rel = this.Relations["Name_rel"];
-            this.relationAdr_rel = this.Relations["Adr_rel"];
-            this.relationSur_rel = this.Relations["Sur_rel"];
             this.relationPat_rel = this.Relations["Pat_rel"];
+            this.relationSur_rel = this.Relations["Sur_rel"];
+            this.relationAdr_rel = this.Relations["Adr_rel"];
+            this.relationName_rel = this.Relations["Name_rel"];
             this.relationPatient_Anamnesis = this.Relations["Patient_Anamnesis"];
             this.relationAdr_rel1 = this.Relations["Adr_rel1"];
         }
@@ -381,16 +381,9 @@ namespace Stability {
             this.tableAnamnesis = new AnamnesisDataTable();
             base.Tables.Add(this.tableAnamnesis);
             global::System.Data.ForeignKeyConstraint fkc;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Names_Patient", new global::System.Data.DataColumn[] {
-                        this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Name_IDColumn});
-            this.tablePatient.Constraints.Add(fkc);
-            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
-            fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("Adr_rel", new global::System.Data.DataColumn[] {
-                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Addr_IDColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("Pat_rel", new global::System.Data.DataColumn[] {
+                        this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Patronymic_IDColumn});
             this.tablePatient.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
@@ -402,29 +395,36 @@ namespace Stability {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("Pat_rel", new global::System.Data.DataColumn[] {
-                        this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Patronymic_IDColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("Adr_rel", new global::System.Data.DataColumn[] {
+                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Addr_IDColumn});
             this.tablePatient.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.Cascade;
             fkc.DeleteRule = global::System.Data.Rule.None;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            this.relationName_rel = new global::System.Data.DataRelation("Name_rel", new global::System.Data.DataColumn[] {
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Names_Patient", new global::System.Data.DataColumn[] {
                         this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Name_IDColumn}, false);
-            this.Relations.Add(this.relationName_rel);
-            this.relationAdr_rel = new global::System.Data.DataRelation("Adr_rel", new global::System.Data.DataColumn[] {
-                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Addr_IDColumn}, false);
-            this.Relations.Add(this.relationAdr_rel);
-            this.relationSur_rel = new global::System.Data.DataRelation("Sur_rel", new global::System.Data.DataColumn[] {
-                        this.tableSurnames.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tablePatient.Surname_IDColumn}, false);
-            this.Relations.Add(this.relationSur_rel);
+                        this.tablePatient.Name_IDColumn});
+            this.tablePatient.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
             this.relationPat_rel = new global::System.Data.DataRelation("Pat_rel", new global::System.Data.DataColumn[] {
                         this.tablePatronymics.IDColumn}, new global::System.Data.DataColumn[] {
                         this.tablePatient.Patronymic_IDColumn}, false);
             this.Relations.Add(this.relationPat_rel);
+            this.relationSur_rel = new global::System.Data.DataRelation("Sur_rel", new global::System.Data.DataColumn[] {
+                        this.tableSurnames.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Surname_IDColumn}, false);
+            this.Relations.Add(this.relationSur_rel);
+            this.relationAdr_rel = new global::System.Data.DataRelation("Adr_rel", new global::System.Data.DataColumn[] {
+                        this.tableAddresses.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Addr_IDColumn}, false);
+            this.Relations.Add(this.relationAdr_rel);
+            this.relationName_rel = new global::System.Data.DataRelation("Name_rel", new global::System.Data.DataColumn[] {
+                        this.tableNames.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tablePatient.Name_IDColumn}, false);
+            this.Relations.Add(this.relationName_rel);
             this.relationPatient_Anamnesis = new global::System.Data.DataRelation("Patient_Anamnesis", new global::System.Data.DataColumn[] {
                         this.tablePatient.IDColumn}, new global::System.Data.DataColumn[] {
                         this.tableAnamnesis.Patient_IDColumn}, false);
@@ -2980,23 +2980,12 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public NamesRow NamesRow {
+            public PatronymicsRow PatronymicsRow {
                 get {
-                    return ((NamesRow)(this.GetParentRow(this.Table.ParentRelations["Name_rel"])));
+                    return ((PatronymicsRow)(this.GetParentRow(this.Table.ParentRelations["Pat_rel"])));
                 }
                 set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Name_rel"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public AddressesRow AddressesRow {
-                get {
-                    return ((AddressesRow)(this.GetParentRow(this.Table.ParentRelations["Adr_rel"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Adr_rel"]);
+                    this.SetParentRow(value, this.Table.ParentRelations["Pat_rel"]);
                 }
             }
             
@@ -3013,12 +3002,23 @@ namespace Stability {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public PatronymicsRow PatronymicsRow {
+            public AddressesRow AddressesRow {
                 get {
-                    return ((PatronymicsRow)(this.GetParentRow(this.Table.ParentRelations["Pat_rel"])));
+                    return ((AddressesRow)(this.GetParentRow(this.Table.ParentRelations["Adr_rel"])));
                 }
                 set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Pat_rel"]);
+                    this.SetParentRow(value, this.Table.ParentRelations["Adr_rel"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public NamesRow NamesRow {
+                get {
+                    return ((NamesRow)(this.GetParentRow(this.Table.ParentRelations["Name_rel"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["Name_rel"]);
                 }
             }
             
@@ -6320,6 +6320,10 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
             tableMapping.ColumnMappings.Add("Weight", "Weight");
             tableMapping.ColumnMappings.Add("Info", "Info");
             tableMapping.ColumnMappings.Add("Entries", "Entries");
+            tableMapping.ColumnMappings.Add("W_k0", "W_k0");
+            tableMapping.ColumnMappings.Add("W_k1", "W_k1");
+            tableMapping.ColumnMappings.Add("W_k2", "W_k2");
+            tableMapping.ColumnMappings.Add("W_k3", "W_k3");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -6328,29 +6332,35 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Original_Anamnesis_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Anamnesis_ID", global::System.Data.DataRowVersion.Original, null));
             this._adapter.InsertCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO Anamnesis\r\n                         (Patient_ID, Datetime, Weight, In" +
-                "fo, Entries)\r\nVALUES        (@Patient_ID,@Datetime,@Weight,@Info,@Entries)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Anamnesis] ([Patient_ID], [Datetime], [Weight], [Info], [Entries], [" +
+                "W_k0], [W_k1], [W_k2], [W_k3]) VALUES (@Patient_ID, @Datetime, @Weight, @Info, @" +
+                "Entries, @W_k0, @W_k1, @W_k2, @W_k3)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Patient_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Patient_ID", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Datetime", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Weight", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Weight", global::System.Data.DataRowVersion.Current, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Info", global::System.Data.SqlDbType.NVarChar, 1000, global::System.Data.ParameterDirection.Input, true, 0, 0, "Info", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Info", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Info", global::System.Data.DataRowVersion.Current, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Entries", global::System.Data.SqlDbType.Image, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Entries", global::System.Data.DataRowVersion.Current, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("W_k0", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, null, global::System.Data.DataRowVersion.Current, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("W_k1", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, null, global::System.Data.DataRowVersion.Current, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("W_k2", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, null, global::System.Data.DataRowVersion.Current, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("W_k3", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, null, global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@W_k0", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "W_k0", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@W_k1", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "W_k1", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@W_k2", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "W_k2", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@W_k3", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "W_k3", global::System.Data.DataRowVersion.Current, null));
             this._adapter.UpdateCommand = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
             this._adapter.UpdateCommand.CommandText = "UPDATE [Anamnesis] SET [Patient_ID] = @Patient_ID, [Datetime] = @Datetime, [Weigh" +
-                "t] = @Weight, [Info] = @Info, [Entries] = @Entries WHERE (([Anamnesis_ID] = @Ori" +
-                "ginal_Anamnesis_ID))";
+                "t] = @Weight, [Info] = @Info, [Entries] = @Entries, [W_k0] = @W_k0, [W_k1] = @W_" +
+                "k1, [W_k2] = @W_k2, [W_k3] = @W_k3 WHERE (([Anamnesis_ID] = @Original_Anamnesis_" +
+                "ID))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Patient_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Patient_ID", global::System.Data.DataRowVersion.Current, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Datetime", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Weight", global::System.Data.SqlDbType.TinyInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Weight", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Weight", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Weight", global::System.Data.DataRowVersion.Current, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Info", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Info", global::System.Data.DataRowVersion.Current, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Entries", global::System.Data.SqlDbType.Binary, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Entries", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Entries", global::System.Data.SqlDbType.Image, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Entries", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@W_k0", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "W_k0", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@W_k1", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "W_k1", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@W_k2", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "W_k2", global::System.Data.DataRowVersion.Current, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@W_k3", global::System.Data.SqlDbType.Float, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "W_k3", global::System.Data.DataRowVersion.Current, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Original_Anamnesis_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Anamnesis_ID", global::System.Data.DataRowVersion.Original, null));
         }
         
@@ -6367,18 +6377,19 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
             this._commandCollection = new global::System.Data.SqlServerCe.SqlCeCommand[3];
             this._commandCollection[0] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Anamnesis_ID, Patient_ID, Datetime, Weight, Info, Entries FROM Anamnesis";
+            this._commandCollection[0].CommandText = "SELECT Anamnesis_ID, Patient_ID, Datetime, Weight, Info, Entries, W_k0, W_k1, W_k" +
+                "2, W_k3 FROM Anamnesis";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT Anamnesis_ID, Patient_ID, Datetime, Weight, Info, Entries FROM Anamnesis W" +
-                "HERE (Patient_ID = @Patient_ID)";
+            this._commandCollection[1].CommandText = "SELECT Anamnesis_ID, Datetime, Entries, Info, Patient_ID, W_k0, W_k1, W_k2, W_k3," +
+                " Weight FROM Anamnesis WHERE (Patient_ID = @Patient_ID)";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@Patient_ID", global::System.Data.SqlDbType.BigInt, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Patient_ID", global::System.Data.DataRowVersion.Current, null));
             this._commandCollection[2] = new global::System.Data.SqlServerCe.SqlCeCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "SELECT Anamnesis_ID, Patient_ID, Datetime, Weight, Info, Entries FROM Anamnesis W" +
-                "HERE (Datetime BETWEEN @From AND @To)";
+            this._commandCollection[2].CommandText = "SELECT Anamnesis_ID, Datetime, Entries, Info, Patient_ID, W_k0, W_k1, W_k2, W_k3," +
+                " Weight FROM Anamnesis WHERE (Datetime BETWEEN @From AND @To)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@From", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
             this._commandCollection[2].Parameters.Add(new global::System.Data.SqlServerCe.SqlCeParameter("@To", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, true, 0, 0, "Datetime", global::System.Data.DataRowVersion.Current, null));
@@ -6558,7 +6569,7 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(global::System.Nullable<long> Patient_ID, System.DateTime Datetime, byte Weight, string Info, byte[] Entries, long Original_Anamnesis_ID) {
+        public virtual int Update(global::System.Nullable<long> Patient_ID, System.DateTime Datetime, double Weight, string Info, byte[] Entries, global::System.Nullable<double> W_k0, global::System.Nullable<double> W_k1, global::System.Nullable<double> W_k2, global::System.Nullable<double> W_k3, long Original_Anamnesis_ID) {
             if ((Patient_ID.HasValue == true)) {
                 this.Adapter.UpdateCommand.Parameters[0].Value = ((long)(Patient_ID.Value));
             }
@@ -6566,7 +6577,7 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
                 this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
             this.Adapter.UpdateCommand.Parameters[1].Value = ((System.DateTime)(Datetime));
-            this.Adapter.UpdateCommand.Parameters[2].Value = ((byte)(Weight));
+            this.Adapter.UpdateCommand.Parameters[2].Value = ((double)(Weight));
             if ((Info == null)) {
                 this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
@@ -6579,7 +6590,31 @@ WHERE        (Anamnesis.Datetime BETWEEN @From AND @To)";
             else {
                 this.Adapter.UpdateCommand.Parameters[4].Value = ((byte[])(Entries));
             }
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((long)(Original_Anamnesis_ID));
+            if ((W_k0.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((double)(W_k0.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            if ((W_k1.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((double)(W_k1.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[6].Value = global::System.DBNull.Value;
+            }
+            if ((W_k2.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((double)(W_k2.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[7].Value = global::System.DBNull.Value;
+            }
+            if ((W_k3.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((double)(W_k3.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[8].Value = global::System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((long)(Original_Anamnesis_ID));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
