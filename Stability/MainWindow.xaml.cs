@@ -34,6 +34,7 @@ namespace Stability
     {
         private StabilityPresenter _presenter;
         private bool isStarted = false;
+        private GraphTypes _currGraphType;
 
         public MainWindow()
         {
@@ -41,7 +42,7 @@ namespace Stability
             _presenter = new StabilityPresenter(new StabilityModel(), this);
             
             Thread.Sleep(200);
-            GraphPane pane = testGraph.GraphPane;
+           /* GraphPane pane = testGraph.GraphPane;
 
 
             pane.Chart.Fill.Brush = new SolidBrush(System.Drawing.Color.LightGray);
@@ -59,7 +60,8 @@ namespace Stability
             pane.XAxis.Scale.MinorStep = 2;
             pane.XAxis.Title.Text = "Время, сек";
             pane.YAxis.Title.Text = "Значение, V";
-            pane.Title.Text = "Показания тензодатчиков";
+            pane.Title.Text = "Показания тензодатчиков";*/
+            SetGraphType(GraphTypes.TenzoVals);
 
             //   buttonHandler = new ButtonHandler(but_ok.Height, but_ok.Width);
             //     but_ok.MouseEnter += buttonHandler.But_MouseEnter;
@@ -423,15 +425,29 @@ namespace Stability
         {
             var crvList = testGraph.GraphPane.CurveList;
             crvList.ForEach(item => item.Clear());
-            for (int i = 0,j=0; i < d.AdcList.Count(); i++,j+=50)
+
+            switch (_currGraphType)
             {
-                var entry = d.AdcList[i];
-                double time = j/1000.0;
-                crvList[0].AddPoint(time, entry[0]);
-                crvList[1].AddPoint(time, entry[1]);
-                crvList[2].AddPoint(time, entry[2]);
-                crvList[3].AddPoint(time, entry[3]);
+                    case GraphTypes.TenzoVals:
+                        for (int i = 0,j=0; i < d.AdcList.Count(); i++,j+=50)
+                        {
+                            var entry = d.AdcList[i];
+                            double time = j/1000.0;
+                            crvList[0].AddPoint(time, entry[0]);
+                            crvList[1].AddPoint(time, entry[1]);
+                            crvList[2].AddPoint(time, entry[2]);
+                            crvList[3].AddPoint(time, entry[3]);
+                        }
+                    break;
+                    case GraphTypes.StabilogramVals:
+                    foreach (var en in d.AdcList)
+                    {
+                        crvList[0].AddPoint(en[0],en[1]);
+                    }
+                    break;
             }
+           
+            
             // Вызываем метод AxisChange (), чтобы обновить данные об осях. 
             // В противном случае на рисунке будет показана только часть графика, 
             // которая умещается в интервалы по осям, установленные по умолчанию
@@ -595,15 +611,69 @@ namespace Stability
         {
             var combo = ((ComboBox) sender);
             var graphtype = (GraphTypes) combo.SelectedIndex;
-            if(AnalyzerEvent != null)
-            AnalyzerEvent.Invoke(this,
-                new AnalyzerCmdResponseArg()
-                {
-                    Cmd = AnalyzerCmd.CalculateGraph,
-                    GraphType = graphtype
-                });
+            if (AnalyzerEvent != null)
+            {
+            /*    AnalyzerEvent.Invoke(this,
+                    new AnalyzerCmdResponseArg()
+                    {
+                        Cmd = AnalyzerCmd.CalculateGraph,
+                        GraphType = graphtype
+                    });*/
+                SetGraphType(GraphTypes.StabilogramVals);
+            }
         }
-    
+
+        private void SetGraphType(GraphTypes newtype)
+        {
+            GraphPane pane = testGraph.GraphPane;
+
+
+            pane.Chart.Fill.Brush = new SolidBrush(System.Drawing.Color.LightGray);
+            pane.Fill.Color = System.Drawing.Color.LightGray;
+            // Очистим список кривых на тот случай, если до этого сигналы уже были нарисованы
+            switch (newtype)
+            {
+                    case GraphTypes.TenzoVals:
+                        pane.CurveList.Clear();
+
+                        pane.AddCurve("Tenz0", new PointPairList(), System.Drawing.Color.Green, SymbolType.None);
+                        pane.AddCurve("Tenz1", new PointPairList(), System.Drawing.Color.Blue, SymbolType.None);
+                        pane.AddCurve("Tenz2", new PointPairList(), System.Drawing.Color.Red, SymbolType.None);
+                        pane.AddCurve("Tenz3", new PointPairList(), System.Drawing.Color.Orange, SymbolType.None);
+
+                        pane.XAxis.Scale.Max = 30;
+                        pane.XAxis.Scale.MajorStep = 10;
+                        pane.XAxis.Scale.MinorStep = 2;
+                        pane.XAxis.Title.Text = "Время, сек";
+                        pane.YAxis.Title.Text = "Значение, V";
+                        pane.Title.Text = "Показания тензодатчиков";
+                        _currGraphType = newtype;
+                    break;
+                    case GraphTypes.StabilogramVals:
+                        pane.CurveList.Clear();
+
+                        pane.AddCurve("X", new PointPairList(), System.Drawing.Color.Green, SymbolType.None);
+                        //pane.AddCurve("Tenz1", new PointPairList(), System.Drawing.Color.Blue, SymbolType.None);
+                        //pane.AddCurve("Tenz2", new PointPairList(), System.Drawing.Color.Red, SymbolType.None);
+                        //pane.AddCurve("Tenz3", new PointPairList(), System.Drawing.Color.Orange, SymbolType.None);
+                       
+                        pane.XAxis.Scale.Max = -5;
+                        pane.XAxis.Scale.Max = 5;
+                        pane.XAxis.Scale.MajorStep = 1;
+                        pane.XAxis.Scale.MinorStep = 0.5;
+                        pane.XAxis.Cross = 0;
+                        pane.XAxis.Title.Text = "X плоскость";
+                        pane.YAxis.Cross = 0;
+                        pane.YAxis.Scale.Max = -5;
+                        pane.YAxis.Scale.Max = 5;
+                        pane.YAxis.Scale.MajorStep = 1;
+                        pane.YAxis.Scale.MinorStep = 0.5;
+                        pane.YAxis.Title.Text = "Y плоскость";
+                        pane.Title.Text = "Стабилограмма";
+                        _currGraphType = newtype;
+                    break;
+            }
+        }
      }
 
 }

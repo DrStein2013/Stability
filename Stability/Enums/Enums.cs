@@ -63,6 +63,7 @@
     public enum GraphTypes
     {
         TenzoVals = 0,
-        StabilogramVals
+        StabilogramVals,
+        TenzoFFT
     }
 }

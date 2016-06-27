@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using MathNet.Numerics;
 using Stability.Enums;
 using Stability.Model.Device;
 
@@ -36,7 +39,7 @@ namespace Stability.Model.Analyzer
         private List<double[]> _pureTenzoList;
         private List<double[]> _tenzoList;
         private List<double[]> _stabilogramsList = new List<double[]>();
-        private List<double[]> _fftList = new List<double[]>();
+        private List<Complex[]> _fftList = new List<Complex[]>();
 
         public override List<double[]> Filter(FilterType type, params int[] fltParams)
         {
@@ -68,6 +71,8 @@ namespace Stability.Model.Analyzer
                     return ResetLists();
               case GraphTypes.StabilogramVals:
                     return GetStabilograms();
+              case GraphTypes.TenzoFFT:
+                    return GetTenzoFFT();
               break;
             }
             return new DeviceDataEntry(null);
@@ -83,6 +88,22 @@ namespace Stability.Model.Analyzer
             return new DeviceDataEntry(_pureTenzoList);
         }
 
+        private DeviceDataEntry GetTenzoFFT()
+        {
+            var cnt = _tenzoList[0].Count();
+            for (int j = 0; j < cnt; j++)
+            {
+                var complex = new List<Complex>(); //new MathNet.Numerics.Complex32[_tenzoList.Count];
+                for (int i = 0; i < _tenzoList.Count; i++)
+                {
+                    complex.Add(new Complex(_tenzoList[i][0], 1.0));
+                }
+                MathNet.Numerics.IntegralTransforms.Fourier.Forward(complex.ToArray());
+
+                _fftList.Add(complex.ToArray());
+            }
+            return null; //new DeviceDataEntry(_fftList);
+        }
         private DeviceDataEntry GetStabilograms()
         {
             _stabilogramsList.Clear();
