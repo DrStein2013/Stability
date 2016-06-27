@@ -28,8 +28,7 @@ namespace Stability.Model.Analyzer
         public double Weight { get; set; }
         public List<double[]> PureTenzoList
         {  set { _pureTenzoList = value;
-              _tenzoList = value;
-            //  value.CopyTo(_tenzoList.ToArray());
+                _tenzoList.AddRange(_pureTenzoList);
             } 
         }
 
@@ -37,7 +36,7 @@ namespace Stability.Model.Analyzer
         private readonly double R = 0.175;  //Растояние от цетра окружности, описаной вокруг платформы весов, до датчика, м
 
         private List<double[]> _pureTenzoList;
-        private List<double[]> _tenzoList;
+        private List<double[]> _tenzoList  = new List<double[]>();
         private List<double[]> _stabilogramsList = new List<double[]>();
         private List<Complex[]> _fftList = new List<Complex[]>();
 
@@ -81,8 +80,8 @@ namespace Stability.Model.Analyzer
         public DeviceDataEntry ResetLists()
         {
             _tenzoList.Clear();
-            _tenzoList = _pureTenzoList;
-           // _pureTenzoList.CopyTo(_tenzoList.ToArray()); 
+            
+            _tenzoList.AddRange(_pureTenzoList);
             _stabilogramsList.Clear();
             _fftList.Clear();
             return new DeviceDataEntry(_pureTenzoList);
@@ -131,6 +130,15 @@ namespace Stability.Model.Analyzer
                 masy[i] = _stabilogramsList[i][1];
             }*/
             return new DeviceDataEntry(_stabilogramsList);
+        }
+
+        public void ClearAll()
+        {
+            if(_pureTenzoList != null)
+                _pureTenzoList.Clear();
+            _tenzoList.Clear();
+            _stabilogramsList.Clear();
+            _fftList.Clear();
         }
     }
     
