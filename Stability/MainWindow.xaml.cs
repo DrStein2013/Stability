@@ -392,6 +392,9 @@ namespace Stability
             var RV =  grid_Anam.SelectedValue as DataRowView;
             if (RV != null)
             {
+                //SetGraphType(GraphTypes.TenzoVals);
+                combo_GraphType.SelectedIndex = 0;
+                //combo_GraphType_SelectionChanged(this,new SelectionChangedEventArgs());
                 var bin_format = new BinaryFormatter();
                 var mem_stream = new MemoryStream();
                 mem_stream.Write((byte[]) RV.Row["Entries"], 0, ((byte[]) RV.Row["Entries"]).Count());
@@ -452,7 +455,6 @@ namespace Stability
             // В противном случае на рисунке будет показана только часть графика, 
             // которая умещается в интервалы по осям, установленные по умолчанию
             testGraph.AxisChange();
-
             // Обновляем график
             testGraph.Invalidate();
         }
@@ -613,13 +615,13 @@ namespace Stability
             var graphtype = (GraphTypes) combo.SelectedIndex;
             if (AnalyzerEvent != null)
             {
-            /*    AnalyzerEvent.Invoke(this,
+                SetGraphType(graphtype);
+                AnalyzerEvent.Invoke(this,
                     new AnalyzerCmdResponseArg()
                     {
                         Cmd = AnalyzerCmd.CalculateGraph,
                         GraphType = graphtype
-                    });*/
-                SetGraphType(GraphTypes.StabilogramVals);
+                    });
             }
         }
 
@@ -657,18 +659,22 @@ namespace Stability
                         //pane.AddCurve("Tenz2", new PointPairList(), System.Drawing.Color.Red, SymbolType.None);
                         //pane.AddCurve("Tenz3", new PointPairList(), System.Drawing.Color.Orange, SymbolType.None);
                        
-                        pane.XAxis.Scale.Max = -5;
-                        pane.XAxis.Scale.Max = 5;
-                        pane.XAxis.Scale.MajorStep = 1;
-                        pane.XAxis.Scale.MinorStep = 0.5;
+                        /*pane.XAxis.Scale.Max = -1;
+                        pane.XAxis.Scale.Max = 1;
+                        pane.XAxis.Scale.MajorStep = 0.5;
+                        pane.XAxis.Scale.MinorStep = 0.01;*/
+                        pane.XAxis.Scale.MaxAuto = true;
+                        pane.XAxis.Scale.MinAuto = true;
+                        pane.XAxis.Scale.MajorStepAuto = true;
                         pane.XAxis.Cross = 0;
                         pane.XAxis.Title.Text = "X плоскость";
+
                         pane.YAxis.Cross = 0;
-                        pane.YAxis.Scale.Max = -5;
-                        pane.YAxis.Scale.Max = 5;
-                        pane.YAxis.Scale.MajorStep = 1;
-                        pane.YAxis.Scale.MinorStep = 0.5;
+                        pane.YAxis.Scale.MaxAuto = true;
+                        pane.YAxis.Scale.MajorStepAuto = true;
+                        pane.YAxis.Scale.MinAuto = true;    
                         pane.YAxis.Title.Text = "Y плоскость";
+                       
                         pane.Title.Text = "Стабилограмма";
                         _currGraphType = newtype;
                     break;
