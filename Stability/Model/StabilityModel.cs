@@ -278,6 +278,7 @@ namespace Stability.Model
             {
               case AnalyzerCmd.SetTenzos:
                  var e = p.DevDatEntry;
+                _analyzer.ClearAll();
                 _analyzer.Weight = e.Weight;
                 _analyzer.W_k = new []{e.W_k0,e.W_k1,e.W_k2,e.W_k3};
                 _analyzer.PureTenzoList = e.AdcList; 
