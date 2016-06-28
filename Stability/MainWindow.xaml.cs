@@ -666,10 +666,10 @@ namespace Stability
                         pane.XAxis.Scale.MaxAuto = true;
                         pane.XAxis.Scale.MinAuto = true;
                         pane.XAxis.Scale.MajorStepAuto = true;
-                        pane.XAxis.Cross = 0;
+                       // pane.XAxis.Cross = 0;
                         pane.XAxis.Title.Text = "X плоскость";
 
-                        pane.YAxis.Cross = 0;
+                        //pane.YAxis.Cross = 0;
                         pane.YAxis.Scale.MaxAuto = true;
                         pane.YAxis.Scale.MajorStepAuto = true;
                         pane.YAxis.Scale.MinAuto = true;    
