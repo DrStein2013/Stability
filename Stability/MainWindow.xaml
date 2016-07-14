@@ -268,6 +268,7 @@
                             <ComboBox x:Name="combo_GraphType" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" SelectedIndex="0" SelectionChanged="combo_GraphType_SelectionChanged">
                                 <ComboBoxItem Content="Показания тензодатчиков"/>
                                 <ComboBoxItem Content="Стабилограммы"/>
+                                <ComboBoxItem Content="Фурье"/>
                             </ComboBox>
                             </StackPanel>
                      

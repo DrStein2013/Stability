@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using MathNet.Numerics;
@@ -90,18 +91,33 @@ namespace Stability.Model.Analyzer
         private DeviceDataEntry GetTenzoFFT()
         {
             var cnt = _tenzoList[0].Count();
+          
             for (int j = 0; j < cnt; j++)
             {
                 var complex = new List<Complex>(); //new MathNet.Numerics.Complex32[_tenzoList.Count];
                 for (int i = 0; i < _tenzoList.Count; i++)
                 {
-                    complex.Add(new Complex(_tenzoList[i][0], 1.0));
+                    complex.Add(new Complex(_tenzoList[i][j], 0.0));
                 }
-                MathNet.Numerics.IntegralTransforms.Fourier.Forward(complex.ToArray());
+                var comp = complex.ToArray();
+                MathNet.Numerics.IntegralTransforms.Fourier.Forward(comp);
 
-                _fftList.Add(complex.ToArray());
+                _fftList.Add(comp);
             }
-            return null; //new DeviceDataEntry(_fftList);
+
+            var l = new List<double[]>();
+            var n = _fftList[0].Count();
+            for (int i = 0; i < n; i++)
+            {
+                var b = new double[4];
+                b[0] = _fftList[0][i].Real;
+                b[1] = _fftList[1][i].Real;
+                b[2] = _fftList[2][i].Real;
+                b[3] = _fftList[3][i].Real;
+                l.Add(b);
+            }
+    
+            return new DeviceDataEntry(l);
         }
         private DeviceDataEntry GetStabilograms()
         {

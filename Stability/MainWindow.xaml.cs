@@ -443,9 +443,17 @@ namespace Stability
                         }
                     break;
                     case GraphTypes.StabilogramVals:
-                    foreach (var en in d.AdcList)
+                        foreach (var en in d.AdcList)
+                            crvList[0].AddPoint(en[0],en[1]);
+                        break;
+                    case GraphTypes.TenzoFFT:
+
+                    for (int i = 0; i < d.AdcList.Count(); i++)
                     {
-                        crvList[0].AddPoint(en[0],en[1]);
+                        crvList[0].AddPoint(i, d.AdcList[i][0]);
+                        crvList[1].AddPoint(i, d.AdcList[i][1]);
+                        crvList[2].AddPoint(i, d.AdcList[i][2]);
+                        crvList[3].AddPoint(i, d.AdcList[i][3]);
                     }
                     break;
             }
@@ -676,6 +684,28 @@ namespace Stability
                         pane.YAxis.Title.Text = "Y плоскость";
                        
                         pane.Title.Text = "Стабилограмма";
+                        _currGraphType = newtype;
+                    break;
+                    case GraphTypes.TenzoFFT:
+                        pane.CurveList.Clear();
+                        pane.AddCurve("X", new PointPairList(), System.Drawing.Color.Green, SymbolType.None);
+                        pane.AddCurve("Tenz1", new PointPairList(), System.Drawing.Color.Blue, SymbolType.None);
+                        pane.AddCurve("Tenz2", new PointPairList(), System.Drawing.Color.Red, SymbolType.None);
+                        pane.AddCurve("Tenz3", new PointPairList(), System.Drawing.Color.Orange, SymbolType.None);
+                       
+                        pane.XAxis.Scale.MaxAuto = true;
+                        pane.XAxis.Scale.MinAuto = true;
+                        pane.XAxis.Scale.MajorStepAuto = true;
+                       // pane.XAxis.Cross = 0;
+                        pane.XAxis.Title.Text = "Отсчёты";
+
+                        //pane.YAxis.Cross = 0;
+                        pane.YAxis.Scale.MaxAuto = true;
+                        pane.YAxis.Scale.MajorStepAuto = true;
+                        pane.YAxis.Scale.MinAuto = true;    
+                        pane.YAxis.Title.Text = "Значение";
+                       
+                        pane.Title.Text = "Фурье";
                         _currGraphType = newtype;
                     break;
             }
