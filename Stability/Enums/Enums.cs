@@ -57,7 +57,8 @@
         ResetAll=0,
         SetTenzos,
         ApplyFilter,
-        CalculateGraph
+        CalculateGraph,
+        CalculateResults
     }
 
     public enum GraphTypes

@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using MathNet.Numerics;
+using MathNet.Numerics.LinearAlgebra.Double;
 using Stability.Enums;
 using Stability.Model.Device;
 
 namespace Stability.Model.Analyzer
 {
+    public class AnalyzerResults
+    {
+        public List<Vector> VectorsList { get; set; }
+
+    }
+
      class Analyzer 
     {
 
@@ -61,6 +68,11 @@ namespace Stability.Model.Analyzer
                     break;
             }
             return null;
+        }
+
+        public AnalyzerResults GetAnalyzerResults()
+        {
+            return new AnalyzerResults();
         }
 
         public DeviceDataEntry Calculate(GraphTypes type)

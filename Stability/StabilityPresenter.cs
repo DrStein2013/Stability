@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using Stability.Annotations;
+using Stability.Enums;
 using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
@@ -15,6 +16,7 @@ namespace Stability
     {
         private object _p;
         private IStabilityModel _model;
+        
         public object P
         {
             get { return _p; }
@@ -28,11 +30,22 @@ namespace Stability
             }
         }
 
+        public RelayCommand ButCommand { get; set; }
+
         public ResearchResultPresenter() { }
    
         public ResearchResultPresenter(IStabilityModel model)
         {
             _model = model;
+            ButCommand = new RelayCommand(OnButCommand,o => true);
+            
+            var res = _model.GetResults();
+        }
+
+        private void OnButCommand(object o)
+        {
+            P = 45;
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

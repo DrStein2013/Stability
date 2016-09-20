@@ -73,8 +73,9 @@ namespace Stability.Model
         void DeviceCmdFromView(DeviceCmdArgEvent c);
         void PatientEventFromView(PatientModelResponseArg p);
         void AnamnesisEventFromView(AnamnesisModelResponseArg p);
-        void AnalyzerCmdFromView(AnalyzerCmdResponseArg p); 
+        void AnalyzerCmdFromView(AnalyzerCmdResponseArg p);
 
+        AnalyzerResults GetResults();
         void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig);
     }
 
@@ -296,7 +297,12 @@ namespace Stability.Model
                  ls = _analyzer.Calculate(p.GraphType);
                  UpdateDataEntry.BeginInvoke(this, new DeviceEntryResponseArgs() { Data = ls }, null, null);
                break;
-            }
+             }
+        }
+
+        public AnalyzerResults GetResults()
+        {
+            return _analyzer.GetAnalyzerResults();
         }
 
         public void SetNewConfig(CPortConfig c, StabilityExchangeConfig stabilityExchangeConfig)

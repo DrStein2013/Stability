@@ -16,7 +16,7 @@
             <ColumnDefinition Width="47*"/>
         </Grid.ColumnDefinitions>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="26,36,0,0" TextWrapping="Wrap" Text="{Binding P}" VerticalAlignment="Top" Width="120" />
-        <Button Grid.ColumnSpan="2" Content="Button" HorizontalAlignment="Left" Margin="146,82,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Grid.Column="1" Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Command="{Binding ButCommand}"/>
 
 
         <!--DataGrid x:Name="gridResults" /-->
