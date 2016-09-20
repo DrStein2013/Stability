@@ -4,14 +4,60 @@ using System.Linq;
 using System.Numerics;
 using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra.Double;
+using MathNet.Numerics.LinearAlgebra.Storage;
 using Stability.Enums;
 using Stability.Model.Device;
 
 namespace Stability.Model.Analyzer
 {
+    public class cVector
+    {
+        public double X_st { get;private set; }
+        public double Y_st{ get; private set; }
+        public double X_end { get; private set; }
+        public double Y_end { get; private set; }
+        public double Ax { get;private set; }
+        public double Ay { get; private set; }
+        public double Modulus()
+        {
+            return Math.Sqrt(Ax*Ax + Ay*Ay);
+        }
+
+        public double DotProtuct(cVector B)
+        {
+            return Ax*B.Ax + Ay*B.Ay;
+        }
+
+        public double Angle(cVector B,bool inDegrees = false)
+        {
+            var angle = Math.Acos(DotProtuct(B)/(Modulus()*B.Modulus()));
+            return !inDegrees ? angle : (180/Math.PI)*angle;
+        }
+
+        public cVector(double x_st, double y_st, double x_end, double y_end)
+        {
+            X_st = x_st;
+            Y_st = y_st;
+            X_end = x_end;
+            Y_end = y_end;
+
+            Ax = X_end - X_st;
+            Ay = Y_end - Y_st;
+        }
+        public cVector(double[] StartPoint,double [] EndPoint)
+        {
+            X_st = StartPoint[0];
+            Y_st = StartPoint[1];
+            X_end = EndPoint[0];
+            Y_end = EndPoint[1];
+
+            Ax = X_end - X_st;
+            Ay = Y_end - Y_st;
+        }
+    }
     public class AnalyzerResults
     {
-        public List<Vector> VectorsList { get; set; }
+        public List<cVector> VectorsList { get; set; }
 
     }
 
@@ -72,7 +118,39 @@ namespace Stability.Model.Analyzer
 
         public AnalyzerResults GetAnalyzerResults()
         {
-            return new AnalyzerResults();
+            var sector_step = 22.5D;
+            var sectors = new List<cVector>[16];
+            for (int i = 0; i < 16; i++)
+            {
+                sectors[i] = new List<cVector>();
+            }
+
+            if (_stabilogramsList.Count == 0)
+                 GetStabilograms();
+            var normVect = new cVector(0, 0, 0, 1);
+
+            foreach (var stb_entry in _stabilogramsList)
+            {
+                var vect = new cVector(new[] { 0.0, 0.0 }, stb_entry);
+                var angle = vect.Angle(normVect, true);
+                int sn = (int) (angle/sector_step);
+                sectors[sn].Add(vect);
+            }
+
+            var result = new List<cVector>();
+            for (int i = 0; i < 16; i++)
+            {
+                if (sectors[i].Count == 0)
+                    result.Add(new cVector(0, 0, 0, 0));
+                else
+                {
+                    var aver_x = sectors[i].Average(vector => vector.X_end);
+                    var aver_y = sectors[i].Average(vector => vector.Y_end);
+                    result.Add(new cVector(0, 0, aver_x, aver_y));
+                }
+            }
+                
+            return new AnalyzerResults(){VectorsList = result};
         }
 
         public DeviceDataEntry Calculate(GraphTypes type)
