@@ -106,6 +106,10 @@
     <Compile Include="Model\Analyzer\Filter.cs" />
     <Compile Include="Model\Analyzer\IAnalyzer.cs" />
     <Compile Include="Model\DataBase.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ResearchResults.xaml.cs">
+      <DependentUpon>ResearchResults.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SimpleWindow.xaml.cs">
       <DependentUpon>SimpleWindow.xaml</DependentUpon>
     </Compile>
@@ -157,6 +161,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ResearchResults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shadow_Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -298,6 +306,7 @@
     <Content Include="Resources\filter.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\medical_result.svg" />
     <Content Include="Resources\save.svg" />
     <Content Include="Resources\sign.svg" />
     <Resource Include="Resources\pat_add.png" />

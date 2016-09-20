@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using Stability.Annotations;
 using Stability.Model;
 using Stability.Model.Device;
 using Stability.Model.Port;
@@ -10,7 +11,39 @@ using Stability.View;
 
 namespace Stability
 {
-    
+    class ResearchResultPresenter:INotifyPropertyChanged
+    {
+        private object _p;
+        private IStabilityModel _model;
+        public object P
+        {
+            get { return _p; }
+            set
+            {
+                if (_p != value)
+                {
+                    _p = value;
+                    OnPropertyChanged("P");
+                }
+            }
+        }
+
+        public ResearchResultPresenter() { }
+   
+        public ResearchResultPresenter(IStabilityModel model)
+        {
+            _model = model;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
   class Presenter
     {
         protected IStabilityModel _model;
@@ -156,7 +189,6 @@ namespace Stability
           ((DataRxWindow)_view).GetWinState(out portConf, out exchConf);
             _model.SetNewConfig(portConf,exchConf);
         }
-
-
     }
+
 }

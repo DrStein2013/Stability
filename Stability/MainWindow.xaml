@@ -6,7 +6,7 @@
         xmlns:zedGraph="clr-namespace:ZedGraph;assembly=ZedGraph"
         x:Class="Stability.MainWindow"
       
-    Title="Stability" Height="601" Width="980" Closing="OnClose" UseLayoutRounding="True" WindowStartupLocation="CenterScreen">
+    Title="Stability" Height="601" Width="1050" Closing="OnClose" UseLayoutRounding="True" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
         <local:DateConverter x:Key="DateConverter"/>
@@ -203,7 +203,7 @@
                 </DataGrid>
 
                 <WindowsFormsHost Grid.Row="1">
-                    <zedGraph:ZedGraphControl x:Name="testGraph" Name="testGraph" />
+                    <zedGraph:ZedGraphControl x:Name="testGraph" />
                 </WindowsFormsHost>
 
                 <ToolBar Grid.Row="2" Background="#FFE4E4E4" IsHitTestVisible="True" UseLayoutRounding="True" Height="55" Margin="3,3,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -296,6 +296,27 @@
                                             c24.1,7.8,49.8-5.1,57.5-29.2c7.4-22.6-3.9-46.7-25.3-56l63.4-189.4c8.9,0,18.3-1.9,26.1-6.2l83.2,127.5   
                                             c-5.1,4.7-9.7,10.5-13.6,16.7c-23.7,38.1-11.7,88.3,26.4,112s88.3,11.7,112-26.4c20.6-33.4,14.4-75.8-13.2-101.9l55.2-170.7   
                                             c28.4,1.2,56.8-12.4,73.1-38.5C500.392,86.36,488.292,35.86,450.192,12.16z
+                                        </Path.Data>
+                                    </Path>
+                                </Grid>
+                            </Button>
+                            <Button x:Name="but_getResults"   Padding="0" Template="{DynamicResource ButtonTemplate}" BorderThickness="0" Style="{StaticResource shadow_Blue}" VerticalContentAlignment="Center" ToolTip="Результаты исследований" Margin="10,0,0,0" Click="but_getResults_Click">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Path Stretch="Fill" Fill="#006DF0">
+                                        <Path.Data>
+                                            M29.343,36.822H7.479c-1.378,0-2.5-1.122-2.5-2.5V6.029c0-1.378,1.122-2.5,2.5-2.5h3.682c0.276,0,0.5,0.224,0.5,0.5      
+                                            s-0.224,0.5-0.5,0.5H7.479c-0.827,0-1.5,0.673-1.5,1.5v28.293c0,0.827,0.673,1.5,1.5,1.5h21.863c0.827,0,1.5-0.673,1.5-1.5      
+                                            V6.029c0-0.827-0.673-1.5-1.5-1.5h-3.682c-0.276,0-0.5-0.224-0.5-0.5s0.224-0.5,0.5-0.5h3.682c1.378,0,2.5,1.122,2.5,2.5v28.293
+                                            C31.843,35.701,30.721,36.822,29.343,36.822z
+                                            M25.661,8.396h-14.5c-0.276,0-0.5-0.224-0.5-0.5V2.688c0-0.276,0.224-0.5,0.5-0.5h4.609C16.005,0.944,17.1,0,18.411,0    
+                                            s2.406,0.944,2.641,2.188h4.609c0.276,0,0.5,0.224,0.5,0.5v5.209C26.161,8.173,25.938,8.396,25.661,8.396z M11.661,7.396h13.5    
+                                            V3.188h-4.563c-0.276,0-0.5-0.224-0.5-0.5C20.099,1.757,19.342,1,18.411,1s-1.688,0.757-1.688,1.688c0,0.276-0.224,0.5-0.5,0.5    
+                                            h-4.563V7.396z
+                                            M16.661,27.356c-0.197,0-0.376-0.116-0.457-0.297l-2.368-5.33H9.661c-0.276,0-0.5-0.224-0.5-0.5s0.224-0.5,0.5-0.5h4.5   
+                                            c0.198,0,0.376,0.116,0.457,0.297l1.99,4.479l3.582-10.148c0.068-0.191,0.245-0.323,0.447-0.333   
+                                            c0.206-0.023,0.391,0.104,0.478,0.288l2.532,5.418h3.515c0.276,0,0.5,0.224,0.5,0.5s-0.224,0.5-0.5,0.5h-3.833   
+                                            c-0.194,0-0.371-0.112-0.453-0.288l-2.149-4.599l-3.593,10.181c-0.068,0.193-0.248,0.325-0.452,0.333  
+                                            C16.674,27.356,16.667,27.356,16.661,27.356z
                                         </Path.Data>
                                     </Path>
                                 </Grid>

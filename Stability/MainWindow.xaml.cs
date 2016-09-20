@@ -710,6 +710,12 @@ namespace Stability
                     break;
             }
         }
+
+        private void but_getResults_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ResearchResults(_presenter.Model);
+            win.ShowDialog();
+        }
      }
 
 }

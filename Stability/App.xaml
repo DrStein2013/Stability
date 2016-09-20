@@ -1,8 +1,9 @@
 ﻿<Application x:Class="Stability.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Stability"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary x:Name="ShadowsDictionary" Source="Shadow_Styles.xaml"/>
+        <ResourceDictionary x:Name="ShadowsDictionary"  Source="Shadow_Styles.xaml"/>
     </Application.Resources>
 </Application>
